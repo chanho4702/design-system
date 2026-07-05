@@ -15,7 +15,8 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@chanho/tokens": "workspace:*"
+    "@chanho/tokens": "workspace:*",
+    "radix-ui": "^1.4.0"
   },
   "devDependencies": {
     "@storybook/react-vite": "^9.0.0",
