@@ -7,6 +7,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
   "peerDependencies": {
@@ -17,6 +18,7 @@
     "@chanho/tokens": "workspace:*"
   },
   "devDependencies": {
+    "@storybook/react-vite": "^9.0.0",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.0",

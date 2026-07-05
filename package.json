@@ -7,6 +7,7 @@
   },
   "scripts": {
     "build:tokens": "pnpm --filter @chanho/tokens run build",
+    "typecheck": "pnpm -r run typecheck",
     "test": "pnpm -r run test",
     "lint:css": "stylelint \"packages/react/src/**/*.css\"",
     "storybook": "pnpm build:tokens && pnpm --filter docs run storybook",

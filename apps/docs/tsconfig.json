@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["stories", ".storybook"]
+  "include": ["stories", ".storybook", "env.d.ts"]
 }
