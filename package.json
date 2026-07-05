@@ -9,5 +9,8 @@
     "test": "pnpm -r run test",
     "lint:css": "stylelint \"packages/react/src/**/*.css\"",
     "storybook": "pnpm --filter docs run storybook"
+  },
+  "devDependencies": {
+    "stylelint": "^16.26.1"
   }
 }
