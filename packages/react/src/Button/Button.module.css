@@ -1,0 +1,65 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chanho-space-100);
+  border: none;
+  border-radius: var(--chanho-radius-medium);
+  font-family: var(--chanho-font-family-sans);
+  font-weight: var(--chanho-font-weight-medium);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--chanho-color-border-focused);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.medium {
+  height: 32px;
+  padding: 0 var(--chanho-space-150);
+  font-size: var(--chanho-font-size-200);
+}
+
+.small {
+  height: 24px;
+  padding: 0 var(--chanho-space-100);
+  font-size: var(--chanho-font-size-100);
+}
+
+.primary {
+  background: var(--chanho-color-background-brand);
+  color: var(--chanho-color-text-inverse);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--chanho-color-background-brand-hovered);
+}
+
+.primary:active:not(:disabled) {
+  background: var(--chanho-color-background-brand-pressed);
+}
+
+.subtle {
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-default);
+}
+
+.subtle:hover:not(:disabled) {
+  background: var(--chanho-color-background-neutral-hovered);
+}
+
+.danger {
+  background: var(--chanho-color-background-danger);
+  color: var(--chanho-color-text-inverse);
+}
+
+.danger:hover:not(:disabled) {
+  background: var(--chanho-color-background-danger-hovered);
+}
