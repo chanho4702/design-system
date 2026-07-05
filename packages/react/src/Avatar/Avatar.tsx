@@ -22,9 +22,16 @@ function initialsOf(name: string): string {
 
 export function Avatar({ name, src, size = "medium", className, ...rest }: AvatarProps) {
   const cls = [styles.avatar, styles[size], className].filter(Boolean).join(" ");
+  if (src) {
+    return (
+      <span className={cls} {...rest}>
+        <img className={styles.image} src={src} alt={name} />
+      </span>
+    );
+  }
   return (
-    <span className={cls} {...rest}>
-      {src ? <img className={styles.image} src={src} alt={name} /> : initialsOf(name)}
+    <span role="img" aria-label={name} className={cls} {...rest}>
+      {initialsOf(name)}
     </span>
   );
 }

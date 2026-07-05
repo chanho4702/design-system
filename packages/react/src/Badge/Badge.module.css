@@ -10,6 +10,7 @@
   font-size: var(--chanho-font-size-100);
   font-weight: var(--chanho-font-weight-medium);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .neutral {

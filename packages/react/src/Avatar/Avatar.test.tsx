@@ -25,4 +25,14 @@ describe("Avatar", () => {
     const { container } = render(<Avatar name="김찬호" className="custom" />);
     expect(container.firstChild).toHaveClass("custom");
   });
+
+  it("src가 없어도 스크린리더는 이니셜 대신 이름을 읽는다", () => {
+    render(<Avatar name="chanho kim" />);
+    expect(screen.getByRole("img", { name: "chanho kim" })).toBeInTheDocument();
+  });
+
+  it("공백뿐인 이름도 크래시 없이 빈 아바타를 렌더링한다", () => {
+    const { container } = render(<Avatar name="   " />);
+    expect(container.textContent).toBe("");
+  });
 });

@@ -8,6 +8,7 @@
   font-weight: var(--chanho-font-weight-semibold);
   line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .neutral {
