@@ -1,0 +1,53 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  font-family: var(--chanho-font-family-sans);
+}
+
+.track {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: var(--chanho-radius-full);
+  background: var(--chanho-color-background-neutral-hovered);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.track:focus-visible {
+  outline: 2px solid var(--chanho-color-border-focused);
+  outline-offset: 2px;
+}
+
+.track[data-state="checked"] {
+  background: var(--chanho-color-background-brand);
+}
+
+.track:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.thumb {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--chanho-radius-full);
+  background: var(--chanho-color-background-surface);
+  transform: translateX(2px);
+  transition: transform 120ms ease;
+  will-change: transform;
+}
+
+.thumb[data-state="checked"] {
+  transform: translateX(16px);
+}
+
+.label {
+  color: var(--chanho-color-text-default);
+  font-size: var(--chanho-font-size-200);
+  cursor: pointer;
+}
