@@ -1,0 +1,36 @@
+.lozenge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--chanho-space-25) var(--chanho-space-50);
+  border-radius: var(--chanho-radius-small);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+  font-weight: var(--chanho-font-weight-semibold);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.neutral {
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-subtle);
+}
+
+.info {
+  background: var(--chanho-color-background-brand-subtle);
+  color: var(--chanho-color-text-brand);
+}
+
+.success {
+  background: var(--chanho-color-background-success-subtle);
+  color: var(--chanho-color-text-success);
+}
+
+.warning {
+  background: var(--chanho-color-background-warning-subtle);
+  color: var(--chanho-color-text-warning);
+}
+
+.danger {
+  background: var(--chanho-color-background-danger-subtle);
+  color: var(--chanho-color-text-danger);
+}
