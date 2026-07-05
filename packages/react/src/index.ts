@@ -6,3 +6,5 @@ export { Button } from "./Button/Button";
 export type { ButtonProps } from "./Button/Button";
 export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
+export { Spinner } from "./Spinner/Spinner";
+export type { SpinnerProps } from "./Spinner/Spinner";
