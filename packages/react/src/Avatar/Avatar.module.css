@@ -1,0 +1,36 @@
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--chanho-radius-full);
+  background: var(--chanho-color-background-neutral-hovered);
+  color: var(--chanho-color-text-subtle);
+  font-family: var(--chanho-font-family-sans);
+  font-weight: var(--chanho-font-weight-medium);
+  user-select: none;
+}
+
+.small {
+  width: 24px;
+  height: 24px;
+  font-size: var(--chanho-font-size-100);
+}
+
+.medium {
+  width: 32px;
+  height: 32px;
+  font-size: var(--chanho-font-size-200);
+}
+
+.large {
+  width: 40px;
+  height: 40px;
+  font-size: var(--chanho-font-size-300);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

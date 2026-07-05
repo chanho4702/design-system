@@ -1,3 +1,5 @@
+export { Avatar } from "./Avatar/Avatar";
+export type { AvatarProps } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
 export type { BadgeProps } from "./Badge/Badge";
 export { Button } from "./Button/Button";
