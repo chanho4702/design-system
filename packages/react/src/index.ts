@@ -10,6 +10,8 @@ export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
 export { Radio, RadioGroup } from "./Radio/Radio";
 export type { RadioProps, RadioGroupProps } from "./Radio/Radio";
+export { Select } from "./Select/Select";
+export type { SelectOption, SelectProps } from "./Select/Select";
 export { Spinner } from "./Spinner/Spinner";
 export type { SpinnerProps } from "./Spinner/Spinner";
 export { Switch } from "./Switch/Switch";
