@@ -8,3 +8,5 @@ export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
 export { Spinner } from "./Spinner/Spinner";
 export type { SpinnerProps } from "./Spinner/Spinner";
+export { TextField } from "./TextField/TextField";
+export type { TextFieldProps } from "./TextField/TextField";

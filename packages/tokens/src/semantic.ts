@@ -29,6 +29,7 @@ export const themes = {
     "color.text.danger": palette.red[700],
     "color.border.default": palette.gray[200],
     "color.border.focused": palette.blue[500],
+    "color.border.danger": palette.red[600],
   },
   dark: {
     "color.background.default": palette.gray[1000],
@@ -54,5 +55,6 @@ export const themes = {
     "color.text.danger": palette.red[100],
     "color.border.default": palette.gray[700],
     "color.border.focused": palette.blue[400],
+    "color.border.danger": palette.red[500],
   },
 } as const;
