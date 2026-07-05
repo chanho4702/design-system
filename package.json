@@ -1,0 +1,13 @@
+{
+  "name": "chanho-design-system",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build:tokens": "pnpm --filter @chanho/tokens run build",
+    "test": "pnpm -r run test",
+    "lint:css": "stylelint \"packages/react/src/**/*.css\"",
+    "storybook": "pnpm --filter docs run storybook"
+  }
+}
