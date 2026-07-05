@@ -1,6 +1,7 @@
 {
   "name": "chanho-design-system",
   "private": true,
+  "packageManager": "pnpm@11.10.0",
   "engines": {
     "node": ">=20"
   },
@@ -8,7 +9,8 @@
     "build:tokens": "pnpm --filter @chanho/tokens run build",
     "test": "pnpm -r run test",
     "lint:css": "stylelint \"packages/react/src/**/*.css\"",
-    "storybook": "pnpm --filter docs run storybook"
+    "storybook": "pnpm build:tokens && pnpm --filter docs run storybook",
+    "build-storybook": "pnpm build:tokens && pnpm --filter docs run build-storybook"
   },
   "devDependencies": {
     "stylelint": "^16.26.1"
