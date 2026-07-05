@@ -4,6 +4,8 @@ export { Badge } from "./Badge/Badge";
 export type { BadgeProps } from "./Badge/Badge";
 export { Button } from "./Button/Button";
 export type { ButtonProps } from "./Button/Button";
+export { Checkbox } from "./Checkbox/Checkbox";
+export type { CheckboxProps } from "./Checkbox/Checkbox";
 export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
 export { Spinner } from "./Spinner/Spinner";

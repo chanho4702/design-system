@@ -1,0 +1,46 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  font-family: var(--chanho-font-family-sans);
+}
+
+.box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 2px solid var(--chanho-color-border-default);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-surface);
+  color: var(--chanho-color-text-inverse);
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.box:focus-visible {
+  outline: 2px solid var(--chanho-color-border-focused);
+  outline-offset: 2px;
+}
+
+.box[data-state="checked"] {
+  border-color: var(--chanho-color-background-brand);
+  background: var(--chanho-color-background-brand);
+}
+
+.box:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.indicator {
+  display: inline-flex;
+}
+
+.label {
+  color: var(--chanho-color-text-default);
+  font-size: var(--chanho-font-size-200);
+  cursor: pointer;
+}
