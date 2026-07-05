@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -30,5 +31,16 @@ describe("Button", () => {
   it('form 안에서 실수로 submit되지 않도록 type 기본값이 "button"이다', () => {
     render(<Button>저장</Button>);
     expect(screen.getByRole("button")).toHaveAttribute("type", "button");
+  });
+
+  it("ref로 실제 button DOM 노드에 접근할 수 있다", () => {
+    const ref = createRef<HTMLButtonElement>();
+    render(<Button ref={ref}>저장</Button>);
+    expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+  });
+
+  it("소비자가 넘긴 className이 컴포넌트 클래스와 병합되어 유지된다", () => {
+    render(<Button className="custom">저장</Button>);
+    expect(screen.getByRole("button")).toHaveClass("custom");
   });
 });
