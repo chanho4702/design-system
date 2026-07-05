@@ -1,0 +1,28 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 var(--chanho-space-50);
+  border-radius: var(--chanho-radius-full);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+  font-weight: var(--chanho-font-weight-medium);
+  line-height: 1;
+}
+
+.neutral {
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-subtle);
+}
+
+.brand {
+  background: var(--chanho-color-background-brand);
+  color: var(--chanho-color-text-inverse);
+}
+
+.danger {
+  background: var(--chanho-color-background-danger);
+  color: var(--chanho-color-text-inverse);
+}
