@@ -8,6 +8,8 @@ export { Checkbox } from "./Checkbox/Checkbox";
 export type { CheckboxProps } from "./Checkbox/Checkbox";
 export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
+export { Modal } from "./Modal/Modal";
+export type { ModalProps } from "./Modal/Modal";
 export { Radio, RadioGroup } from "./Radio/Radio";
 export type { RadioProps, RadioGroupProps } from "./Radio/Radio";
 export { Select } from "./Select/Select";
