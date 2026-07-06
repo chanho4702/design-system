@@ -1,0 +1,6 @@
+packages:
+  - "."
+allowBuilds:
+  esbuild: true
+overrides:
+  "@chanho/tokens": "file:../../artifacts/chanho-tokens-0.1.0.tgz"
