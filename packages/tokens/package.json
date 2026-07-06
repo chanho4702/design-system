@@ -1,19 +1,40 @@
 {
   "name": "@chanho/tokens",
   "version": "0.0.0",
-  "private": true,
+  "description": "Chanho Design System — 디자인 토큰 (CSS 변수 + TypeScript 상수, 라이트/다크)",
+  "license": "MIT",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./css": "./dist/tokens.css"
   },
-  "scripts": {
-    "build": "tsx src/build.ts",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./css": "./dist/tokens.css"
+    }
   },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean && tsx src/build.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "css-variables"
+  ],
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "tsup": "^8.3.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
