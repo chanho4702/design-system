@@ -91,7 +91,7 @@ export function ToastProvider({ children, duration = 5000 }: ToastProviderProps)
             </RadixToast.Close>
           </RadixToast.Root>
         ))}
-        <RadixToast.Viewport className={styles.viewport} label="알림" />
+        <RadixToast.Viewport className={styles.viewport} label="알림 ({hotkey})" />
       </RadixToast.Provider>
     </ToastContext.Provider>
   );

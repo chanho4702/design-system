@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { Dialog as RadixDialog } from "radix-ui";
 import styles from "./Modal.module.css";
 
 export interface ModalProps {
   /** 클릭 시 모달을 여는 트리거 요소. */
-  trigger: ReactNode;
+  trigger: ReactElement;
   /** 모달 제목. dialog의 접근 가능 이름이 된다. */
   title: string;
   /** 제목 아래 보조 설명. dialog의 접근 가능 설명이 된다. */

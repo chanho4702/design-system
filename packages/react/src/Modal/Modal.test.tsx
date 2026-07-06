@@ -52,4 +52,27 @@ describe("Modal", () => {
     await userEvent.click(screen.getByRole("button", { name: "열기" }));
     expect(screen.getByRole("dialog")).toHaveClass("custom");
   });
+
+  it("열리면 포커스가 dialog 안에 갇히고, 닫으면 트리거로 돌아온다", async () => {
+    render(
+      <Modal trigger={<button type="button">열기</button>} title="이슈 삭제">
+        <button type="button">확인</button>
+      </Modal>,
+    );
+    const trigger = screen.getByRole("button", { name: "열기" });
+    await userEvent.click(trigger);
+    const dialog = screen.getByRole("dialog");
+    // 포커스가 dialog 내부에 있다
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    // Tab을 여러 번 눌러도 포커스는 dialog 밖으로 나가지 않는다 (트랩)
+    await userEvent.tab();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    await userEvent.tab();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    await userEvent.tab();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    // 닫으면 포커스가 트리거로 복귀한다
+    await userEvent.keyboard("{Escape}");
+    expect(trigger).toHaveFocus();
+  });
 });

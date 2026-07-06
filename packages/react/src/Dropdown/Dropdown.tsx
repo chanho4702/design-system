@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactElement } from "react";
 import { DropdownMenu as RadixDropdownMenu } from "radix-ui";
 import styles from "./Dropdown.module.css";
 
@@ -13,7 +13,7 @@ export interface DropdownItem {
 
 export interface DropdownProps {
   /** 클릭 시 메뉴를 여는 트리거 요소. */
-  trigger: ReactNode;
+  trigger: ReactElement;
   items: DropdownItem[];
   /** 메뉴 콘텐츠에 병합되는 클래스. */
   className?: string;
