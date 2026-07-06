@@ -6,6 +6,8 @@ export { Button } from "./Button/Button";
 export type { ButtonProps } from "./Button/Button";
 export { Checkbox } from "./Checkbox/Checkbox";
 export type { CheckboxProps } from "./Checkbox/Checkbox";
+export { Dropdown } from "./Dropdown/Dropdown";
+export type { DropdownItem, DropdownProps } from "./Dropdown/Dropdown";
 export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
 export { Modal } from "./Modal/Modal";
