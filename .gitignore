@@ -4,3 +4,4 @@ storybook-static/
 *.log
 artifacts/
 examples/consumer/pnpm-lock.yaml
+.idea/
