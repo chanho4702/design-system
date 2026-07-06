@@ -39,7 +39,11 @@ describe("Tooltip", () => {
   it("소비자 className이 툴팁 콘텐츠에 병합된다", async () => {
     render(<Subject className="custom" />);
     await userEvent.hover(screen.getByRole("button", { name: "삭제" }));
-    const tooltip = await screen.findByRole("tooltip");
-    expect(tooltip).toHaveClass("custom");
+    await screen.findByRole("tooltip");
+    // Radix Tooltip은 role="tooltip"을 숨김 복제 노드에 붙이고 className은 가시
+    // Popper 콘텐츠에 붙인다(이중 노드 구조) — 가시 노드를 직접 조회해 검증한다.
+    const content = document.querySelector(".custom");
+    expect(content).not.toBeNull();
+    expect(content).toHaveTextContent("보관된 항목은 삭제할 수 없습니다");
   });
 });
