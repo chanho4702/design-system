@@ -1,0 +1,39 @@
+.root {
+  font-family: var(--chanho-font-family-sans);
+}
+
+.list {
+  display: flex;
+  gap: var(--chanho-space-100);
+  border-bottom: 2px solid var(--chanho-color-border-default);
+}
+
+.trigger {
+  padding: var(--chanho-space-100) var(--chanho-space-150);
+  border: none;
+  background: none;
+  color: var(--chanho-color-text-subtle);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-200);
+  font-weight: var(--chanho-font-weight-medium);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  color: var(--chanho-color-text-default);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--chanho-color-border-focused);
+  outline-offset: -2px;
+}
+
+.trigger[data-state="active"] {
+  color: var(--chanho-color-text-brand);
+  box-shadow: inset 0 -2px 0 0 var(--chanho-color-background-brand);
+}
+
+.content {
+  padding: var(--chanho-space-200) 0;
+  color: var(--chanho-color-text-default);
+}

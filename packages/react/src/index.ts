@@ -20,6 +20,8 @@ export { Spinner } from "./Spinner/Spinner";
 export type { SpinnerProps } from "./Spinner/Spinner";
 export { Switch } from "./Switch/Switch";
 export type { SwitchProps } from "./Switch/Switch";
+export { Tabs } from "./Tabs/Tabs";
+export type { TabItem, TabsProps } from "./Tabs/Tabs";
 export { TextField } from "./TextField/TextField";
 export type { TextFieldProps } from "./TextField/TextField";
 export { Tooltip } from "./Tooltip/Tooltip";
