@@ -11,11 +11,41 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 | [`@chanho/tokens`](packages/tokens) | 디자인 토큰 — 원시(palette)/시맨틱 2층 구조, 라이트·다크 CSS 변수 85개 |
 | [`@chanho/react`](packages/react) | React 19 컴포넌트 15종 — Radix UI 기반 동작 + 토큰 스타일링 |
 
-## 사용
+## 설치
+
+> ⚠️ 아직 npm 레지스트리에 배포 전입니다. 현재는 **tarball 설치** 방식을 사용합니다.
+
+**① 이 저장소에서 패키지 파일(.tgz) 생성:**
 
 ```bash
-pnpm add @chanho/react @chanho/tokens
+pnpm install && pnpm -r build
+cd packages/tokens && pnpm pack --pack-destination ../../artifacts
+cd ../react && pnpm pack --pack-destination ../../artifacts
 ```
+
+→ `artifacts/`에 `chanho-tokens-0.1.0.tgz`, `chanho-react-0.1.0.tgz` 생성 (npm에 올라갈 산출물과 동일)
+
+**② 사용할 프로젝트의 `package.json`:**
+
+```jsonc
+"dependencies": {
+  "@chanho/react": "file:<경로>/design-system/artifacts/chanho-react-0.1.0.tgz",
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.1.0.tgz"
+}
+```
+
+**③ 사용할 프로젝트의 `pnpm-workspace.yaml`** (없으면 생성) — `@chanho/react`가 내부 의존하는 tokens를 tarball로 해석시키는 설정:
+
+```yaml
+overrides:
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.1.0.tgz"
+```
+
+동작하는 실제 예시는 [`examples/consumer`](examples/consumer)를 그대로 참고하면 됩니다.
+
+npm 배포 후에는 이 모든 게 한 줄로 줄어듭니다: `pnpm add @chanho/react @chanho/tokens`
+
+## 사용
 
 ```tsx
 // 앱 진입점
