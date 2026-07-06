@@ -11,9 +11,13 @@
     "test": "pnpm -r run test",
     "lint:css": "stylelint \"packages/react/src/**/*.css\"",
     "storybook": "pnpm build:tokens && pnpm --filter docs run storybook",
-    "build-storybook": "pnpm build:tokens && pnpm --filter docs run build-storybook"
+    "build-storybook": "pnpm build:tokens && pnpm --filter docs run build-storybook",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm -r build && pnpm -r publish --access public"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "stylelint": "^16.26.1"
   }
 }
