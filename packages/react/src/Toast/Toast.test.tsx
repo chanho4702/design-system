@@ -41,7 +41,10 @@ describe("Toast", () => {
     await userEvent.click(screen.getByRole("button", { name: "알림 발생" }));
     expect(screen.getByText("저장됨")).toBeInTheDocument();
     expect(screen.getByText("변경 사항이 저장되었습니다")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveAttribute("data-appearance", "success");
+    // Radix Toast는 낭독용 숨김 아나운서(role="status")를 별도로 렌더하므로 role 쿼리는
+    // 중복 매치된다 — 가시 토스트(li)를 제목 텍스트 기준으로 조회해 계약을 검증한다.
+    const toast = screen.getByText("저장됨").closest("li");
+    expect(toast).toHaveAttribute("data-appearance", "success");
   });
 
   it("닫기 버튼을 클릭하면 토스트가 사라진다", async () => {

@@ -52,10 +52,6 @@ export interface ToastProviderProps {
 export function ToastProvider({ children, duration = 5000 }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastEntry[]>([]);
   const counter = useRef(0);
-  // Radix는 스크린 리더용으로 시각적 토스트와 별개인 role="status" 안내 노드를 항상 하나 더 렌더한다.
-  // 우리는 시각적 토스트(RadixToast.Root)에 role="status"를 직접 부여해 이미 라이브 리전으로
-  // 동작시키므로, 내장 안내 노드는 중복 낭독을 막기 위해 aria-hidden 컨테이너로 리다이렉트한다.
-  const [announcer, setAnnouncer] = useState<HTMLDivElement | null>(null);
 
   const toast = useCallback((options: ToastOptions) => {
     counter.current += 1;
@@ -68,18 +64,12 @@ export function ToastProvider({ children, duration = 5000 }: ToastProviderProps)
 
   return (
     <ToastContext.Provider value={toast}>
-      <div aria-hidden="true" ref={setAnnouncer} />
-      <RadixToast.Provider
-        swipeDirection="right"
-        duration={duration}
-        announcerContainer={announcer ?? undefined}
-      >
+      <RadixToast.Provider swipeDirection="right" duration={duration}>
         {children}
         {toasts.map((entry) => (
           <RadixToast.Root
             key={entry.id}
             type="background"
-            role="status"
             className={styles.toast}
             data-appearance={entry.appearance ?? "info"}
             onOpenChange={(open) => {
