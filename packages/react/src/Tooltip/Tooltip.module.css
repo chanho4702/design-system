@@ -1,0 +1,12 @@
+.content {
+  max-width: 240px;
+  padding: var(--chanho-space-50) var(--chanho-space-100);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-inverse);
+  box-shadow: var(--chanho-shadow-overlay);
+  color: var(--chanho-color-text-inverse);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+  line-height: var(--chanho-font-lineHeight-100);
+  z-index: 50;
+}

@@ -18,3 +18,5 @@ export { Switch } from "./Switch/Switch";
 export type { SwitchProps } from "./Switch/Switch";
 export { TextField } from "./TextField/TextField";
 export type { TextFieldProps } from "./TextField/TextField";
+export { Tooltip } from "./Tooltip/Tooltip";
+export type { TooltipProps } from "./Tooltip/Tooltip";
