@@ -52,4 +52,22 @@ describe("Select", () => {
     );
     expect(container.firstChild).toHaveClass("custom");
   });
+
+  it("disabled 옵션은 클릭해도 선택되지 않는다", async () => {
+    const onValueChange = vi.fn();
+    render(
+      <Select
+        label="우선순위"
+        options={[
+          { value: "high", label: "높음" },
+          { value: "low", label: "낮음", disabled: true },
+        ]}
+        placeholder="선택"
+        onValueChange={onValueChange}
+      />,
+    );
+    await userEvent.click(screen.getByRole("combobox", { name: "우선순위" }));
+    await userEvent.click(screen.getByRole("option", { name: "낮음" }));
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
 });

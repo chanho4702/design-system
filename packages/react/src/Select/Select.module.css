@@ -53,7 +53,7 @@
   border: 1px solid var(--chanho-color-border-default);
   border-radius: var(--chanho-radius-medium);
   background: var(--chanho-color-background-surface);
-  box-shadow: 0 4px 12px var(--chanho-color-background-neutral-hovered);
+  box-shadow: var(--chanho-shadow-overlay);
   font-family: var(--chanho-font-family-sans);
 }
 

@@ -5,6 +5,8 @@ import styles from "./Select.module.css";
 export interface SelectOption {
   value: string;
   label: string;
+  /** 선택 불가 옵션으로 표시한다. */
+  disabled?: boolean;
 }
 
 export interface SelectProps {
@@ -74,7 +76,12 @@ export function Select({
           <RadixSelect.Content className={styles.content} position="popper" sideOffset={4}>
             <RadixSelect.Viewport>
               {options.map((option) => (
-                <RadixSelect.Item key={option.value} value={option.value} className={styles.item}>
+                <RadixSelect.Item
+                  key={option.value}
+                  value={option.value}
+                  className={styles.item}
+                  disabled={option.disabled}
+                >
                   <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
                   <RadixSelect.ItemIndicator>
                     <ChevronIcon />

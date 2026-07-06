@@ -20,6 +20,8 @@ export const themes = {
     "color.background.success-subtle": palette.green[100],
     "color.background.warning-subtle": palette.amber[100],
     "color.background.danger-subtle": palette.red[100],
+    "color.background.inverse": palette.gray[800],
+    "color.blanket": "rgba(11, 14, 20, 0.55)",
     "color.text.default": palette.gray[900],
     "color.text.subtle": palette.gray[600],
     "color.text.inverse": palette.gray[0],
@@ -30,6 +32,7 @@ export const themes = {
     "color.border.default": palette.gray[200],
     "color.border.focused": palette.blue[500],
     "color.border.danger": palette.red[600],
+    "shadow.overlay": "0 4px 12px rgba(22, 27, 38, 0.18)",
   },
   dark: {
     "color.background.default": palette.gray[1000],
@@ -46,6 +49,8 @@ export const themes = {
     "color.background.success-subtle": palette.green[700],
     "color.background.warning-subtle": palette.amber[700],
     "color.background.danger-subtle": palette.red[700],
+    "color.background.inverse": palette.gray[200],
+    "color.blanket": "rgba(0, 0, 0, 0.65)",
     "color.text.default": palette.gray[50],
     "color.text.subtle": palette.gray[400],
     "color.text.inverse": palette.gray[1000],
@@ -56,5 +61,6 @@ export const themes = {
     "color.border.default": palette.gray[700],
     "color.border.focused": palette.blue[400],
     "color.border.danger": palette.red[500],
+    "shadow.overlay": "0 4px 12px rgba(0, 0, 0, 0.55)",
   },
 } as const;
