@@ -3,6 +3,13 @@
   "version": "0.1.0",
   "description": "Chanho Design System — 디자인 토큰 (CSS 변수 + TypeScript 상수, 라이트/다크)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chanho4702/design-system.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/chanho4702/design-system#readme",
+  "bugs": "https://github.com/chanho4702/design-system/issues",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
