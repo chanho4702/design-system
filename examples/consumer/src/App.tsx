@@ -3,6 +3,7 @@ import {
   Badge,
   Button,
   Lozenge,
+  TextArea,
   TextField,
   ToastProvider,
   useToast,
@@ -20,6 +21,7 @@ function Demo() {
         브랜드 컬러 <code>{palette.blue[500]}</code> <Lozenge appearance="success">설치 성공</Lozenge>
       </p>
       <TextField label="이메일" description="배포 산출물로 렌더링됨" />
+      <TextArea label="TextArea 스모크" description="0.2.0 tarball 검증" />
       <Button onClick={() => toast({ title: "동작 확인", appearance: "success" })}>
         토스트 발생
       </Button>

@@ -8,7 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@chanho/react": "file:../../artifacts/chanho-react-0.1.0.tgz",
+    "@chanho/react": "file:../../artifacts/chanho-react-0.2.0.tgz",
     "@chanho/tokens": "file:../../artifacts/chanho-tokens-0.1.0.tgz",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
