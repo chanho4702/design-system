@@ -22,6 +22,8 @@ export { Switch } from "./Switch/Switch";
 export type { SwitchProps } from "./Switch/Switch";
 export { Tabs } from "./Tabs/Tabs";
 export type { TabItem, TabsProps } from "./Tabs/Tabs";
+export { TextArea } from "./TextArea/TextArea";
+export type { TextAreaProps } from "./TextArea/TextArea";
 export { TextField } from "./TextField/TextField";
 export type { TextFieldProps } from "./TextField/TextField";
 export { ToastProvider, useToast } from "./Toast/Toast";
