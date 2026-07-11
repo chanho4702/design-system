@@ -7,7 +7,7 @@
 
 .label {
   color: var(--chanho-color-text-default);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
   font-weight: var(--chanho-font-weight-medium);
 }
 
@@ -19,7 +19,7 @@
   background: var(--chanho-color-background-surface);
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
   transition: border-color 120ms ease;
 }
 
@@ -44,11 +44,11 @@
 .description {
   margin: 0;
   color: var(--chanho-color-text-subtle);
-  font-size: var(--chanho-font-size-100);
+  font-size: var(--chanho-font-size-75);
 }
 
 .error {
   margin: 0;
   color: var(--chanho-color-text-danger);
-  font-size: var(--chanho-font-size-100);
+  font-size: var(--chanho-font-size-75);
 }

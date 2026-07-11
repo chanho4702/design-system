@@ -51,6 +51,6 @@
 
 .label {
   color: var(--chanho-color-text-default);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
   cursor: pointer;
 }

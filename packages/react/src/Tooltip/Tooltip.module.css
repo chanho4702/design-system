@@ -6,7 +6,7 @@
   box-shadow: var(--chanho-shadow-overlay);
   color: var(--chanho-color-text-inverse);
   font-family: var(--chanho-font-family-sans);
-  font-size: var(--chanho-font-size-100);
-  line-height: var(--chanho-font-lineHeight-100);
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-75);
   z-index: 50;
 }

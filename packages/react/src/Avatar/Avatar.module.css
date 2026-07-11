@@ -14,19 +14,19 @@
 .small {
   width: 24px;
   height: 24px;
-  font-size: var(--chanho-font-size-100);
+  font-size: var(--chanho-font-size-75);
 }
 
 .medium {
   width: 32px;
   height: 32px;
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
 }
 
 .large {
   width: 40px;
   height: 40px;
-  font-size: var(--chanho-font-size-300);
+  font-size: var(--chanho-font-size-200);
 }
 
 .image {

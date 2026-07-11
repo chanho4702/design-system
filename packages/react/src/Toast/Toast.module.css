@@ -46,14 +46,14 @@
 .title {
   margin: 0;
   color: var(--chanho-color-text-default);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
   font-weight: var(--chanho-font-weight-semibold);
 }
 
 .description {
   margin: var(--chanho-space-25) 0 0;
   color: var(--chanho-color-text-subtle);
-  font-size: var(--chanho-font-size-100);
+  font-size: var(--chanho-font-size-75);
 }
 
 .close {

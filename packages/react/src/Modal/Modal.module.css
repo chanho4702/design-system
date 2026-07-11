@@ -32,7 +32,7 @@
 
 .title {
   margin: 0;
-  font-size: var(--chanho-font-size-400);
+  font-size: var(--chanho-font-size-300);
   font-weight: var(--chanho-font-weight-semibold);
 }
 
@@ -62,5 +62,5 @@
 .description {
   margin: 0 0 var(--chanho-space-200);
   color: var(--chanho-color-text-subtle);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
 }

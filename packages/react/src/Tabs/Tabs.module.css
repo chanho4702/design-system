@@ -14,7 +14,7 @@
   background: none;
   color: var(--chanho-color-text-subtle);
   font-family: var(--chanho-font-family-sans);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
   font-weight: var(--chanho-font-weight-medium);
   cursor: pointer;
 }

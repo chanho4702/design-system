@@ -24,13 +24,13 @@
 .medium {
   height: 32px;
   padding: 0 var(--chanho-space-150);
-  font-size: var(--chanho-font-size-200);
+  font-size: var(--chanho-font-size-100);
 }
 
 .small {
   height: 24px;
   padding: 0 var(--chanho-space-100);
-  font-size: var(--chanho-font-size-100);
+  font-size: var(--chanho-font-size-75);
 }
 
 .primary {
