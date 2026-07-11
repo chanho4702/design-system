@@ -43,4 +43,49 @@ describe("Button", () => {
     render(<Button className="custom">저장</Button>);
     expect(screen.getByRole("button")).toHaveClass("custom");
   });
+
+  it("loading이면 클릭이 차단되고 aria-busy가 설정된다", async () => {
+    const onClick = vi.fn();
+    render(
+      <Button onClick={onClick} loading>
+        저장
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "저장" });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).toBeDisabled();
+    await userEvent.click(button);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("loading이 아니면 aria-busy가 붙지 않는다", () => {
+    render(<Button>저장</Button>);
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-busy");
+  });
+
+  it("secondary/ghost 등 새 variant를 렌더링할 수 있다", () => {
+    render(
+      <>
+        <Button variant="secondary">보조</Button>
+        <Button variant="ghost">고스트</Button>
+      </>,
+    );
+    expect(screen.getByRole("button", { name: "보조" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "고스트" })).toBeInTheDocument();
+  });
+
+  it("large size와 fullWidth 프롭을 받는다", () => {
+    render(
+      <Button size="large" fullWidth>
+        큰 버튼
+      </Button>,
+    );
+    expect(screen.getByRole("button", { name: "큰 버튼" })).toBeInTheDocument();
+  });
+
+  it("iconBefore를 텍스트 앞에 렌더링한다", () => {
+    render(<Button iconBefore={<span data-testid="icon" />}>저장</Button>);
+    expect(screen.getByTestId("icon")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "저장" })).toBeInTheDocument();
+  });
 });

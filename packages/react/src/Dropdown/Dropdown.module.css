@@ -4,10 +4,10 @@
   padding: var(--chanho-space-50);
   border: 1px solid var(--chanho-color-border-default);
   border-radius: var(--chanho-radius-medium);
-  background: var(--chanho-color-background-surface);
-  box-shadow: var(--chanho-shadow-overlay);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-300);
   font-family: var(--chanho-font-family-sans);
-  z-index: 50;
+  z-index: var(--chanho-z-dropdown);
 }
 
 .item {

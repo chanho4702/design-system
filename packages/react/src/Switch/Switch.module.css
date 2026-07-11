@@ -18,8 +18,8 @@
 }
 
 .track:focus-visible {
-  outline: 2px solid var(--chanho-color-border-focused);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
 }
 
 .track[data-state="checked"] {
@@ -27,8 +27,8 @@
 }
 
 .track:disabled {
+  background: var(--chanho-color-background-disabled);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .thumb {

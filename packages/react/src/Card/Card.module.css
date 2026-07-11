@@ -1,0 +1,69 @@
+.card {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--chanho-color-background-surface);
+  border: 1px solid var(--chanho-color-border-default);
+  border-radius: var(--chanho-radius-medium);
+  box-shadow: var(--chanho-shadow-100);
+  font-family: var(--chanho-font-family-sans);
+  color: var(--chanho-color-text-default);
+}
+
+.padNone {
+  padding: 0;
+}
+
+.padSm {
+  padding: var(--chanho-space-150);
+}
+
+.padMd {
+  padding: var(--chanho-space-300);
+}
+
+.padLg {
+  padding: var(--chanho-space-400);
+}
+
+.interactive {
+  cursor: pointer;
+  transition:
+    box-shadow 120ms ease,
+    border-color 120ms ease;
+}
+
+.interactive:hover {
+  box-shadow: var(--chanho-shadow-200);
+  border-color: var(--chanho-color-border-input);
+}
+
+.interactive:active {
+  box-shadow: var(--chanho-shadow-100);
+  background: var(--chanho-color-background-subtle);
+}
+
+.interactive:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  margin-bottom: var(--chanho-space-200);
+}
+
+.title {
+  margin: 0;
+  flex: 1;
+  font-size: var(--chanho-font-size-200);
+  line-height: var(--chanho-font-lineHeight-200);
+  font-weight: var(--chanho-font-weight-semibold);
+}
+
+.actions {
+  display: flex;
+  gap: var(--chanho-space-50);
+}

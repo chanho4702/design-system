@@ -1,0 +1,150 @@
+.sidenav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  flex: none;
+  background: var(--chanho-color-background-subtle);
+  border-right: 1px solid var(--chanho-color-border-default);
+  font-family: var(--chanho-font-family-sans);
+  transition: width 0.18s ease;
+  overflow: visible;
+}
+
+.sidenav.collapsed {
+  width: 56px;
+}
+
+.header {
+  padding: var(--chanho-space-200) var(--chanho-space-150) var(--chanho-space-100);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.footer {
+  margin-top: auto;
+  padding: var(--chanho-space-150);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: var(--chanho-space-100);
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-25);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  height: 36px;
+  padding: 0 var(--chanho-space-100);
+  border-radius: var(--chanho-radius-small);
+  color: var(--chanho-color-text-default);
+  font-size: var(--chanho-font-size-100);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.item:hover {
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-default);
+}
+
+.item:active {
+  background: var(--chanho-color-background-neutral-hovered);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.item.active {
+  background: var(--chanho-color-background-selected);
+  color: var(--chanho-color-text-selected);
+  font-weight: var(--chanho-font-weight-semibold);
+}
+
+.icon {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-neutral);
+  font-size: var(--chanho-font-size-50);
+  font-weight: var(--chanho-font-weight-semibold);
+  color: var(--chanho-color-text-subtle);
+}
+
+.item.active .icon {
+  background: var(--chanho-color-background-brand);
+  color: var(--chanho-color-text-inverse);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  flex: none;
+}
+
+.sidenav.collapsed .label,
+.sidenav.collapsed .badge,
+.sidenav.collapsed .header,
+.sidenav.collapsed .footer {
+  display: none;
+}
+
+.collapse {
+  position: absolute;
+  top: 20px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--chanho-color-border-default);
+  border-radius: var(--chanho-radius-full);
+  background: var(--chanho-color-background-surface);
+  box-shadow: var(--chanho-shadow-100);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.collapse:hover {
+  background: var(--chanho-color-background-neutral);
+}
+
+.collapse:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.chevron {
+  width: 7px;
+  height: 7px;
+  border-left: 2px solid var(--chanho-color-text-subtle);
+  border-bottom: 2px solid var(--chanho-color-text-subtle);
+  transform: rotate(45deg);
+  margin-left: 2px;
+}
+
+.chevronRight {
+  transform: rotate(225deg);
+  margin-left: -2px;
+}

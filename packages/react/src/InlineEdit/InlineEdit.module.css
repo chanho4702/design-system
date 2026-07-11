@@ -1,0 +1,103 @@
+.view {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-75);
+  max-width: 100%;
+  padding: var(--chanho-space-25) var(--chanho-space-75);
+  margin: calc(-1 * var(--chanho-space-25)) calc(-1 * var(--chanho-space-75));
+  border: none;
+  border-radius: var(--chanho-radius-small);
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: text;
+}
+
+.view:hover:not(:disabled) {
+  background: var(--chanho-color-background-neutral);
+}
+
+.view:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.view.disabled {
+  cursor: default;
+}
+
+.pencil {
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-subtle);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.view:hover .pencil,
+.view:focus-visible .pencil {
+  opacity: 1;
+}
+
+.placeholder {
+  color: var(--chanho-color-text-subtle);
+}
+
+.editor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  width: 100%;
+  padding: var(--chanho-space-25) var(--chanho-space-75);
+  margin: calc(-1 * var(--chanho-space-25)) calc(-1 * var(--chanho-space-75));
+  border: 1px solid var(--chanho-color-border-focused);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-input);
+  font: inherit;
+  color: var(--chanho-color-text-default);
+  box-shadow: inset 0 0 0 1px var(--chanho-color-border-focused);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.controls {
+  position: absolute;
+  right: 0;
+  top: calc(100% + var(--chanho-space-50));
+  display: flex;
+  gap: var(--chanho-space-50);
+  z-index: var(--chanho-z-dropdown);
+}
+
+.control {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--chanho-color-border-default);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-surface-raised);
+  box-shadow: var(--chanho-shadow-200);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-100);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.control:hover {
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-default);
+}
+
+.control:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.confirm {
+  color: var(--chanho-color-text-success);
+}

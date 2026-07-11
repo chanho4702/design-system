@@ -1,0 +1,49 @@
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--chanho-space-800) var(--chanho-space-400);
+  font-family: var(--chanho-font-family-sans);
+}
+
+.media {
+  margin-bottom: var(--chanho-space-300);
+}
+
+.placeholder {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--chanho-radius-full);
+  border: 1px dashed var(--chanho-color-border-input);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--chanho-color-background-subtle),
+    var(--chanho-color-background-subtle) 6px,
+    var(--chanho-color-background-default) 6px,
+    var(--chanho-color-background-default) 12px
+  );
+}
+
+.title {
+  margin: 0 0 var(--chanho-space-50);
+  font-size: var(--chanho-font-size-200);
+  line-height: var(--chanho-font-lineHeight-200);
+  font-weight: var(--chanho-font-weight-semibold);
+  color: var(--chanho-color-text-default);
+}
+
+.desc {
+  margin: 0;
+  max-width: 360px;
+  font-size: var(--chanho-font-size-100);
+  line-height: var(--chanho-font-lineHeight-100);
+  color: var(--chanho-color-text-subtle);
+}
+
+.actions {
+  display: flex;
+  gap: var(--chanho-space-100);
+  margin-top: var(--chanho-space-300);
+}

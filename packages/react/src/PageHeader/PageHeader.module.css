@@ -1,0 +1,74 @@
+.pageHeader {
+  font-family: var(--chanho-font-family-sans);
+}
+
+.breadcrumbList {
+  list-style: none;
+  margin: 0 0 var(--chanho-space-50);
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--chanho-space-50);
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-50);
+}
+
+.breadcrumbLink {
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-75);
+  color: var(--chanho-color-text-subtle);
+  text-decoration: none;
+  border-radius: var(--chanho-radius-small);
+}
+
+.breadcrumbLink:hover {
+  color: var(--chanho-color-text-link-hovered);
+  text-decoration: underline;
+}
+
+.breadcrumbLink:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.breadcrumbCurrent {
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-75);
+  color: var(--chanho-color-text-subtle);
+}
+
+.breadcrumbSep {
+  color: var(--chanho-color-text-disabled);
+  font-size: var(--chanho-font-size-75);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-200);
+}
+
+.title {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--chanho-font-size-400);
+  line-height: var(--chanho-font-lineHeight-400);
+  font-weight: var(--chanho-font-weight-bold);
+  color: var(--chanho-color-text-default);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+}
+
+.bottom {
+  margin-top: var(--chanho-space-200);
+}

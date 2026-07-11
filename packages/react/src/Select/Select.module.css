@@ -17,16 +17,16 @@
   justify-content: space-between;
   gap: var(--chanho-space-100);
   min-width: 180px;
-  height: 40px;
+  height: 36px;
   padding: 0 var(--chanho-space-100);
-  border: 2px solid var(--chanho-color-border-default);
-  border-radius: var(--chanho-radius-medium);
-  background: var(--chanho-color-background-surface);
+  border: 1px solid var(--chanho-color-border-input);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-input);
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
   font-size: var(--chanho-font-size-100);
   cursor: pointer;
-  transition: border-color 120ms ease;
+  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
 }
 
 .trigger:hover:not(:disabled) {
@@ -36,11 +36,14 @@
 .trigger:focus-visible {
   outline: none;
   border-color: var(--chanho-color-border-focused);
+  box-shadow: inset 0 0 0 1px var(--chanho-color-border-focused);
 }
 
 .trigger:disabled {
+  border-color: var(--chanho-color-border-disabled);
+  background: var(--chanho-color-background-disabled);
+  color: var(--chanho-color-text-disabled);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .trigger[data-placeholder] {
@@ -52,9 +55,10 @@
   min-width: 180px;
   border: 1px solid var(--chanho-color-border-default);
   border-radius: var(--chanho-radius-medium);
-  background: var(--chanho-color-background-surface);
-  box-shadow: var(--chanho-shadow-overlay);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-300);
   font-family: var(--chanho-font-family-sans);
+  z-index: var(--chanho-z-dropdown);
 }
 
 .item {

@@ -12,15 +12,19 @@
 }
 
 .input {
-  height: 40px;
+  height: 36px;
   padding: 0 var(--chanho-space-100);
-  border: 2px solid var(--chanho-color-border-default);
-  border-radius: var(--chanho-radius-medium);
-  background: var(--chanho-color-background-surface);
+  border: 1px solid var(--chanho-color-border-input);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-input);
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
   font-size: var(--chanho-font-size-100);
-  transition: border-color 120ms ease;
+  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+.input::placeholder {
+  color: var(--chanho-color-text-subtle);
 }
 
 .input:hover:not(:disabled) {
@@ -30,15 +34,23 @@
 .input:focus-visible {
   outline: none;
   border-color: var(--chanho-color-border-focused);
+  box-shadow: inset 0 0 0 1px var(--chanho-color-border-focused);
 }
 
 .input:disabled {
+  border-color: var(--chanho-color-border-disabled);
+  background: var(--chanho-color-background-disabled);
+  color: var(--chanho-color-text-disabled);
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .invalid {
   border-color: var(--chanho-color-border-danger);
+}
+
+.invalid:focus-visible {
+  border-color: var(--chanho-color-border-danger);
+  box-shadow: inset 0 0 0 1px var(--chanho-color-border-danger);
 }
 
 .description {

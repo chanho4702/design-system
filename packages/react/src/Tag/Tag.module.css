@@ -1,0 +1,59 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-neutral);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-default);
+  overflow: hidden;
+}
+
+.label {
+  padding: 0 var(--chanho-space-75);
+  line-height: 20px;
+}
+
+.labelLink {
+  color: var(--chanho-color-text-link);
+  text-decoration: none;
+}
+
+.labelLink:hover {
+  color: var(--chanho-color-text-link-hovered);
+  text-decoration: underline;
+}
+
+.labelLink:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+  border-radius: var(--chanho-radius-small);
+}
+
+.remove {
+  width: 18px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-100);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.remove:hover {
+  background: var(--chanho-color-background-danger-subtle);
+  color: var(--chanho-color-text-danger);
+}
+
+.remove:active {
+  background: var(--chanho-color-background-danger);
+  color: var(--chanho-color-text-inverse);
+}
+
+.remove:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}

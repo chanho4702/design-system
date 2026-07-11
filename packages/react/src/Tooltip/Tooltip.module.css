@@ -3,10 +3,10 @@
   padding: var(--chanho-space-50) var(--chanho-space-100);
   border-radius: var(--chanho-radius-small);
   background: var(--chanho-color-background-inverse);
-  box-shadow: var(--chanho-shadow-overlay);
+  box-shadow: var(--chanho-shadow-200);
   color: var(--chanho-color-text-inverse);
   font-family: var(--chanho-font-family-sans);
   font-size: var(--chanho-font-size-75);
   line-height: var(--chanho-font-lineHeight-75);
-  z-index: 50;
+  z-index: var(--chanho-z-tooltip);
 }

@@ -17,8 +17,8 @@
 }
 
 .info {
-  background: var(--chanho-color-background-brand-subtle);
-  color: var(--chanho-color-text-brand);
+  background: var(--chanho-color-background-info-subtle);
+  color: var(--chanho-color-text-info);
 }
 
 .success {

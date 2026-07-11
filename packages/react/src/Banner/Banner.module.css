@@ -1,0 +1,80 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  padding: var(--chanho-space-100) var(--chanho-space-200);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-75);
+}
+
+.info {
+  background: var(--chanho-color-background-info-subtle);
+  color: var(--chanho-color-text-info);
+}
+
+.warning {
+  background: var(--chanho-color-background-warning-subtle);
+  color: var(--chanho-color-text-warning);
+}
+
+.danger {
+  background: var(--chanho-color-background-danger-subtle);
+  color: var(--chanho-color-text-danger);
+}
+
+.icon {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--chanho-radius-full);
+  background: currentColor;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  font-weight: var(--chanho-font-weight-medium);
+}
+
+.action {
+  flex: none;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-semibold);
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.action:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+  border-radius: var(--chanho-radius-small);
+}
+
+.close {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--chanho-radius-small);
+  background: transparent;
+  color: inherit;
+  font-size: var(--chanho-font-size-100);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--chanho-color-background-default);
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}

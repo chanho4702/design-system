@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   background: var(--chanho-color-blanket);
-  z-index: 40;
+  z-index: var(--chanho-z-blanket);
 }
 
 .content {
@@ -15,11 +15,11 @@
   overflow-y: auto;
   padding: var(--chanho-space-300);
   border-radius: var(--chanho-radius-large);
-  background: var(--chanho-color-background-surface);
-  box-shadow: var(--chanho-shadow-overlay);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-300);
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
-  z-index: 41;
+  z-index: var(--chanho-z-modal);
 }
 
 .header {
@@ -55,8 +55,8 @@
 }
 
 .close:focus-visible {
-  outline: 2px solid var(--chanho-color-border-focused);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
 }
 
 .description {

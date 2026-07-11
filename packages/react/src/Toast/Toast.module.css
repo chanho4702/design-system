@@ -10,7 +10,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  z-index: 60;
+  z-index: var(--chanho-z-toast);
 }
 
 .toast {
@@ -21,8 +21,8 @@
   border: 1px solid var(--chanho-color-border-default);
   border-left-width: 4px;
   border-radius: var(--chanho-radius-medium);
-  background: var(--chanho-color-background-surface);
-  box-shadow: var(--chanho-shadow-overlay);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-300);
   font-family: var(--chanho-font-family-sans);
 }
 
@@ -75,6 +75,6 @@
 }
 
 .close:focus-visible {
-  outline: 2px solid var(--chanho-color-border-focused);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
 }
