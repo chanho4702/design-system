@@ -2,14 +2,14 @@
 
 Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프로젝트(MSA 플랫폼 템플릿 프론트, 협업 툴 클론)가 공유하는 자체 디자인 시스템입니다.
 
-**구조는 Atlassian을 참고하되, 브랜드는 자체 정의** — Primary 블루 `#3B6EF5`, Pretendard 서체.
+**구조는 Atlassian을 참고하되, 브랜드는 자체 정의** — 스틸 블루 `#1B66C9` (브랜드 탐색 1a), Pretendard 서체.
 
 ## 패키지
 
 | 패키지 | 설명 |
 |---|---|
-| [`@chanho/tokens`](packages/tokens) | 디자인 토큰 — 원시(palette)/시맨틱 2층 구조, 라이트·다크 CSS 변수 85개 |
-| [`@chanho/react`](packages/react) | React 19 컴포넌트 15종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/tokens`](packages/tokens) | 디자인 토큰 — 원시(palette)/시맨틱 2층 구조, 라이트·다크 CSS 변수 (elevation·focus-ring·z-index 포함) |
+| [`@chanho/react`](packages/react) | React 19 컴포넌트 26종 — Radix UI 기반 동작 + 토큰 스타일링 |
 
 ## 설치
 
@@ -23,14 +23,14 @@ cd packages/tokens && pnpm pack --pack-destination ../../artifacts
 cd ../react && pnpm pack --pack-destination ../../artifacts
 ```
 
-→ `artifacts/`에 `chanho-tokens-0.1.0.tgz`, `chanho-react-0.1.0.tgz` 생성 (npm에 올라갈 산출물과 동일)
+→ `artifacts/`에 `chanho-tokens-0.2.0.tgz`, `chanho-react-0.3.0.tgz` 생성 (npm에 올라갈 산출물과 동일)
 
 **② 사용할 프로젝트의 `package.json`:**
 
 ```jsonc
 "dependencies": {
-  "@chanho/react": "file:<경로>/design-system/artifacts/chanho-react-0.1.0.tgz",
-  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.1.0.tgz"
+  "@chanho/react": "file:<경로>/design-system/artifacts/chanho-react-0.3.0.tgz",
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.2.0.tgz"
 }
 ```
 
@@ -38,7 +38,7 @@ cd ../react && pnpm pack --pack-destination ../../artifacts
 
 ```yaml
 overrides:
-  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.1.0.tgz"
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.2.0.tgz"
 ```
 
 동작하는 실제 예시는 [`examples/consumer`](examples/consumer)를 그대로 참고하면 됩니다.
@@ -61,17 +61,17 @@ import { Button, TextField, Modal, ToastProvider, useToast } from "@chanho/react
 document.documentElement.dataset.theme = "dark"; // 또 "light"
 ```
 
-## 컴포넌트 (15)
+## 컴포넌트 (26)
 
-**표시** Avatar · Badge · Lozenge · Spinner
-**폼** Button · Checkbox · Radio/RadioGroup · Select · Switch · TextField
-**오버레이·내비게이션** Dropdown · Modal · Tabs · Toast(`ToastProvider`/`useToast`) · Tooltip
+**표시** Avatar · Badge · Card · Comment · EmptyState · Lozenge · ProgressBar · Spinner · Table · Tag
+**폼** Button · Checkbox · InlineEdit · Radio/RadioGroup · Select · Switch · TextArea · TextField
+**오버레이·내비게이션** Banner · Dropdown · Modal · PageHeader · SideNav · Tabs · Toast(`ToastProvider`/`useToast`) · Tooltip · TopBar
 
 ## 아키텍처 원칙
 
 - **토큰 2층 구조**: 컴포넌트는 시맨틱 토큰(`--chanho-color-background-brand`)만 참조하고 원시 팔레트는 직접 쓰지 않습니다. 색상 하드코딩은 Stylelint가 차단합니다(hex·색상명·rgb()/hsl() 전부).
 - **Headless 기반**: 포커스 트랩, 키보드 내비게이션, 스크린리더 시맨틱 같은 동작 계층은 [Radix UI](https://www.radix-ui.com/primitives)가 담당하고, 룩앤필은 100% 이 저장소가 소유합니다.
-- **접근성 계약을 테스트로 강제**: 라벨 없는 폼 컨트롤 금지, `role`/접근 가능 이름/키보드 조작을 행위 테스트로 고정 (테스트 79개).
+- **접근성 계약을 테스트로 강제**: 라벨 없는 폼 컨트롤 금지, `role`/접근 가능 이름/키보드 조작을 행위 테스트로 고정 (테스트 151개).
 
 ## 개발
 
