@@ -1,6 +1,6 @@
 {
   "name": "@chanho/tokens",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Chanho Design System — 디자인 토큰 (CSS 변수 + TypeScript 상수, 라이트/다크)",
   "license": "MIT",
   "repository": {

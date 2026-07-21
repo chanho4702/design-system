@@ -13,6 +13,8 @@
 }
 
 .brand {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: var(--chanho-space-100);
@@ -22,8 +24,19 @@
   white-space: nowrap;
 }
 
+/* 중앙 영역 — 좌/우 열(brand/actions)이 동일 flex라 이 영역이 헤더 정중앙에 온다. */
+.center {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chanho-space-150);
+}
+
 .search {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 420px;
 }
 
@@ -64,8 +77,10 @@
 }
 
 .actions {
-  margin-left: auto;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--chanho-space-100);
 }

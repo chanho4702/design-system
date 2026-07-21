@@ -22,3 +22,7 @@ export const WithImage: Story = {
 export const Small: Story = { args: { size: "small" } };
 
 export const Large: Story = { args: { size: "large" } };
+
+export const ColorBlue: Story = { args: { name: "문서 공간", color: "blue" } };
+
+export const ColorAuto: Story = { args: { name: "고객 작업", color: "auto" } };

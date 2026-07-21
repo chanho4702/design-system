@@ -60,4 +60,22 @@ describe("Dropdown", () => {
     await userEvent.click(screen.getByRole("button", { name: "더보기" }));
     expect(screen.getByRole("menu")).toHaveClass("custom");
   });
+
+  it("항목 아이콘과 구분선을 렌더링한다", async () => {
+    render(
+      <Dropdown
+        trigger={<button type="button">더보기</button>}
+        items={[
+          { label: "복제", icon: <span data-testid="copy-icon" /> },
+          { separator: true },
+          { label: "삭제", danger: true },
+        ]}
+      />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "더보기" }));
+    expect(screen.getByTestId("copy-icon")).toBeInTheDocument();
+    expect(screen.getByRole("separator")).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "복제" })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: "삭제" })).toBeInTheDocument();
+  });
 });

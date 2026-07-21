@@ -22,6 +22,12 @@ export interface ButtonProps extends ComponentPropsWithRef<"button"> {
   iconBefore?: ReactNode;
   /** true면 가로 폭을 100%로 채운다. */
   fullWidth?: boolean;
+  /**
+   * true면 라벨 없는 정사각 아이콘 전용 버튼. 아이콘은 iconBefore 또는 children으로 넘긴다.
+   * 시각적 라벨이 없으므로 접근 가능한 이름을 위해 `aria-label`을 반드시 함께 지정한다.
+   * @default false
+   */
+  iconOnly?: boolean;
 }
 
 export function Button({
@@ -31,6 +37,7 @@ export function Button({
   loading = false,
   disabled = false,
   fullWidth = false,
+  iconOnly = false,
   iconBefore,
   className,
   children,
@@ -41,11 +48,32 @@ export function Button({
     styles[variant],
     styles[size],
     fullWidth && styles.fullWidth,
+    iconOnly && styles.iconOnly,
     loading && styles.loading,
     className,
   ]
     .filter(Boolean)
     .join(" ");
+
+  if (iconOnly) {
+    return (
+      <button
+        type={type}
+        className={cls}
+        disabled={disabled || loading}
+        aria-busy={loading || undefined}
+        {...rest}
+      >
+        {loading ? (
+          <span className={styles.spinner} aria-hidden="true" />
+        ) : (
+          <span className={styles.icon} aria-hidden="true">
+            {iconBefore ?? children}
+          </span>
+        )}
+      </button>
+    );
+  }
 
   return (
     <button

@@ -3,9 +3,9 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildCss, flatten } from "./buildCss";
 import { themes } from "./semantic";
-import { focus, font, radius, space, z } from "./static";
+import { focus, font, radius, space, transition, z } from "./static";
 
-const staticTokens = flatten({ space, radius, font, z, focus });
+const staticTokens = flatten({ space, radius, font, z, focus, transition });
 const css = buildCss(staticTokens, themes.light, themes.dark);
 
 const outDir = join(dirname(fileURLToPath(import.meta.url)), "..", "dist");

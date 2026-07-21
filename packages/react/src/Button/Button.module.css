@@ -9,7 +9,8 @@
   font-weight: var(--chanho-font-weight-semibold);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+  transition: background-color var(--chanho-transition-base), border-color var(--chanho-transition-base),
+    box-shadow var(--chanho-transition-base);
 }
 
 .button:focus-visible {
@@ -37,6 +38,23 @@
   height: 44px;
   padding: 0 var(--chanho-space-200);
   font-size: var(--chanho-font-size-100);
+}
+
+/* 아이콘 전용: 정사각. 크기별 폭 = 높이. size 규칙 뒤에 와서 padding을 덮는다. */
+.iconOnly {
+  padding: 0;
+}
+
+.iconOnly.small {
+  width: 28px;
+}
+
+.iconOnly.medium {
+  width: 36px;
+}
+
+.iconOnly.large {
+  width: 44px;
 }
 
 .primary {

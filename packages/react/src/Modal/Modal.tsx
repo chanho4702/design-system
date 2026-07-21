@@ -3,8 +3,8 @@ import { Dialog as RadixDialog } from "radix-ui";
 import styles from "./Modal.module.css";
 
 export interface ModalProps {
-  /** 클릭 시 모달을 여는 트리거 요소. */
-  trigger: ReactElement;
+  /** 클릭 시 모달을 여는 트리거 요소. 제어형(open/onOpenChange)으로 열 때는 생략 가능. */
+  trigger?: ReactElement;
   /** 모달 제목. dialog의 접근 가능 이름이 된다. */
   title: string;
   /** 제목 아래 보조 설명. dialog의 접근 가능 설명이 된다. */
@@ -41,7 +41,7 @@ export function Modal({
 }: ModalProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
-      <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
+      {trigger ? <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger> : null}
       <RadixDialog.Portal>
         <RadixDialog.Overlay className={styles.overlay} />
         <RadixDialog.Content

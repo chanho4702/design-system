@@ -1,5 +1,5 @@
 export { Avatar } from "./Avatar/Avatar";
-export type { AvatarProps } from "./Avatar/Avatar";
+export type { AvatarColor, AvatarProps } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
 export type { BadgeProps } from "./Badge/Badge";
 export { Banner } from "./Banner/Banner";
@@ -12,6 +12,8 @@ export { Checkbox } from "./Checkbox/Checkbox";
 export type { CheckboxProps } from "./Checkbox/Checkbox";
 export { Comment } from "./Comment/Comment";
 export type { CommentAction, CommentProps } from "./Comment/Comment";
+export { ConfirmDialog } from "./ConfirmDialog/ConfirmDialog";
+export type { ConfirmDialogProps } from "./ConfirmDialog/ConfirmDialog";
 export { Dropdown } from "./Dropdown/Dropdown";
 export type { DropdownItem, DropdownProps } from "./Dropdown/Dropdown";
 export { EmptyState } from "./EmptyState/EmptyState";

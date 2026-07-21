@@ -88,4 +88,26 @@ describe("Button", () => {
     expect(screen.getByTestId("icon")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "저장" })).toBeInTheDocument();
   });
+
+  it("iconOnly면 aria-label로 접근 가능한 이름을 갖고 아이콘을 렌더링한다", () => {
+    render(
+      <Button iconOnly aria-label="편집">
+        <span data-testid="pencil" />
+      </Button>,
+    );
+    expect(screen.getByRole("button", { name: "편집" })).toBeInTheDocument();
+    expect(screen.getByTestId("pencil")).toBeInTheDocument();
+  });
+
+  it("iconOnly + loading이면 스피너로 대체되고 클릭이 차단된다", async () => {
+    const onClick = vi.fn();
+    render(
+      <Button iconOnly aria-label="저장" loading onClick={onClick} iconBefore={<span data-testid="save" />} />,
+    );
+    const button = screen.getByRole("button", { name: "저장" });
+    expect(button).toBeDisabled();
+    expect(screen.queryByTestId("save")).not.toBeInTheDocument();
+    await userEvent.click(button);
+    expect(onClick).not.toHaveBeenCalled();
+  });
 });

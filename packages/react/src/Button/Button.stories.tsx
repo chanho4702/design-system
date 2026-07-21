@@ -34,3 +34,11 @@ export const WithIcon: Story = {
 export const FullWidth: Story = { args: { fullWidth: true } };
 
 export const Disabled: Story = { args: { disabled: true } };
+
+export const IconOnly: Story = {
+  args: {
+    iconOnly: true,
+    "aria-label": "편집",
+    children: <span aria-hidden="true">✎</span>,
+  },
+};

@@ -34,3 +34,29 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* 이니셜 틴트 — 시맨틱 서브틀 배경 + 대응 텍스트색(토큰만 사용). */
+.blue {
+  background: var(--chanho-color-background-brand-subtle);
+  color: var(--chanho-color-text-brand);
+}
+
+.green {
+  background: var(--chanho-color-background-success-subtle);
+  color: var(--chanho-color-text-success);
+}
+
+.orange {
+  background: var(--chanho-color-background-warning-subtle);
+  color: var(--chanho-color-text-warning);
+}
+
+.red {
+  background: var(--chanho-color-background-danger-subtle);
+  color: var(--chanho-color-text-danger);
+}
+
+.teal {
+  background: var(--chanho-color-background-info-subtle);
+  color: var(--chanho-color-text-info);
+}

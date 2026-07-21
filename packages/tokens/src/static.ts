@@ -18,10 +18,20 @@ export const space = {
 
 export const radius = {
   small: "4px",
-  medium: "8px",
+  medium: "6px",
   large: "12px",
   xlarge: "16px",
   full: "9999px",
+} as const;
+
+/**
+ * 트랜지션 — 인터랙션 상태 전환. CSS에서 `transition: <prop> var(--chanho-transition-base)` 형태로 사용.
+ * 기본값은 150ms ease (Atlassian 감속감).
+ */
+export const transition = {
+  fast: "100ms ease",
+  base: "150ms ease",
+  slow: "250ms ease",
 } as const;
 
 export const font = {
