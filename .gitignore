@@ -5,3 +5,6 @@ storybook-static/
 artifacts/
 examples/consumer/pnpm-lock.yaml
 .idea/
+# 반입한 디자인 탐색 산출물(zip + 압축 해제본) — 패키지 소스가 아니다.
+# 참고물은 Obsidian 보관함 몫. 디스크에는 남기고 추적만 하지 않는다.
+/# 디자인 시스템 브랜드 탐색*
