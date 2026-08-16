@@ -1,5 +1,11 @@
 # Chanho Design System
 
+[![CI](https://github.com/chanho4702/design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/chanho4702/design-system/actions/workflows/ci.yml)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-5FA04E?logo=nodedotjs&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-11.10.0-F69220?logo=pnpm&logoColor=white)
+![Components](https://img.shields.io/badge/Components-28-1B66C9)
+
 Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프론트엔드가 공유하도록 만든 **자체 디자인 시스템 모노레포**.
 토큰과 React 컴포넌트를 별도 npm 패키지로 분리해, 소비 앱은 두 패키지만 설치하면 동일한 룩앤필·다크모드·접근성 계약을 그대로 가져간다.
 
