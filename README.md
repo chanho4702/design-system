@@ -5,7 +5,7 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 **구조는 Atlassian을 참고하되 브랜드는 자체 정의** — 스틸 블루 `#1B66C9`(브랜드 탐색 1a), Pretendard 서체.
 
-> 이 저장소는 **독립 git repo**(`chanho4702/design-system`)이며, MSA 우산 repo에서는 별도로 관리한다. MSA 프론트 중 `wiki-front`·`alm-front`가 tarball 방식으로 실제 소비 중이다 — 아래 [소비 프로젝트](#소비-프로젝트) 참고.
+> 이 저장소는 [독립 git repo](https://github.com/chanho4702/design-system)이며, MSA 우산 repo에서는 별도로 관리한다. MSA 프론트 중 `wiki-front`·`alm-front`가 tarball 방식으로 실제 소비 중이다 — 아래 [소비 프로젝트](#소비-프로젝트) 참고.
 
 ---
 
@@ -15,8 +15,8 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 | 패키지 | 버전 | 설명 |
 |---|---|---|
-| [`@chanho/tokens`](packages/tokens) | 0.2.0 | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
-| [`@chanho/react`](packages/react) | 0.3.0 | React 19 컴포넌트 27종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/tokens`](packages/tokens) | 0.3.0 | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
+| [`@chanho/react`](packages/react) | 0.5.0 | React 19 컴포넌트 28종 — Radix UI 기반 동작 + 토큰 스타일링 |
 
 두 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
 
@@ -50,11 +50,11 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 ---
 
-## 컴포넌트 (`@chanho/react`) — 27종
+## 컴포넌트 (`@chanho/react`) — 28종
 
-**표시** Avatar · Badge · Card · Comment · EmptyState · Lozenge · ProgressBar · Spinner · Table · Tag
-**폼** Button · Checkbox · InlineEdit · Radio/RadioGroup · Select · Switch · TextArea · TextField
-**오버레이·내비게이션** Banner · Dropdown · Modal · PageHeader · SideNav · Tabs · Toast(`ToastProvider`/`useToast`) · Tooltip · TopBar
+- **표시:** Avatar · Badge · Card · Comment · EmptyState · Lozenge · ProgressBar · Spinner · Table · Tag
+- **폼:** Button · Checkbox · InlineEdit · Radio/RadioGroup · Select · Switch · TextArea · TextField
+- **오버레이·내비게이션:** Banner · ConfirmDialog · Dropdown · Modal · PageHeader · SideNav · Tabs · Toast(`ToastProvider`/`useToast`) · Tooltip · TopBar
 
 각 컴포넌트는 값 export와 함께 타입(`ButtonProps` 등)을 노출한다. `react`/`react-dom`은 peer(^19), `radix-ui`·`@chanho/tokens`는 런타임 의존이자 번들 external.
 
@@ -62,7 +62,7 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 - **토큰 2층 강제**: 컴포넌트는 시맨틱 CSS 변수(`--chanho-color-background-brand`)만 참조하고 원시 팔레트는 쓰지 않는다. 색상 하드코딩은 Stylelint가 차단한다.
 - **Headless 기반**: 포커스 트랩·키보드 내비게이션·스크린리더 시맨틱 같은 동작 계층은 Radix UI가 담당하고, 룩앤필은 100% 이 저장소가 소유한다.
-- **접근성 계약을 테스트로 고정**: 라벨 없는 폼 컨트롤 금지, `role`·접근 가능 이름·키보드 조작을 행위 테스트로 검증. React 테스트 151개 + 토큰 테스트 4개.
+- **접근성 계약을 테스트로 고정**: 라벨 없는 폼 컨트롤 금지, `role`·접근 가능 이름·키보드 조작을 행위 테스트로 검증한다.
 
 ---
 
@@ -96,14 +96,14 @@ cd packages/tokens && pnpm pack --pack-destination ../../artifacts
 cd ../react && pnpm pack --pack-destination ../../artifacts
 ```
 
-→ `artifacts/`에 `chanho-tokens-0.2.0.tgz`, `chanho-react-0.3.0.tgz` 생성(npm에 올라갈 산출물과 동일).
+→ `artifacts/`에 `chanho-tokens-0.3.0.tgz`, `chanho-react-0.5.0.tgz` 생성(npm에 올라갈 산출물과 동일).
 
 **② 소비 프로젝트 `package.json`**
 
 ```jsonc
 "dependencies": {
-  "@chanho/react":  "file:<경로>/design-system/artifacts/chanho-react-0.3.0.tgz",
-  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.2.0.tgz"
+  "@chanho/react":  "file:<경로>/design-system/artifacts/chanho-react-0.5.0.tgz",
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.3.0.tgz"
 }
 ```
 
@@ -111,10 +111,12 @@ cd ../react && pnpm pack --pack-destination ../../artifacts
 
 ```yaml
 overrides:
-  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.2.0.tgz"
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.3.0.tgz"
 ```
 
-동작하는 실제 예시는 [`examples/consumer`](examples/consumer)를 그대로 참고하면 된다.
+설치 구조는 [`examples/consumer`](examples/consumer)에서 확인할 수 있다. 이 예제는 현재
+React 0.3.0 / tokens 0.2.0 tarball에 고정돼 있으므로, 최신 산출물을 검증할 때는 위 버전으로
+`package.json`을 맞춘다.
 
 npm 배포 후에는 한 줄로 줄어든다: `pnpm add @chanho/react @chanho/tokens`
 
@@ -123,9 +125,9 @@ npm 배포 후에는 한 줄로 줄어든다: `pnpm add @chanho/react @chanho/to
 | 소비처 | 방식 | 용도 |
 |---|---|---|
 | `apps/docs` | `workspace:*` | Storybook 문서·개발 환경 |
-| `examples/consumer` | 배포 tarball(`file:`) | 배포 산출물이 실제로 설치·동작하는지 검증 |
-| `wiki-front` (별도 repo) | 배포 tarball(`file:../design-system/artifacts/*.tgz`) | 위키 프론트 — UI 100% 이 시스템으로 구성 |
-| `alm-front` (별도 repo) | 배포 tarball(`file:../design-system/artifacts/*.tgz`) | ALM(지라 클론) 프론트 — UI 100% 이 시스템으로 구성 |
+| `examples/consumer` | 배포 tarball(`file:`, React 0.3.0 / tokens 0.2.0) | 커밋된 tarball 의존성의 설치·빌드 검증 |
+| `wiki-front` (별도 repo) | 배포 tarball(React 0.5.0 / tokens 0.3.0) | 위키 프론트 — UI 100% 이 시스템으로 구성 |
+| `alm-front` (별도 repo) | 배포 tarball(React 0.3.0 / tokens 0.2.0) | ALM 프론트 — UI 100% 이 시스템으로 구성 |
 
 myFront는 MUI 기반이라 이 시스템을 소비하지 않는다.
 
@@ -165,7 +167,7 @@ design-system/
 │  ├─ tokens/            @chanho/tokens — palette·semantic·static + CSS 빌드
 │  │  └─ src/            index.ts · palette.ts · semantic.ts · static.ts
 │  │                     buildCss.ts(+test) · build.ts
-│  └─ react/             @chanho/react — 컴포넌트 27종 (Vite lib mode)
+│  └─ react/             @chanho/react — 컴포넌트 28종 (Vite lib mode)
 │     └─ src/<Component>/ 각 컴포넌트 + *.test.tsx + CSS
 ├─ apps/
 │  └─ docs/              Storybook 9 (workspace 참조)
