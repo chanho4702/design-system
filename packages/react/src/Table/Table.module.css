@@ -117,3 +117,59 @@
   outline: none;
   box-shadow: inset var(--chanho-focus-ring);
 }
+
+/* 열 너비 조절·순서 변경 */
+.tableFixed {
+  table-layout: fixed;
+}
+
+.tableFixed .td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thDraggable {
+  cursor: grab;
+}
+
+.thDraggable:focus-visible {
+  outline: none;
+  box-shadow: inset var(--chanho-focus-ring);
+}
+
+.thDropTarget {
+  box-shadow: inset 3px 0 0 var(--chanho-color-border-brand);
+}
+
+.resizer {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+}
+
+.resizer::after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  left: 3px;
+  width: 1px;
+  background: var(--chanho-color-border-default);
+  opacity: 0;
+}
+
+.th:hover .resizer::after,
+.resizer:hover::after {
+  opacity: 1;
+  background: var(--chanho-color-border-brand);
+}
+
+.resizingBody {
+  cursor: col-resize;
+  user-select: none;
+}

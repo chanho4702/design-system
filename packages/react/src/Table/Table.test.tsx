@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Table } from "./Table";
@@ -74,5 +74,30 @@ describe("Table", () => {
       <Table aria-label="사용자" columns={columns} rows={rows} className="custom" />,
     );
     expect(container.firstChild).toHaveClass("custom");
+  });
+
+  it("reorderable이면 헤더에서 Alt+화살표로 열 순서를 바꾸고 onColumnOrderChange를 부른다", async () => {
+    const onColumnOrderChange = vi.fn();
+    render(<Table aria-label="사용자" columns={columns} rows={rows} reorderable onColumnOrderChange={onColumnOrderChange} />);
+    const headers = screen.getAllByRole("columnheader");
+    const first = headers[0];
+    first.focus();
+    await userEvent.keyboard("{Alt>}{ArrowRight}{/Alt}");
+    expect(onColumnOrderChange).toHaveBeenCalledTimes(1);
+    const next = onColumnOrderChange.mock.calls[0][0] as string[];
+    expect(next[1]).toBe(columns[0].key);
+    expect(screen.getAllByRole("columnheader")[1]).toHaveTextContent(columns[0].header);
+  });
+
+  it("resizable이면 헤더 가장자리를 끌어 너비를 바꾸고 onColumnWidthsChange를 부른다", () => {
+    const onColumnWidthsChange = vi.fn();
+    render(<Table aria-label="사용자" columns={columns} rows={rows} resizable onColumnWidthsChange={onColumnWidthsChange} />);
+    const handle = screen.getByRole("separator", { name: `${columns[0].header} 열 너비 조절` });
+    fireEvent.pointerDown(handle, { clientX: 100 });
+    fireEvent.pointerMove(window, { clientX: 160 });
+    fireEvent.pointerUp(window);
+    expect(onColumnWidthsChange).toHaveBeenCalled();
+    const widths = onColumnWidthsChange.mock.calls.at(-1)?.[0] as Record<string, number>;
+    expect(widths[columns[0].key]).toBeGreaterThanOrEqual(56);
   });
 });
