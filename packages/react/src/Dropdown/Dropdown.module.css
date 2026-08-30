@@ -51,3 +51,49 @@
   background: var(--chanho-color-background-danger-subtle);
   color: var(--chanho-color-text-danger);
 }
+
+/* 그룹 제목 — 선택 불가, 지라 설정 메뉴의 "개인 설정 / 관리자 설정" */
+.heading {
+  padding: var(--chanho-space-100) var(--chanho-space-150) var(--chanho-space-50);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* 설명이 있는 두 줄 항목 */
+.itemRich {
+  align-items: flex-start;
+}
+
+.itemRich .itemIcon {
+  margin-top: 2px;
+  color: var(--chanho-color-text-subtle);
+}
+
+.itemRich[data-highlighted] .itemIcon {
+  color: inherit;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.itemLabel {
+  font-weight: var(--chanho-font-weight-medium);
+}
+
+.itemDescription {
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+  white-space: normal;
+}
+
+.itemRich[data-highlighted] .itemDescription {
+  color: inherit;
+  opacity: 0.85;
+}

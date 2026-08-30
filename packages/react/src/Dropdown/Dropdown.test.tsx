@@ -78,4 +78,26 @@ describe("Dropdown", () => {
     expect(screen.getByRole("menuitem", { name: "복제" })).toBeInTheDocument();
     expect(screen.getByRole("menuitem", { name: "삭제" })).toBeInTheDocument();
   });
+
+  it("그룹 제목과 설명이 있는 항목을 렌더링한다 (제목은 선택 불가)", async () => {
+    const onSelect = vi.fn();
+    render(
+      <Dropdown
+        align="end"
+        trigger={<button type="button">설정</button>}
+        items={[
+          { heading: "개인 설정" },
+          { label: "알림 설정", description: "앱 내 알림 수신을 관리합니다", icon: <span data-testid="bell" />, onSelect },
+        ]}
+      />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "설정" }));
+    expect(screen.getByText("개인 설정")).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: /개인 설정/ })).not.toBeInTheDocument();
+    const item = screen.getByRole("menuitem", { name: /알림 설정/ });
+    expect(item).toHaveTextContent("앱 내 알림 수신을 관리합니다");
+    expect(screen.getByTestId("bell")).toBeInTheDocument();
+    await userEvent.click(item);
+    expect(onSelect).toHaveBeenCalledTimes(1);
+  });
 });
