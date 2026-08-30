@@ -92,6 +92,32 @@ document.documentElement.dataset.theme = "dark"; // 또는 "light"
 
 ## 설치 (소비 프로젝트에서)
 
+### GitHub Packages (기본, 2026-08-30~)
+
+`v*` 태그를 푸시하면 `.github/workflows/publish.yml`이 두 패키지를 GitHub Packages에 올린다.
+GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트리 이름은 `@chanho4702/*`지만, 소비 프로젝트는
+**pnpm alias**로 `@chanho/*` import를 그대로 쓴다.
+
+```jsonc
+// package.json
+"dependencies": {
+  "@chanho/react":  "npm:@chanho4702/react@0.7.0",
+  "@chanho/tokens": "npm:@chanho4702/tokens@0.3.0"
+}
+```
+
+```ini
+# .npmrc (리포에 커밋) — 토큰은 환경변수로
+@chanho4702:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GH_PACKAGES_TOKEN}
+```
+
+- 로컬: `GH_PACKAGES_TOKEN=$(gh auth token) pnpm install` (gh 토큰에 `read:packages` 스코프가 있다) 또는 PAT.
+- CI: 패키지가 공개(public)라 `secrets.GITHUB_TOKEN`으로 읽힌다 — `GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
+- 새 버전: `packages/*/package.json` 버전 올리고 `git tag v<react 버전>` 푸시. 이미 올라간 버전은 건너뛴다.
+
+### tarball 로컬 참조 (대안 — 레지스트리를 못 쓰는 환경)
+
 > 아직 npm 레지스트리에 배포 전이다. 현재는 **tarball(.tgz) 로컬 참조** 방식을 쓴다.
 
 **① 이 저장소에서 패키지 파일 생성**
