@@ -107,13 +107,15 @@ GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트�
 ```
 
 ```ini
-# .npmrc (리포에 커밋) — 토큰은 환경변수로
+# 프로젝트 .npmrc (리포에 커밋) — 스코프 → 레지스트리만. 토큰은 여기 두지 않는다:
+# pnpm은 커밋되는 프로젝트 .npmrc의 인증(환경변수 참조 포함)을 무시한다.
 @chanho4702:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GH_PACKAGES_TOKEN}
 ```
 
-- 로컬: `GH_PACKAGES_TOKEN=$(gh auth token) pnpm install` (gh 토큰에 `read:packages` 스코프가 있다) 또는 PAT.
-- CI: 패키지가 공개(public)라 `secrets.GITHUB_TOKEN`으로 읽힌다 — `GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
+- 로컬(최초 1회): `~/.npmrc`에 `//npm.pkg.github.com/:_authToken=${GH_PACKAGES_TOKEN}` 한 줄. 이후 `GH_PACKAGES_TOKEN=$(gh auth token) pnpm install`
+  (gh 토큰에 `read:packages` 스코프가 있다) 또는 PAT.
+- CI: 패키지가 공개(public)라 `secrets.GITHUB_TOKEN`으로 읽힌다 — `actions/setup-node`에 `registry-url: https://npm.pkg.github.com`,
+  `scope: '@chanho4702'`를 주고 install 스텝에 `NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
 - 새 버전: `packages/*/package.json` 버전 올리고 `git tag v<react 버전>` 푸시. 이미 올라간 버전은 건너뛴다.
 
 ### tarball 로컬 참조 (대안 — 레지스트리를 못 쓰는 환경)
