@@ -26,8 +26,10 @@
   background: var(--chanho-color-background-brand);
 }
 
+/* disabled는 색을 덮지 않고 흐리게만 — checked 상태(브랜드색)가 disabled에서도 읽혀야 한다.
+   배경을 disabled 색으로 덮으면 "켜진 채 잠김"과 "꺼짐"이 구분되지 않는다(ALM 필드 구성 읽기 전용 표에서 발견). */
 .track:disabled {
-  background: var(--chanho-color-background-disabled);
+  opacity: 0.5;
   cursor: not-allowed;
 }
 

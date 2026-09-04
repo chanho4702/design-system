@@ -1,5 +1,11 @@
 # @chanho/react
 
+## 0.8.1
+
+### Patch Changes
+
+- Switch: disabled가 배경색을 덮어 checked 상태가 보이지 않던 문제 — disabled는 opacity로만 표현해 "켜진 채 잠김"이 구분된다.
+
 ## 0.8.0
 
 ### Minor Changes
