@@ -73,6 +73,8 @@ export const z = {
   dropdown: "400",
   blanket: "500",
   modal: "510",
+  /** 팝오버(Select·Dropdown 메뉴·InlineEdit 액션) — 모달 안에서 열려도 블랭킷·모달 위에 떠야 한다 */
+  popover: "550",
   toast: "600",
   tooltip: "700",
 } as const;

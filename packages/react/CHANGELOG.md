@@ -1,5 +1,17 @@
 # @chanho/react
 
+## 0.8.0
+
+### Minor Changes
+
+- Select·Dropdown·InlineEdit 팝업을 `--chanho-z-popover`(550)로 — 모달 안에서 열었을 때 블랭킷(500)이 포인터를 가로채
+  옵션을 마우스로 고를 수 없던 버그 수정(ALM 이슈 상세 모달 우측 속성 패널에서 발견).
+
+### Patch Changes
+
+- Updated dependencies
+  - @chanho/tokens@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

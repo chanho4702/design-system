@@ -71,7 +71,7 @@
   top: calc(100% + var(--chanho-space-50));
   display: flex;
   gap: var(--chanho-space-50);
-  z-index: var(--chanho-z-dropdown);
+  z-index: var(--chanho-z-popover);
 }
 
 .control {

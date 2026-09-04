@@ -58,7 +58,7 @@
   background: var(--chanho-color-background-surface-overlay);
   box-shadow: var(--chanho-shadow-300);
   font-family: var(--chanho-font-family-sans);
-  z-index: var(--chanho-z-dropdown);
+  z-index: var(--chanho-z-popover);
 }
 
 .item {
