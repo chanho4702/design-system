@@ -1,0 +1,124 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-200);
+  font-family: var(--chanho-font-family-sans);
+  color: var(--chanho-color-text-default);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--chanho-space-150);
+}
+
+.toolbarGrow {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.toolbarEnd {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--chanho-space-100);
+}
+
+.rowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chanho-space-50);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--chanho-font-size-200);
+  font-weight: var(--chanho-font-weight-semibold);
+  color: var(--chanho-color-text-default);
+}
+
+.subtle {
+  margin: 0;
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-subtle);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-150);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chanho-space-50);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  gap: var(--chanho-space-200);
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detailList {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--chanho-space-100) var(--chanho-space-200);
+  margin: 0;
+  font-size: var(--chanho-font-size-100);
+}
+
+.detailList dt {
+  color: var(--chanho-color-text-subtle);
+}
+
+.detailList dd {
+  margin: 0;
+}
+
+.eventList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-100);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.eventRow {
+  display: flex;
+  gap: var(--chanho-space-100);
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-subtle);
+}
+
+.eventType {
+  font-weight: var(--chanho-font-weight-medium);
+  color: var(--chanho-color-text-default);
+}
+
+.formGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-200);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--chanho-space-100);
+}
+
+.resultTable {
+  width: 100%;
+}

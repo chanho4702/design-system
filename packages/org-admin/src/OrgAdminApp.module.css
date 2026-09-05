@@ -1,0 +1,47 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-300);
+  padding-bottom: var(--chanho-space-600);
+  font-family: var(--chanho-font-family-sans);
+  color: var(--chanho-color-text-default);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chanho-space-50);
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-75);
+  padding: var(--chanho-space-100) var(--chanho-space-150);
+  border-radius: var(--chanho-radius-medium);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-100);
+  font-weight: var(--chanho-font-weight-medium);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-default);
+}
+
+.navLink:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.navLinkActive {
+  background: var(--chanho-color-background-selected);
+  color: var(--chanho-color-text-selected);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-200);
+}

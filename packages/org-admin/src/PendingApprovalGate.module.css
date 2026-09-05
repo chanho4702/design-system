@@ -1,0 +1,32 @@
+.gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--chanho-space-200);
+  min-height: 60vh;
+  padding: var(--chanho-space-600) var(--chanho-space-200);
+  font-family: var(--chanho-font-family-sans);
+  color: var(--chanho-color-text-default);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--chanho-font-size-400);
+  font-weight: var(--chanho-font-weight-semibold);
+}
+
+.body {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--chanho-font-size-100);
+  line-height: var(--chanho-font-lineHeight-100);
+  color: var(--chanho-color-text-subtle);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chanho-space-100);
+}

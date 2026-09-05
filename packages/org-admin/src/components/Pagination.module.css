@@ -1,0 +1,10 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--chanho-space-150);
+  padding-top: var(--chanho-space-150);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-subtle);
+}

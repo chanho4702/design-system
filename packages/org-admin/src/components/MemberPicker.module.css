@@ -1,0 +1,62 @@
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-100);
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chanho-space-50);
+  max-height: 220px;
+  overflow-y: auto;
+  padding: var(--chanho-space-50);
+  border: 1px solid var(--chanho-color-border-default);
+  border-radius: var(--chanho-radius-medium);
+  background: var(--chanho-color-background-surface);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  width: 100%;
+  padding: var(--chanho-space-100);
+  border: none;
+  border-radius: var(--chanho-radius-small);
+  background: transparent;
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+  color: var(--chanho-color-text-default);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover,
+.option:focus-visible {
+  background: var(--chanho-color-background-neutral);
+}
+
+.option[aria-pressed="true"] {
+  background: var(--chanho-color-background-selected);
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.optionEmail {
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-subtle);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hint {
+  margin: 0;
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  color: var(--chanho-color-text-subtle);
+}
