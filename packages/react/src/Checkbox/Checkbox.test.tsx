@@ -42,4 +42,12 @@ describe("Checkbox", () => {
     render(<Checkbox label="동의합니다" ref={ref} />);
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
+
+  it("labelHidden이면 라벨이 시각적으로만 숨고 접근 이름은 유지된다", () => {
+    render(<Checkbox label="모두 선택" labelHidden />);
+    expect(screen.getByRole("checkbox", { name: "모두 선택" })).toBeInTheDocument();
+    const labelStyle = window.getComputedStyle(screen.getByText("모두 선택"));
+    expect(labelStyle.position).toBe("absolute");
+    expect(labelStyle.width).toBe("1px");
+  });
 });

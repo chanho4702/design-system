@@ -46,3 +46,14 @@
   font-size: var(--chanho-font-size-100);
   cursor: pointer;
 }
+
+/* 라벨을 시각적으로만 숨긴다 — 스크린리더에는 남아 접근 이름이 유지된다.
+   TopBar의 검색 라벨과 같은 관례. */
+.labelHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

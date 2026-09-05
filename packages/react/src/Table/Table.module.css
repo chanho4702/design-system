@@ -39,6 +39,20 @@
   text-align: center;
 }
 
+/* 헤더 셀 내용 래퍼 — header가 노드(체크박스·아이콘·배지)여도 세로 가운데로 모으고,
+   오른쪽 가장자리에 절대배치되는 너비 조절 핸들 안쪽에 머물게 폭을 가둔다. */
+.thContent,
+.thLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-75);
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
 .sort {
   display: inline-flex;
   align-items: center;
@@ -145,6 +159,7 @@
   position: absolute;
   top: 0;
   right: -3px;
+  z-index: 1;
   width: 7px;
   height: 100%;
   cursor: col-resize;

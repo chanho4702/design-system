@@ -46,4 +46,37 @@ describe("Tabs", () => {
     const { container } = render(<Tabs label="이슈 상세" items={ITEMS} className="custom" />);
     expect(container.firstChild).toHaveClass("custom");
   });
+
+  it("label에 노드를 넣으면 그대로 렌더링되고 ariaLabel이 접근 이름이 된다", () => {
+    render(
+      <Tabs
+        label="필드 구성"
+        items={[
+          {
+            value: "bug",
+            label: (
+              <>
+                버그 <span aria-hidden="true">●</span>
+              </>
+            ),
+            ariaLabel: "버그 (덮어씀)",
+            content: <p>버그 필드</p>,
+          },
+          { value: "task", label: "작업", content: <p>작업 필드</p> },
+        ]}
+      />,
+    );
+    expect(screen.getByRole("tab", { name: "버그 (덮어씀)" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "버그 (덮어씀)" })).toHaveTextContent("버그");
+  });
+
+  it("ariaLabel이 없으면 라벨 노드의 텍스트가 접근 이름이 된다", () => {
+    render(
+      <Tabs
+        label="필드 구성"
+        items={[{ value: "bug", label: <span>버그</span>, content: <p>버그 필드</p> }]}
+      />,
+    );
+    expect(screen.getByRole("tab", { name: "버그" })).toBeInTheDocument();
+  });
 });

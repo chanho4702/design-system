@@ -7,8 +7,13 @@ export type SortDirection = "asc" | "desc";
 export interface TableColumn<Row> {
   /** 행 데이터에서 값을 읽을 키. render가 없으면 이 키로 셀 값을 조회한다. */
   key: string;
-  /** 헤더 셀에 표시되는 텍스트. */
-  header: string;
+  /**
+   * 헤더 셀에 표시되는 내용. 문자열 외에 체크박스·아이콘 같은 노드도 받는다.
+   * 노드를 넣으면 정렬 버튼·너비 조절 핸들의 접근 이름을 만들 수 없으므로 `ariaLabel`을 함께 준다.
+   */
+  header: ReactNode;
+  /** 열의 접근 가능 이름(문자열). 정렬 버튼과 너비 조절 핸들의 이름에 쓰인다. */
+  ariaLabel?: string;
   /** true면 헤더가 정렬 버튼이 된다. */
   sortable?: boolean;
   /** 열 너비(CSS 값). resizable이면 초기 너비로 쓰인다. */
@@ -60,6 +65,15 @@ export interface TableProps<Row extends { id: string }> {
 }
 
 const MIN_WIDTH = 56;
+
+/**
+ * 열의 접근 이름으로 쓸 문자열 — ariaLabel이 있으면 그것, 없으면 header가 문자열일 때만.
+ * 둘 다 없으면(노드 헤더 + ariaLabel 미지정) undefined를 돌려주고, 호출부가 이름을 생략한다.
+ */
+function columnName<Row>(col: TableColumn<Row>): string | undefined {
+  if (col.ariaLabel) return col.ariaLabel;
+  return typeof col.header === "string" ? col.header : undefined;
+}
 
 function alignClass(align?: "left" | "right" | "center") {
   if (align === "right") return styles.right;
@@ -222,6 +236,7 @@ export function Table<Row extends { id: string }>({
           <tr>
             {ordered.map((col) => {
               const sorted = sortKey === col.key;
+              const name = columnName(col);
               const adjustable = col.adjustable !== false;
               const canDrag = reorderable && adjustable;
               return (
@@ -284,9 +299,10 @@ export function Table<Row extends { id: string }>({
                       className={[styles.sort, sorted ? styles.sorted : null]
                         .filter(Boolean)
                         .join(" ")}
+                      aria-label={col.ariaLabel}
                       onClick={() => onSort?.(col.key)}
                     >
-                      {col.header}
+                      <span className={styles.thLabel}>{col.header}</span>
                       <span
                         className={[
                           styles.arrow,
@@ -298,14 +314,14 @@ export function Table<Row extends { id: string }>({
                       />
                     </button>
                   ) : (
-                    col.header
+                    <span className={styles.thContent}>{col.header}</span>
                   )}
                   {resizable && adjustable ? (
                     <span
                       className={styles.resizer}
                       role="separator"
                       aria-orientation="vertical"
-                      aria-label={`${col.header} 열 너비 조절`}
+                      aria-label={name ? `${name} 열 너비 조절` : "열 너비 조절"}
                       onPointerDown={(event) => startResize(col.key, event)}
                       onDragStart={(event) => event.preventDefault()}
                     />

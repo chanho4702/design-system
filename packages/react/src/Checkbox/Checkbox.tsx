@@ -6,6 +6,11 @@ import styles from "./Checkbox.module.css";
 export interface CheckboxProps extends ComponentPropsWithRef<typeof RadixCheckbox.Root> {
   /** 라벨 텍스트. 접근성을 위해 필수이며 체크박스와 자동 연결된다. */
   label: string;
+  /**
+   * true면 라벨을 시각적으로만 숨긴다 — 접근 이름은 그대로 남는다.
+   * 표 헤더의 "모두 선택"이나 행마다 붙는 선택 체크박스처럼 글자를 둘 자리가 없을 때 쓴다.
+   */
+  labelHidden?: boolean;
 }
 
 function CheckIcon() {
@@ -22,7 +27,7 @@ function CheckIcon() {
   );
 }
 
-export function Checkbox({ label, id, className, ...rest }: CheckboxProps) {
+export function Checkbox({ label, labelHidden = false, id, className, ...rest }: CheckboxProps) {
   const autoId = useId();
   const checkboxId = id ?? autoId;
   return (
@@ -32,7 +37,10 @@ export function Checkbox({ label, id, className, ...rest }: CheckboxProps) {
           <CheckIcon />
         </RadixCheckbox.Indicator>
       </RadixCheckbox.Root>
-      <label className={styles.label} htmlFor={checkboxId}>
+      <label
+        className={[styles.label, labelHidden ? styles.labelHidden : null].filter(Boolean).join(" ")}
+        htmlFor={checkboxId}
+      >
         {label}
       </label>
     </span>

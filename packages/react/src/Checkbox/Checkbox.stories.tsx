@@ -18,3 +18,8 @@ export const Checked: Story = { args: { defaultChecked: true } };
 export const Disabled: Story = { args: { disabled: true } };
 
 export const DisabledChecked: Story = { args: { disabled: true, defaultChecked: true } };
+
+/** 표 헤더·행처럼 글자를 둘 자리가 없을 때 — 라벨은 스크린리더에만 남는다. */
+export const LabelHidden: Story = {
+  args: { label: "모두 선택", labelHidden: true },
+};

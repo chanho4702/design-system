@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { Checkbox } from "../Checkbox/Checkbox";
 import { Table } from "./Table";
 import type { SortDirection, TableColumn } from "./Table";
 
@@ -89,5 +90,53 @@ export const StickyHeader: Story = {
     rows: [...members, ...members, ...members].map((m, i) => ({ ...m, id: String(i) })),
     stickyHeader: true,
     maxHeight: 160,
+  },
+};
+
+/**
+ * header는 ReactNode라 "모두 선택" 체크박스처럼 상호작용하는 노드도 넣을 수 있다.
+ * 노드 헤더는 정렬 버튼·너비 조절 핸들의 이름을 만들 수 없으므로 ariaLabel로 문자열을 준다
+ * (ALM 이슈 목록의 일괄 선택 열).
+ */
+export const NodeHeader: Story = {
+  args: { "aria-label": "팀원", columns, rows: members },
+  render: () => {
+    const [selected, setSelected] = useState<string[]>([members[0].id]);
+    const allChecked = selected.length === members.length;
+    const someChecked = selected.length > 0 && !allChecked;
+    const selectColumn: TableColumn<Member> = {
+      key: "select",
+      ariaLabel: "모두 선택",
+      adjustable: false,
+      width: "48px",
+      header: (
+        <Checkbox
+          label="모두 선택"
+          labelHidden
+          checked={allChecked ? true : someChecked ? "indeterminate" : false}
+          onCheckedChange={(next) => setSelected(next === true ? members.map((m) => m.id) : [])}
+        />
+      ),
+      render: (row) => (
+        <Checkbox
+          label={`${row.name} 선택`}
+          labelHidden
+          checked={selected.includes(row.id)}
+          onCheckedChange={(next) =>
+            setSelected((prev) =>
+              next === true ? [...prev, row.id] : prev.filter((id) => id !== row.id),
+            )
+          }
+        />
+      ),
+    };
+    return (
+      <Table<Member>
+        aria-label="팀원"
+        columns={[selectColumn, ...columns]}
+        rows={members}
+        resizable
+      />
+    );
   },
 };

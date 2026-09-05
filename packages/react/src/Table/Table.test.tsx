@@ -86,18 +86,70 @@ describe("Table", () => {
     expect(onColumnOrderChange).toHaveBeenCalledTimes(1);
     const next = onColumnOrderChange.mock.calls[0][0] as string[];
     expect(next[1]).toBe(columns[0].key);
-    expect(screen.getAllByRole("columnheader")[1]).toHaveTextContent(columns[0].header);
+    expect(screen.getAllByRole("columnheader")[1]).toHaveTextContent("이름");
   });
 
   it("resizable이면 헤더 가장자리를 끌어 너비를 바꾸고 onColumnWidthsChange를 부른다", () => {
     const onColumnWidthsChange = vi.fn();
     render(<Table aria-label="사용자" columns={columns} rows={rows} resizable onColumnWidthsChange={onColumnWidthsChange} />);
-    const handle = screen.getByRole("separator", { name: `${columns[0].header} 열 너비 조절` });
+    const handle = screen.getByRole("separator", { name: "이름 열 너비 조절" });
     fireEvent.pointerDown(handle, { clientX: 100 });
     fireEvent.pointerMove(window, { clientX: 160 });
     fireEvent.pointerUp(window);
     expect(onColumnWidthsChange).toHaveBeenCalled();
     const widths = onColumnWidthsChange.mock.calls.at(-1)?.[0] as Record<string, number>;
     expect(widths[columns[0].key]).toBeGreaterThanOrEqual(56);
+  });
+
+  it("header에 노드를 넣으면 헤더 셀에 그대로 렌더링된다", () => {
+    const cols: TableColumn<Row>[] = [
+      {
+        key: "select",
+        header: <input type="checkbox" aria-label="모두 선택" />,
+        ariaLabel: "모두 선택",
+        adjustable: false,
+      },
+      ...columns,
+    ];
+    render(<Table aria-label="사용자" columns={cols} rows={rows} />);
+    expect(screen.getByRole("checkbox", { name: "모두 선택" })).toBeInTheDocument();
+    expect(screen.getAllByRole("columnheader")[0]).toContainElement(
+      screen.getByRole("checkbox", { name: "모두 선택" }),
+    );
+  });
+
+  it("정렬 가능한 열의 header가 노드여도 ariaLabel이 버튼의 접근 이름이 된다", async () => {
+    const onSort = vi.fn();
+    const cols: TableColumn<Row>[] = [
+      {
+        key: "name",
+        header: (
+          <>
+            <span aria-hidden="true">👤</span> 이름
+          </>
+        ),
+        ariaLabel: "이름",
+        sortable: true,
+      },
+    ];
+    render(<Table aria-label="사용자" columns={cols} rows={rows} onSort={onSort} />);
+    await userEvent.click(screen.getByRole("button", { name: "이름" }));
+    expect(onSort).toHaveBeenCalledWith("name");
+  });
+
+  it("resizable에서 header가 노드면 ariaLabel로 핸들 이름을 만들고, 없으면 이름만 남긴다", () => {
+    const cols: TableColumn<Row>[] = [
+      { key: "name", header: <b>이름</b>, ariaLabel: "이름" },
+      { key: "age", header: <b>나이</b> },
+    ];
+    render(<Table aria-label="사용자" columns={cols} rows={rows} resizable />);
+    expect(screen.getByRole("separator", { name: "이름 열 너비 조절" })).toBeInTheDocument();
+    expect(screen.getByRole("separator", { name: "열 너비 조절" })).toBeInTheDocument();
+  });
+
+  it("문자열 header는 ariaLabel 없이도 정렬 버튼 이름과 핸들 이름을 유지한다", () => {
+    render(<Table aria-label="사용자" columns={columns} rows={rows} resizable />);
+    expect(screen.getByRole("button", { name: /이름/ })).toBeInTheDocument();
+    expect(screen.getByRole("separator", { name: "나이 열 너비 조절" })).toBeInTheDocument();
   });
 });

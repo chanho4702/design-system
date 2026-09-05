@@ -9,6 +9,9 @@
 }
 
 .trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-75);
   padding: var(--chanho-space-100) var(--chanho-space-150);
   border: none;
   background: none;
