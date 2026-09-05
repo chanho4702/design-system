@@ -1,10 +1,17 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useLocation } from "react-router";
 import { InvitationsScreen } from "./InvitationsScreen";
 import { FakeError, createFakeApi } from "../testing/fakeApi";
 import type { FakeHandler } from "../testing/fakeApi";
 import { renderScreen } from "../testing/renderScreen";
+
+/** 프리셋 쿼리가 실제로 지워졌는지 보기 위한 현위치 표시기. */
+function LocationProbe() {
+  const location = useLocation();
+  return <span data-testid="search">{location.search}</span>;
+}
 
 const PENDING = {
   id: 10,
@@ -137,6 +144,78 @@ describe("InvitationsScreen", () => {
       expect(
         calls.some((c) => c.method === "DELETE" && c.path === "/api/org/invitations/10"),
       ).toBe(true);
+    });
+  });
+
+  describe("리소스 권한 프리셋 쿼리", () => {
+    it("scope·resourceId·role을 읽어 폼을 열고 권한 칩을 미리 채운 뒤 쿼리를 지운다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(
+        <>
+          <InvitationsScreen />
+          <LocationProbe />
+        </>,
+        { api, entry: "/admin/org/invitations?scope=SPACE&resourceId=DEV&role=EDITOR" },
+      );
+
+      expect(await screen.findByText("스페이스 · DEV · 편집")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "초대 보내기" })).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId("search")).toHaveTextContent("");
+      });
+    });
+
+    it("resolveResource가 있으면 칩에 리소스 이름을 보여 준다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, {
+        api,
+        entry: "/admin/org/invitations?scope=SPACE&resourceId=DEV&role=VIEWER",
+        resolveResource: (_scope, id) => Promise.resolve({ name: `개발 스페이스(${id})` }),
+      });
+
+      expect(await screen.findByText("스페이스 · 개발 스페이스(DEV) · 읽기")).toBeInTheDocument();
+    });
+
+    it("모르는 role은 읽기로 떨어뜨린다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, {
+        api,
+        entry: "/admin/org/invitations?scope=PROJECT&resourceId=9&role=SUPERUSER",
+      });
+
+      expect(await screen.findByText("프로젝트 · 9 · 읽기")).toBeInTheDocument();
+    });
+
+    it("resourceId가 없으면 프리셋을 무시하고 폼을 열지 않는다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, {
+        api,
+        entry: "/admin/org/invitations?scope=SPACE",
+      });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      expect(screen.queryByRole("button", { name: "초대 보내기" })).not.toBeInTheDocument();
+    });
+
+    it("프리셋이 담긴 채로 초대를 만들면 grants에 실려 나간다", async () => {
+      const { api, calls } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, {
+        api,
+        entry: "/admin/org/invitations?scope=SPACE&resourceId=DEV&role=EDITOR",
+      });
+      await screen.findByText("스페이스 · DEV · 편집");
+
+      await userEvent.click(screen.getByRole("textbox", { name: "이메일" }));
+      await userEvent.paste("a@example.com");
+      await userEvent.click(screen.getByRole("button", { name: "초대 보내기" }));
+
+      await waitFor(() => {
+        const post = calls.find((c) => c.method === "POST");
+        expect(post?.body).toMatchObject({
+          emails: ["a@example.com"],
+          grants: [{ scope: "SPACE", resourceId: "DEV", role: "EDITOR" }],
+        });
+      });
     });
   });
 

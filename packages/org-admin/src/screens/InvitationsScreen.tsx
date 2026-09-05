@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, ConfirmDialog, Table, Tabs, TextField, useToast } from "@chanho/react";
 import type { TableColumn } from "@chanho/react";
+import { useSearchParams } from "react-router";
 import { useOrgClient } from "../context";
 import { useAsync } from "../useAsync";
 import { CopyButton } from "../components/CopyButton";
@@ -9,11 +10,28 @@ import { Pagination } from "../components/Pagination";
 import { INVITATION_STATUS_LABEL, formatDate } from "../format";
 import { InviteForm } from "./InviteForm";
 import { InvitationStatusLozenge } from "./StatusLozenge";
-import type { Invitation, InvitationStatus } from "../api/types";
+import type { GrantPreset, GrantRole, GrantScope, Invitation, InvitationStatus } from "../api/types";
 import styles from "./screen.module.css";
 
 const PAGE_SIZE = 20;
 const TAB_STATUSES: InvitationStatus[] = ["PENDING", "ACCEPTED", "EXPIRED", "REVOKED"];
+
+/** 호스트의 리소스 권한 화면이 "초대하기" 링크로 실어 보내는 프리셋 쿼리. */
+const PRESET_KEYS = ["scope", "resourceId", "role"] as const;
+
+function readPresetFromQuery(params: URLSearchParams): GrantPreset | null {
+  const scope = params.get("scope");
+  if (scope !== "SPACE" && scope !== "PROJECT") return null;
+  const resourceId = params.get("resourceId")?.trim();
+  if (!resourceId) return null;
+  const role = params.get("role");
+  const known = role === "VIEWER" || role === "EDITOR" || role === "ADMIN";
+  return {
+    scope: scope as GrantScope,
+    resourceId,
+    role: (known ? role : "VIEWER") as GrantRole,
+  };
+}
 
 /** 초대 화면 — 새 초대 폼 + 상태 탭 목록(재발송·철회·링크 복사). */
 export function InvitationsScreen() {
@@ -25,6 +43,22 @@ export function InvitationsScreen() {
   const [formOpen, setFormOpen] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [revoking, setRevoking] = useState<Invitation | null>(null);
+  const [presetGrants, setPresetGrants] = useState<GrantPreset[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  /**
+   * 호스트의 스페이스·프로젝트 권한 화면이 `?scope=SPACE&resourceId=DEV&role=EDITOR`로 넘어온다.
+   * 프리셋을 폼에 옮겨 담은 뒤 쿼리를 지운다 — 남겨 두면 새로고침·뒤로가기에서 다시 채워진다.
+   */
+  useEffect(() => {
+    const preset = readPresetFromQuery(searchParams);
+    if (!preset) return;
+    setPresetGrants([preset]);
+    setFormOpen(true);
+    const next = new URLSearchParams(searchParams);
+    for (const key of PRESET_KEYS) next.delete(key);
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const result = useAsync(
     () => client.invitations({ status, q: term, page, size: PAGE_SIZE }),
@@ -155,7 +189,14 @@ export function InvitationsScreen() {
       </div>
 
       {formOpen ? (
-        <InviteForm onClose={() => setFormOpen(false)} onCreated={result.reload} />
+        <InviteForm
+          initialGrants={presetGrants}
+          onClose={() => {
+            setFormOpen(false);
+            setPresetGrants([]);
+          }}
+          onCreated={result.reload}
+        />
       ) : null}
 
       <Tabs

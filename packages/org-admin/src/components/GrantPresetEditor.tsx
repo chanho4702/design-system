@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Select, Tag, TextField } from "@chanho/react";
 import { GRANT_ROLE_LABEL, GRANT_SCOPE_LABEL } from "../format";
 import { useOrgAdmin } from "../context";
@@ -32,6 +32,26 @@ export function GrantPresetEditor({ value, onChange, allowGlobal }: GrantPresetE
   const [role, setRole] = useState<GrantRole>("VIEWER");
   const [names, setNames] = useState<Record<string, string>>({});
 
+  // 미리 채워진 프리셋(호스트 링크에서 온 것)은 add를 거치지 않으므로 이름을 여기서 채운다.
+  useEffect(() => {
+    if (!resolveResource) return;
+    let alive = true;
+    for (const preset of value) {
+      if (!preset.resourceId) continue;
+      const key = `${preset.scope}:${preset.resourceId}`;
+      if (names[key]) continue;
+      resolveResource(preset.scope, preset.resourceId).then(
+        (result) => {
+          if (alive) setNames((prev) => (prev[key] ? prev : { ...prev, [key]: result.name }));
+        },
+        () => undefined,
+      );
+    }
+    return () => {
+      alive = false;
+    };
+  }, [value, names, resolveResource]);
+
   const scopes: readonly GrantScope[] = allowGlobal
     ? ["GLOBAL", "SPACE", "PROJECT"]
     : ["SPACE", "PROJECT"];
@@ -45,15 +65,8 @@ export function GrantPresetEditor({ value, onChange, allowGlobal }: GrantPresetE
     };
     if (scope !== "GLOBAL" && !next.resourceId) return;
     if (value.some((v) => keyOf(v) === keyOf(next))) return;
+    // 이름은 위 effect가 value를 보고 채운다 — 여기서 또 부르면 같은 요청이 두 번 나간다.
     onChange([...value, next]);
-    if (next.resourceId && resolveResource) {
-      const id = next.resourceId;
-      const currentScope = scope;
-      resolveResource(currentScope, id).then(
-        (result) => setNames((prev) => ({ ...prev, [`${currentScope}:${id}`]: result.name })),
-        () => undefined,
-      );
-    }
     setResourceId("");
   };
 

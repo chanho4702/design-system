@@ -1,6 +1,6 @@
 {
   "name": "@chanho/org-admin",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Chanho Design System — 플랫폼 공통 조직 관리 화면 (사용자·초대·팀·전역 역할·승인 대기)",
   "license": "MIT",
   "repository": {

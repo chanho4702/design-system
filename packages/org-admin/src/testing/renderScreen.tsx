@@ -15,6 +15,8 @@ export interface RenderScreenOptions {
   currentUser?: OrgAdminUser;
   resolveResource?: ResolveResource;
   basePath?: string;
+  /** 라우터에 실을 첫 항목. 쿼리(초대 프리셋 등)를 넣을 때 쓴다. */
+  entry?: string;
 }
 
 /**
@@ -22,9 +24,15 @@ export interface RenderScreenOptions {
  * 앱 전체(`OrgAdminApp`)를 그리는 테스트는 `renderApp`을 쓴다.
  */
 export function renderScreen(ui: ReactNode, options: RenderScreenOptions): RenderResult {
-  const { api, currentUser = ADMIN_USER, resolveResource, basePath = "/admin/org" } = options;
+  const {
+    api,
+    currentUser = ADMIN_USER,
+    resolveResource,
+    basePath = "/admin/org",
+    entry = basePath,
+  } = options;
   return render(
-    <MemoryRouter initialEntries={[basePath]}>
+    <MemoryRouter initialEntries={[entry]}>
       <OrgAdminProvider
         api={api}
         basePath={basePath}

@@ -132,6 +132,41 @@ describe("TeamsScreen", () => {
     expect(screen.getByRole("button", { name: "팀원 추가" })).toBeInTheDocument();
   });
 
+  it("팀을 만들면 목록 재조회가 끝난 뒤에도 새 팀이 선택된 채로 남는다", async () => {
+    // 생성 직후에는 서버 목록이 아직 새 팀을 모른다 — 그 사이 선택이 첫 팀으로 리셋되면 안 된다.
+    let created = false;
+    const { api } = createFakeApi(
+      teamRoutes({
+        "GET /api/org/teams": () =>
+          created ? [...TEAMS, { id: 5, name: "신규팀", kind: "STANDARD", memberCount: 0 }] : TEAMS,
+        "POST /api/org/teams": ({ body }) => {
+          created = true;
+          return { id: 5, name: (body as { name: string }).name, kind: "STANDARD" };
+        },
+        "GET /api/org/teams/:id/members": ({ path }) =>
+          path.split("/")[4] === "5"
+            ? [{ memberId: 9, displayName: "신규팀원", email: "new@example.com", role: "MEMBER" }]
+            : (TEAM_MEMBERS[path.split("/")[4] ?? ""] ?? []),
+      }),
+    );
+    renderScreen(<TeamsScreen />, { api });
+    await selectTeam("플랫폼");
+
+    await userEvent.type(screen.getByRole("textbox", { name: "새 팀 이름" }), "신규팀");
+    await userEvent.click(screen.getByRole("button", { name: "만들기" }));
+
+    // 생성 직후: 서버 목록이 아직 새 팀을 모르는 사이에도 선택이 유지된다.
+    expect(await screen.findByRole("heading", { name: "신규팀" })).toBeInTheDocument();
+
+    // 재조회가 목록에 반영된 뒤에도 그대로다(첫 팀으로 리셋되지 않는다).
+    const list = await screen.findByRole("list", { name: "팀 목록" });
+    await waitFor(() => {
+      expect(within(list).getByRole("button", { name: /신규팀/ })).toBeInTheDocument();
+    });
+    expect(screen.getByRole("heading", { name: "신규팀" })).toBeInTheDocument();
+    expect(await screen.findByRole("cell", { name: "신규팀원" })).toBeInTheDocument();
+  });
+
   it("팀 목록 조회가 실패하면 오류를 노출한다", async () => {
     const { api } = createFakeApi({
       "GET /api/org/teams": () => new FakeError(503, "org-service에 연결할 수 없습니다"),

@@ -41,7 +41,27 @@ export function TeamsScreen() {
   const [renameValue, setRenameValue] = useState("");
 
   const teams = useAsync(() => client.teams(term), [client, term]);
-  const list = teams.data ?? [];
+
+  /**
+   * 방금 만든 팀. 생성 응답은 왔지만 목록 재조회가 아직 안 끝난 사이에도 목록에 있어야 한다 —
+   * 없으면 "선택한 id가 목록에 없다"고 판단해 첫 팀으로 리셋된다.
+   */
+  const [justCreated, setJustCreated] = useState<Team | null>(null);
+
+  const list = useMemo(() => {
+    const fetched = teams.data ?? [];
+    if (justCreated && !fetched.some((team) => team.id === justCreated.id)) {
+      return [...fetched, justCreated];
+    }
+    return fetched;
+  }, [teams.data, justCreated]);
+
+  useEffect(() => {
+    // 서버 목록이 새 팀을 담고 나면 임시 병합본은 버린다(안 버리면 삭제한 팀이 되살아난다).
+    if (justCreated && (teams.data ?? []).some((team) => team.id === justCreated.id)) {
+      setJustCreated(null);
+    }
+  }, [teams.data, justCreated]);
 
   const selected: Team | null = useMemo(
     () => list.find((team) => team.id === selectedId) ?? null,
@@ -49,11 +69,12 @@ export function TeamsScreen() {
   );
 
   useEffect(() => {
-    if (selectedId === null && list.length > 0) setSelectedId(list[0].id);
-    if (selectedId !== null && list.length > 0 && !list.some((t) => t.id === selectedId)) {
+    // 재조회 중에는 목록이 낡았을 수 있으니 선택을 건드리지 않는다.
+    if (teams.loading || list.length === 0) return;
+    if (selectedId === null || !list.some((t) => t.id === selectedId)) {
       setSelectedId(list[0].id);
     }
-  }, [list, selectedId]);
+  }, [list, selectedId, teams.loading]);
 
   useEffect(() => {
     setRenameValue(selected?.name ?? "");
@@ -93,6 +114,7 @@ export function TeamsScreen() {
       (team) => {
         setCreating(false);
         setNewName("");
+        setJustCreated(team);
         setSelectedId(team.id);
         toast({ title: "팀을 만들었습니다", appearance: "success" });
         teams.reload();
@@ -199,8 +221,9 @@ export function TeamsScreen() {
           {isGlobalAdmin ? (
             <Card title="팀 만들기">
               <div className={styles.stack}>
+                {/* 상세의 이름 변경 입력과 라벨이 겹치지 않게 구분한다(둘 다 화면에 함께 있다). */}
                 <TextField
-                  label="팀 이름"
+                  label="새 팀 이름"
                   value={newName}
                   onChange={(event) => setNewName(event.target.value)}
                 />
@@ -321,6 +344,8 @@ export function TeamsScreen() {
           if (!selected) return;
           run(client.deleteTeam(selected.id), "팀을 삭제했습니다", "팀을 삭제하지 못했습니다", () => {
             setConfirmDelete(false);
+            // 방금 만든 팀을 곧바로 지운 경우 임시 병합본이 되살아나지 않게 함께 버린다.
+            setJustCreated((prev) => (prev && prev.id === selected.id ? null : prev));
             setSelectedId(null);
             teams.reload();
           });

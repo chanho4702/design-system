@@ -137,6 +137,49 @@ type OrgApiFetch = (path: string, init?: RequestInit) => Promise<Response>;
 
 ---
 
+## 호스트 주의사항
+
+### 초대 화면 프리셋 링크
+
+호스트의 스페이스·프로젝트 권한 화면에서 "초대하기"를 걸 때 쿼리로 프리셋을 넘길 수 있다.
+
+```
+/admin/org/invitations?scope=SPACE&resourceId=DEV&role=EDITOR
+```
+
+`scope`는 `SPACE` 또는 `PROJECT`, `role`은 `VIEWER|EDITOR|ADMIN`(모르는 값이면 `VIEWER`).
+초대 폼이 열린 채로 그 권한이 미리 담기고, 화면이 **쿼리를 즉시 지운다**(`replace`) — 새로고침이나
+뒤로가기에서 프리셋이 되살아나지 않게 하기 위해서다. 호스트는 `resolveResource`만 주면 칩에
+리소스 id 대신 이름이 표시된다.
+
+### vitest에서 `useLocation()` 오류가 날 때
+
+호스트 테스트가 이 패키지를 **외부화**하면 `react-router`가 두 벌 로드되어 컨텍스트가 갈라지고,
+`useLocation() may be used only in the context of a <Router> component` 같은 오류가 난다.
+호스트의 `vitest.config.ts`에서 두 가지를 함께 걸어야 한다.
+
+```ts
+export default defineConfig({
+  resolve: {
+    // 라우터 인스턴스를 하나로 묶는다.
+    dedupe: ["react", "react-dom", "react-router"],
+  },
+  test: {
+    server: {
+      deps: {
+        // ⚠️ 발행 스코프로 적어야 한다. pnpm alias의 `@chanho/*`가 아니라
+        //    실제 설치된 패키지 이름(`@chanho4702/*`)으로 해석되기 때문이다.
+        inline: ["@chanho4702/org-admin"],
+      },
+    },
+  },
+});
+```
+
+`@chanho/org-admin`으로 적으면 매칭되지 않아 증상이 그대로 남는다.
+
+---
+
 ## 개발
 
 ```bash

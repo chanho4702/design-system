@@ -15,19 +15,21 @@ export interface InviteFormProps {
   onClose: () => void;
   /** 초대가 생성되면 목록을 다시 읽게 한다. */
   onCreated: () => void;
+  /** 미리 채울 리소스 권한 프리셋(호스트의 "초대하기" 링크에서 온다). 마운트 시 한 번만 반영한다. */
+  initialGrants?: GrantPreset[];
 }
 
 /**
  * 새 초대. 이메일은 붙여넣기 덩어리를 쉼표·줄바꿈·공백으로 나누고, 형식이 틀린 것만 인라인으로
  * 짚어 준다. 결과는 발송 여부와 초대 링크를 함께 보여 준다 — 메일이 없으면 링크 복사가 유일한 경로다.
  */
-export function InviteForm({ onClose, onCreated }: InviteFormProps) {
+export function InviteForm({ onClose, onCreated, initialGrants }: InviteFormProps) {
   const { client, isGlobalAdmin } = useOrgAdmin();
   const toast = useToast();
   const [raw, setRaw] = useState("");
   const [message, setMessage] = useState("");
   const [teams, setTeams] = useState<TeamPreset[]>([]);
-  const [grants, setGrants] = useState<GrantPreset[]>([]);
+  const [grants, setGrants] = useState<GrantPreset[]>(initialGrants ?? []);
   const [submitting, setSubmitting] = useState(false);
   const [results, setResults] = useState<Invitation[] | null>(null);
 
