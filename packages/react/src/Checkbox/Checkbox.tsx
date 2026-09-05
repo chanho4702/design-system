@@ -13,11 +13,43 @@ export interface CheckboxProps extends ComponentPropsWithRef<typeof RadixCheckbo
   labelHidden?: boolean;
 }
 
-function CheckIcon() {
+/* lucide Check(M20 6 9 17l-5-5)를 12px 박스로 옮긴 것 — lucide-react는 이 패키지의 의존성이 아니라 인라인으로 그린다. */
+function CheckIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true">
+    <svg
+      className={className}
+      data-icon="check"
+      viewBox="0 0 12 12"
+      width="12"
+      height="12"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M2.5 6.5L5 9l4.5-5.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* lucide Minus(M5 12h14)를 같은 12px 박스·같은 획 두께로 옮긴 것 — 부분 선택(중간 상태) 표시. */
+function MinusIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      data-icon="minus"
+      viewBox="0 0 12 12"
+      width="12"
+      height="12"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M2.5 6h7"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
@@ -34,7 +66,8 @@ export function Checkbox({ label, labelHidden = false, id, className, ...rest }:
     <span className={[styles.wrapper, className].filter(Boolean).join(" ")}>
       <RadixCheckbox.Root id={checkboxId} className={styles.box} {...rest}>
         <RadixCheckbox.Indicator className={styles.indicator}>
-          <CheckIcon />
+          <CheckIcon className={styles.iconChecked} />
+          <MinusIcon className={styles.iconIndeterminate} />
         </RadixCheckbox.Indicator>
       </RadixCheckbox.Root>
       <label

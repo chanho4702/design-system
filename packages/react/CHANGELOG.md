@@ -1,5 +1,14 @@
 # @chanho/react
 
+## 0.9.1
+
+### Patch Changes
+
+- Checkbox: `checked="indeterminate"`에서 인디케이터가 그려지지 않아 미선택과 똑같아 보이던 문제 —
+  중간 상태는 빼기 글리프(lucide Minus 형태를 인라인 SVG로), 선택은 기존 체크 글리프로 나뉘고,
+  박스 배경·테두리는 선택과 같은 브랜드 색이 된다. `aria-checked="mixed"`는 Radix가 주던 그대로다.
+  아이콘은 `data-state`로 골라 보여, 비제어 체크박스가 중간→선택으로 바뀌어도 표시가 따라간다.
+
 ## 0.9.0
 
 ### Minor Changes

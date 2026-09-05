@@ -25,7 +25,8 @@
   box-shadow: var(--chanho-focus-ring);
 }
 
-.box[data-state="checked"] {
+.box[data-state="checked"],
+.box[data-state="indeterminate"] {
   border-color: var(--chanho-color-border-brand);
   background: var(--chanho-color-background-brand);
 }
@@ -39,6 +40,13 @@
 
 .indicator {
   display: inline-flex;
+}
+
+/* Radix는 checked·indeterminate 모두에서 Indicator를 렌더한다.
+   두 아이콘을 함께 두고 상태로 골라 보여, 비제어 체크박스가 중간→선택으로 바뀌어도 표시가 따라간다. */
+.indicator[data-state="checked"] .iconIndeterminate,
+.indicator[data-state="indeterminate"] .iconChecked {
+  display: none;
 }
 
 .label {

@@ -50,4 +50,13 @@ describe("Checkbox", () => {
     expect(labelStyle.position).toBe("absolute");
     expect(labelStyle.width).toBe("1px");
   });
+
+  it('checked="indeterminate"면 중간 상태 인디케이터가 보이고 aria-checked는 mixed다', () => {
+    const { container } = render(<Checkbox label="모두 선택" checked="indeterminate" />);
+    const box = screen.getByRole("checkbox", { name: "모두 선택" });
+    expect(box).toHaveAttribute("aria-checked", "mixed");
+    expect(box).toHaveAttribute("data-state", "indeterminate");
+    expect(container.querySelector('[data-icon="minus"]')).toBeVisible();
+    expect(container.querySelector('[data-icon="check"]')).not.toBeVisible();
+  });
 });

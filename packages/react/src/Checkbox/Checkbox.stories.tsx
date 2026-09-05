@@ -23,3 +23,8 @@ export const DisabledChecked: Story = { args: { disabled: true, defaultChecked: 
 export const LabelHidden: Story = {
   args: { label: "모두 선택", labelHidden: true },
 };
+
+/** 일부만 선택된 상태 — "모두 선택" 헤더 체크박스가 이 모습이 된다. */
+export const Indeterminate: Story = {
+  args: { label: "모두 선택", checked: "indeterminate" },
+};
