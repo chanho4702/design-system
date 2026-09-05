@@ -28,7 +28,7 @@ const MEMBERS = [
 
 function fake(overrides: Record<string, () => unknown> = {}) {
   return createFakeApi({
-    "GET /api/org/members": ({ params }) => {
+    "GET /api/org/members/page": ({ params }) => {
       const q = params.get("q") ?? "";
       const items = MEMBERS.filter((m) => m.displayName.includes(q) || (m.email ?? "").includes(q));
       return { items, page: Number(params.get("page") ?? 0), size: 20, total: items.length };
@@ -52,6 +52,7 @@ describe("UsersScreen", () => {
     renderScreen(<UsersScreen />, { api });
 
     expect(await screen.findByRole("cell", { name: "김채호" })).toBeInTheDocument();
+    expect(calls[0].path).toContain("/api/org/members/page?");
     expect(calls[0].path).toContain("status=ACTIVE");
     expect(calls[0].path).toContain("kind=HUMAN");
   });
@@ -71,7 +72,7 @@ describe("UsersScreen", () => {
 
   it("결과가 없으면 빈 상태를 보여 준다", async () => {
     const { api } = createFakeApi({
-      "GET /api/org/members": () => ({ items: [], page: 0, size: 20, total: 0 }),
+      "GET /api/org/members/page": () => ({ items: [], page: 0, size: 20, total: 0 }),
     });
     renderScreen(<UsersScreen />, { api });
     expect(await screen.findByText("조건에 맞는 사용자가 없습니다")).toBeInTheDocument();
@@ -79,7 +80,7 @@ describe("UsersScreen", () => {
 
   it("목록 조회가 실패하면 서버 문구를 그대로 노출하고 다시 시도를 제공한다", async () => {
     const { api } = createFakeApi({
-      "GET /api/org/members": () => {
+      "GET /api/org/members/page": () => {
         throw new Error("사용자 목록을 불러오지 못했습니다");
       },
     });

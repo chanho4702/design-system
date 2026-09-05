@@ -30,12 +30,10 @@ function roleRoutes(overrides: Record<string, FakeHandler> = {}): Record<string,
   return {
     "GET /api/org/grants": () => GRANTS,
     "GET /api/org/teams": () => [{ id: 2, name: "플랫폼", kind: "STANDARD" }],
-    "GET /api/org/members": () => ({
-      items: [{ id: 7, displayName: "최유진", email: "yujin@example.com", status: "ACTIVE", kind: "HUMAN" }],
-      page: 0,
-      size: 10,
-      total: 1,
-    }),
+    // 선택기는 배열 응답(하위 호환) 경로를 쓴다.
+    "GET /api/org/members": () => [
+      { id: 7, displayName: "최유진", email: "yujin@example.com", status: "ACTIVE", kind: "HUMAN" },
+    ],
     "PATCH /api/org/grants/:id": () => undefined,
     "DELETE /api/org/grants/:id": () => undefined,
     "POST /api/org/grants": () => ({ id: 13, subjectType: "USER", subjectId: 7, resourceType: "GLOBAL", role: "ADMIN" }),

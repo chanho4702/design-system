@@ -13,7 +13,10 @@ import { UsersScreen } from "./screens/UsersScreen";
 import styles from "./OrgAdminApp.module.css";
 
 export interface OrgAdminAppProps {
-  /** 호스트가 이 앱을 마운트한 경로(예: `/admin/org`). 내비게이션 링크의 앞머리로 쓴다. */
+  /**
+   * 호스트가 이 앱을 마운트한 경로. 호스트마다 다르다 — wiki는 `/admin/org`, ALM은 `/settings/org`.
+   * 내비게이션 링크와 리다이렉트의 앞머리로 쓰며, 이 패키지는 특정 경로를 가정하지 않는다.
+   */
   basePath: string;
   /** 인증이 붙은 fetch. 패키지는 `/api/org/...` 상대 경로만 넘긴다. */
   api: OrgApiFetch;
@@ -68,8 +71,8 @@ function AdminNav({ basePath }: { basePath: string }) {
 }
 
 /**
- * 플랫폼 공통 조직 관리 화면. 호스트가 `<Route path="/admin/org/*" element={<OrgAdminApp … />} />`
- * 처럼 마운트하면 이 컴포넌트가 `basePath` 아래 경로만 정의한다.
+ * 플랫폼 공통 조직 관리 화면. 호스트가 `<Route path={`${basePath}/*`} element={<OrgAdminApp … />} />`
+ * 처럼 마운트하면 이 컴포넌트가 그 아래 경로만 정의한다. `basePath`는 임의 경로를 받는다.
  *
  * 토스트는 이 컴포넌트가 자체 `ToastProvider`로 감싼다 — 호스트에 프로바이더가 없어도 오류 문구가
  * 사라지지 않게 하기 위해서다(호스트에 이미 있으면 중첩되지만 각자 자기 토스트만 띄운다).

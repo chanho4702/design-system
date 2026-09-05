@@ -44,11 +44,14 @@ export interface RenderAppOptions extends RenderScreenOptions {
 
 /** 호스트가 하듯 `basePath/*` 아래에 앱을 마운트한다. */
 export function renderApp(app: ReactNode, options: RenderAppOptions): RenderResult {
-  const { basePath = "/admin/org", route = `${basePath}/users` } = options;
+  const { basePath = "/admin/org" } = options;
+  // 호스트 라우터의 경로는 슬래시가 겹치지 않는다 — prop 쪽 지저분한 값과 분리해 둔다.
+  const routePrefix = basePath.replace(/\/+$/, "");
+  const { route = `${routePrefix}/users` } = options;
   return render(
     <MemoryRouter initialEntries={[route]}>
       <Routes>
-        <Route path={`${basePath}/*`} element={app} />
+        <Route path={`${routePrefix}/*`} element={app} />
       </Routes>
     </MemoryRouter>,
   );

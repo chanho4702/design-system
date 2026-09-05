@@ -13,7 +13,7 @@
 
 | 경로 | 화면 | 하는 일 |
 |---|---|---|
-| `users` | 사용자 | 목록·검색·상태/종류 필터·페이지네이션, 상세(상태 변경 · 팀 · 권한 · 이력) |
+| `users` | 사용자 | 목록·검색·상태/종류 필터·페이지네이션, 상세(상태 변경 · 팀 · 권한 · 이력). 표시명 편집은 없다 |
 | `invitations` | 초대 | 새 초대(이메일 여러 개·팀·권한 프리셋·메시지 → 링크 복사·발송 여부), 상태 탭 목록·재발송·철회 |
 | `teams` | 팀 | 목록·검색·생성·이름 변경·삭제, 팀원 추가/제거·리더 지정. `kind=EVERYONE` 팀은 읽기 전용 |
 | `roles` | 전역 역할 | `GLOBAL` grant 목록·부여·역할 변경·회수 (마지막 관리자 보호는 서버 409 문구 그대로) |
@@ -91,11 +91,12 @@ const api = (path: string, init?: RequestInit) =>
 
 ### alm-front
 
-같은 모양이고 `links`만 프로젝트로 바꾼다.
+`basePath`는 임의 경로를 받는다 — ALM은 설정 아래에 붙이고 `links`만 프로젝트로 바꾼다.
+호스트 라우트도 같은 앞머리(`<Route path="/settings/org/*" …>`)를 써야 한다.
 
 ```tsx
 <OrgAdminApp
-  basePath="/admin/org"
+  basePath="/settings/org"
   api={api}
   currentUser={{ id: me.id, globalRoles: me.globalRoles }}
   resolveResource={(scope, id) =>
@@ -114,7 +115,9 @@ type OrgApiFetch = (path: string, init?: RequestInit) => Promise<Response>;
 ```
 
 - **경로**: 패키지는 언제나 `/api/org/...`로 시작하는 **상대 경로**만 넘긴다. 게이트웨이 prefix·
-  절대 URL·포트는 호스트가 붙인다.
+  절대 URL·포트는 호스트가 붙인다. 멤버 조회는 두 갈래다 — 선택기(팀원 추가·권한 대상)는
+  배열을 주는 `GET /members?status=&kind=&q=`, 사용자 목록 화면은 페이지를 주는
+  `GET /members/page?status=&kind=&q=&page=&size=`를 쓴다.
 - **인증**: 토큰 헤더든 쿠키든 호스트가 붙인다. 패키지는 자격증명을 만들지도, 보지도 않는다.
 - **응답**: `Response`를 그대로 돌려준다. 실패는 던지지 말고 `res.ok === false`로 돌려주면 된다 —
   패키지가 본문의 `{"error": "..."}`를 꺼내 그 문구 그대로 토스트에 띄운다. 401·403에서 로그인으로
@@ -125,7 +128,7 @@ type OrgApiFetch = (path: string, init?: RequestInit) => Promise<Response>;
 
 | prop | 뜻 |
 |---|---|
-| `basePath` | 이 앱이 마운트된 경로. 내비게이션 링크 앞머리. |
+| `basePath` | 이 앱이 마운트된 경로. 임의 경로를 받는다(wiki `/admin/org`, ALM `/settings/org`). 내비게이션 링크와 리다이렉트의 앞머리. |
 | `currentUser` | `{ id, globalRoles }` — `/api/org/me` 값 그대로. `globalRoles`에 `"ADMIN"`이 있으면 관리자 UI가 열린다. |
 | `resolveResource?` | `(scope, id) => Promise<{name, href?}>`. 리소스 권한에 사람이 읽는 이름을 붙인다. 없거나 실패하면 id를 그대로 보여 준다. |
 | `links?` | `{ space?(id), project?(id) }` — 리소스로 나가는 링크. |

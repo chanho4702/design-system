@@ -7,7 +7,7 @@ import type { FakeHandler } from "./testing/fakeApi";
 import { ADMIN_USER, renderApp } from "./testing/renderScreen";
 
 const ROUTES: Record<string, FakeHandler> = {
-  "GET /api/org/members": () => ({
+  "GET /api/org/members/page": () => ({
     items: [
       {
         id: 1,
@@ -30,12 +30,13 @@ const ROUTES: Record<string, FakeHandler> = {
   "GET /api/org/invitations": () => ({ items: [], page: 0, size: 20, total: 0 }),
 };
 
-function mount(route?: string) {
+function mount(route?: string, basePath = "/admin/org") {
   const { api, calls } = createFakeApi(ROUTES);
-  const view = renderApp(
-    <OrgAdminApp basePath="/admin/org" api={api} currentUser={ADMIN_USER} />,
-    { api, route },
-  );
+  const view = renderApp(<OrgAdminApp basePath={basePath} api={api} currentUser={ADMIN_USER} />, {
+    api,
+    route,
+    basePath,
+  });
   return { view, calls };
 }
 
@@ -77,5 +78,27 @@ describe("OrgAdminApp", () => {
   it("모르는 하위 경로는 사용자 화면으로 돌려보낸다", async () => {
     mount("/admin/org/없는화면");
     expect(await screen.findByRole("cell", { name: "김채호" })).toBeInTheDocument();
+  });
+
+  // ALM은 /settings/org 아래에 붙는다 — 패키지가 특정 경로를 가정하지 않는지 잠근다.
+  it("다른 basePath에 마운트해도 링크·리다이렉트가 그 경로를 따른다", async () => {
+    mount("/settings/org", "/settings/org");
+
+    expect(await screen.findByRole("cell", { name: "김채호" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "팀" })).toHaveAttribute("href", "/settings/org/teams");
+  });
+
+  it("다른 basePath에서도 모르는 하위 경로를 사용자 화면으로 돌려보낸다", async () => {
+    mount("/settings/org/없는화면", "/settings/org");
+    expect(await screen.findByRole("cell", { name: "김채호" })).toBeInTheDocument();
+  });
+
+  it("basePath에 뒤 슬래시가 붙어도 링크가 겹치지 않는다", async () => {
+    mount("/settings/org/users", "/settings/org/");
+    expect(await screen.findByRole("cell", { name: "김채호" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "초대" })).toHaveAttribute(
+      "href",
+      "/settings/org/invitations",
+    );
   });
 });

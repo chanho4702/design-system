@@ -27,12 +27,21 @@ describe("createOrgClient", () => {
     expect(calls[0]).toMatchObject({ method: "DELETE", path: "/api/org/invitations/7" });
   });
 
-  it("멤버 목록 질의를 쿼리스트링으로 보낸다(빈 값은 뺀다)", async () => {
+  it("멤버 검색은 배열 경로를 쓰고 페이지 파라미터를 붙이지 않는다", async () => {
     const { api, calls } = createFakeApi({
-      "GET /api/org/members": () => ({ items: [], page: 0, size: 20, total: 0 }),
+      "GET /api/org/members": () => [{ id: 1, displayName: "김채호", status: "ACTIVE" }],
     });
-    await createOrgClient(api).members({ q: "김", status: "", kind: "HUMAN", page: 1, size: 20 });
-    expect(calls[0].path).toBe("/api/org/members?kind=HUMAN&q=%EA%B9%80&page=1&size=20");
+    const found = await createOrgClient(api).members({ q: "김", status: "", kind: "HUMAN" });
+    expect(calls[0].path).toBe("/api/org/members?kind=HUMAN&q=%EA%B9%80");
+    expect(found).toHaveLength(1);
+  });
+
+  it("멤버 목록 페이지는 /members/page로 page·size와 함께 보낸다(빈 값은 뺀다)", async () => {
+    const { api, calls } = createFakeApi({
+      "GET /api/org/members/page": () => ({ items: [], page: 1, size: 20, total: 0 }),
+    });
+    await createOrgClient(api).memberPage({ q: "김", status: "", kind: "HUMAN", page: 1, size: 20 });
+    expect(calls[0].path).toBe("/api/org/members/page?kind=HUMAN&q=%EA%B9%80&page=1&size=20");
   });
 
   it("grant 생성은 현행 org-service 계약대로 resourceType 키로 보낸다", async () => {

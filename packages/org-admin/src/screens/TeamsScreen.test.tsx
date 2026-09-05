@@ -34,12 +34,10 @@ function teamRoutes(overrides: Record<string, FakeHandler> = {}): Record<string,
     "PUT /api/org/teams/:id/members/:memberId": () => undefined,
     "PATCH /api/org/teams/:id/members/:memberId": () => undefined,
     "DELETE /api/org/teams/:id/members/:memberId": () => undefined,
-    "GET /api/org/members": () => ({
-      items: [{ id: 7, displayName: "최유진", email: "yujin@example.com", status: "ACTIVE", kind: "HUMAN" }],
-      page: 0,
-      size: 10,
-      total: 1,
-    }),
+    // 선택기는 배열 응답(하위 호환) 경로를 쓴다.
+    "GET /api/org/members": () => [
+      { id: 7, displayName: "최유진", email: "yujin@example.com", status: "ACTIVE", kind: "HUMAN" },
+    ],
     ...overrides,
   };
 }
