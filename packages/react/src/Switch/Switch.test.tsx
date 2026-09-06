@@ -36,4 +36,17 @@ describe("Switch", () => {
     render(<Switch label="알림 받기" ref={ref} />);
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
+
+  it("label에 노드를 넣어도 접근 이름은 라벨 텍스트로 잡힌다", () => {
+    render(
+      <Switch
+        label={
+          <>
+            <span aria-hidden="true">🔔</span> 알림 받기
+          </>
+        }
+      />,
+    );
+    expect(screen.getByRole("switch", { name: "알림 받기" })).toBeInTheDocument();
+  });
 });

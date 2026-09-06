@@ -59,4 +59,17 @@ describe("Checkbox", () => {
     expect(container.querySelector('[data-icon="minus"]')).toBeVisible();
     expect(container.querySelector('[data-icon="check"]')).not.toBeVisible();
   });
+
+  it("label에 노드를 넣어도 접근 이름은 라벨 텍스트로 잡힌다", () => {
+    render(
+      <Checkbox
+        label={
+          <>
+            <span aria-hidden="true">🔔</span> 알림 받기
+          </>
+        }
+      />,
+    );
+    expect(screen.getByRole("checkbox", { name: "알림 받기" })).toBeInTheDocument();
+  });
 });

@@ -1,5 +1,17 @@
 # @chanho/react
 
+## 0.11.0
+
+### Minor Changes
+
+- Checkbox·Switch·Radio: `label`이 `ReactNode`를 받는다(문자열 하위 호환) — 아이콘+텍스트 라벨을 넣을 수 있다.
+  세 컴포넌트 모두 Radix Root가 `button`이라 `label[for]`만으로는 이름이 붙지 않는 브라우저가 있어,
+  라벨 요소에 id를 주고 `aria-labelledby`로 직접 가리킨다. 접근 이름은 라벨 안 텍스트로 잡히고,
+  소비자가 `aria-label`이나 `aria-labelledby`를 직접 주면 그쪽이 이긴다.
+  라벨은 `inline-flex`로 아이콘과 글자를 세로 가운데에 모은다(문자열 라벨은 보이는 결과가 같다).
+
+  이 변경은 0.10.0에 함께 담으려던 것인데, 0.10.0이 이미 발행되어 되돌릴 수 없어 0.11.0으로 나간다.
+
 ## 0.10.0
 
 ### Minor Changes

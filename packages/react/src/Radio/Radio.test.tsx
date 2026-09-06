@@ -68,4 +68,20 @@ describe("Radio / RadioGroup", () => {
     );
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
   });
+
+  it("label에 노드를 넣어도 접근 이름은 라벨 텍스트로 잡힌다", () => {
+    render(
+      <RadioGroup defaultValue="a">
+        <Radio
+          value="a"
+          label={
+            <>
+              <span aria-hidden="true">🔔</span> 알림 받기
+            </>
+          }
+        />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole("radio", { name: "알림 받기" })).toBeInTheDocument();
+  });
 });

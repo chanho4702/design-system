@@ -50,7 +50,12 @@
   background: var(--chanho-color-background-brand);
 }
 
+/* 라벨이 노드(아이콘+텍스트)일 때 아이콘과 글자를 세로 가운데로 모으고 토큰 간격을 준다.
+   문자열 라벨은 익명 항목 하나뿐이라 gap이 걸리지 않아 보이는 결과가 같다. */
 .label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-50);
   color: var(--chanho-color-text-default);
   font-size: var(--chanho-font-size-100);
   cursor: pointer;
