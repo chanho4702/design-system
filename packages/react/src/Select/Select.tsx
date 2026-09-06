@@ -1,10 +1,17 @@
-import { useId } from "react";
+import { useId, useState } from "react";
+import type { ReactNode } from "react";
 import { Select as RadixSelect } from "radix-ui";
 import styles from "./Select.module.css";
 
 export interface SelectOption {
   value: string;
   label: string;
+  /**
+   * 라벨 앞에 놓이는 아이콘(Dropdown의 `icon`과 같은 규칙).
+   * 목록과 트리거의 선택값 양쪽에 같은 아이콘이 나온다. 크기는 소비자가 정한다.
+   * 장식이므로 스크린리더에서는 감춰지고, 접근 이름은 label로 남는다.
+   */
+  icon?: ReactNode;
   /** 선택 불가 옵션으로 표시한다. */
   disabled?: boolean;
 }
@@ -55,6 +62,17 @@ export function Select({
 }: SelectProps) {
   const autoId = useId();
   const triggerId = id ?? autoId;
+  // Radix의 Value는 선택된 항목의 ItemText만 복제하므로 아이콘은 따라오지 않는다.
+  // 트리거에도 같은 아이콘을 그리려고 현재 값을 따로 따라간다(제어 시에는 value가 곧 답).
+  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
+  const currentValue = value ?? uncontrolledValue;
+  const selectedIcon = options.find((option) => option.value === currentValue)?.icon;
+
+  const handleValueChange = (next: string) => {
+    if (value === undefined) setUncontrolledValue(next);
+    onValueChange?.(next);
+  };
+
   return (
     <div className={[styles.field, className].filter(Boolean).join(" ")}>
       <label className={styles.label} htmlFor={triggerId}>
@@ -63,11 +81,18 @@ export function Select({
       <RadixSelect.Root
         value={value}
         defaultValue={defaultValue}
-        onValueChange={onValueChange}
+        onValueChange={handleValueChange}
         disabled={disabled}
       >
         <RadixSelect.Trigger id={triggerId} className={styles.trigger}>
-          <RadixSelect.Value placeholder={placeholder} />
+          <span className={styles.triggerValue}>
+            {selectedIcon ? (
+              <span className={styles.itemIcon} aria-hidden="true">
+                {selectedIcon}
+              </span>
+            ) : null}
+            <RadixSelect.Value placeholder={placeholder} />
+          </span>
           <RadixSelect.Icon>
             <ChevronIcon />
           </RadixSelect.Icon>
@@ -82,7 +107,14 @@ export function Select({
                   className={styles.item}
                   disabled={option.disabled}
                 >
-                  <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
+                  <span className={styles.itemContent}>
+                    {option.icon ? (
+                      <span className={styles.itemIcon} aria-hidden="true">
+                        {option.icon}
+                      </span>
+                    ) : null}
+                    <RadixSelect.ItemText>{option.label}</RadixSelect.ItemText>
+                  </span>
                   <RadixSelect.ItemIndicator>
                     <ChevronIcon />
                   </RadixSelect.ItemIndicator>

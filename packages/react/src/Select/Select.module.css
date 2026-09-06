@@ -83,3 +83,23 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
+
+/* 옵션 앞 아이콘 — Dropdown의 itemIcon과 같은 이름·같은 규칙.
+   크기는 소비자가 정하고, 컨테이너는 줄어들지 않는다. */
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+/* 아이콘과 텍스트를 한 덩어리로 묶는다 — 항목의 space-between이 아이콘까지 벌리지 않도록. */
+.itemContent,
+.triggerValue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

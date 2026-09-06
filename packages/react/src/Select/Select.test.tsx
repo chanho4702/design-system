@@ -70,4 +70,30 @@ describe("Select", () => {
     await userEvent.click(screen.getByRole("option", { name: "낮음" }));
     expect(onValueChange).not.toHaveBeenCalled();
   });
+
+  it("옵션 icon이 목록과 트리거의 선택값 양쪽에 렌더된다", async () => {
+    const ICON_OPTIONS = [
+      { value: "epic", label: "에픽", icon: <span data-icon="epic" /> },
+      { value: "story", label: "스토리", icon: <span data-icon="story" /> },
+    ];
+    render(<Select label="이슈 타입" options={ICON_OPTIONS} placeholder="선택" />);
+    const trigger = screen.getByRole("combobox", { name: "이슈 타입" });
+    await userEvent.click(trigger);
+    const epic = screen.getByRole("option", { name: "에픽" });
+    expect(epic.querySelector('[data-icon="epic"]')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("option", { name: "스토리" }));
+    expect(trigger).toHaveTextContent("스토리");
+    expect(trigger.querySelector('[data-icon="story"]')).toBeInTheDocument();
+    expect(trigger.querySelector('[data-icon="epic"]')).not.toBeInTheDocument();
+  });
+
+  it("icon이 없는 옵션은 트리거에 아이콘 없이 라벨만 남는다", () => {
+    const { container } = render(
+      <Select label="우선순위" options={OPTIONS} defaultValue="low" />,
+    );
+    const trigger = screen.getByRole("combobox", { name: "우선순위" });
+    expect(trigger).toHaveTextContent("낮음");
+    expect(container.querySelectorAll("[data-icon]")).toHaveLength(0);
+  });
 });
