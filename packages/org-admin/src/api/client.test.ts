@@ -63,4 +63,57 @@ describe("createOrgClient", () => {
       role: "ADMIN",
     });
   });
+
+  it("메일 설정 저장은 password를 넘기지 않으면 키 자체를 빼고 보낸다", async () => {
+    const { api, calls } = createFakeApi({ "PUT /api/org/settings/mail": () => undefined });
+    const base = {
+      enabled: true,
+      host: "mail-relay",
+      port: 25,
+      username: "",
+      tls: "NONE",
+      fromAddress: "no-reply@example.com",
+      fromName: "플랫폼",
+    } as const;
+
+    await createOrgClient(api).saveMailSetting({ ...base });
+    expect(calls[0].body).toEqual(base);
+
+    await createOrgClient(api).saveMailSetting({ ...base, password: "" });
+    expect(calls[1].body).toEqual({ ...base, password: "" });
+  });
+
+  it("테스트 발송은 받는 주소가 비면 본문을 비워 서버가 요청자에게 보내게 한다", async () => {
+    const { api, calls } = createFakeApi({
+      "POST /api/org/settings/mail/test": () => ({ ok: true }),
+    });
+    const client = createOrgClient(api);
+
+    await client.testMail("  ");
+    expect(calls[0].body).toEqual({});
+
+    await client.testMail(" yujin@example.com ");
+    expect(calls[1].body).toEqual({ to: "yujin@example.com" });
+  });
+
+  it("발송 로그는 빈 상태 필터를 빼고 page·size만 붙인다", async () => {
+    const { api, calls } = createFakeApi({
+      "GET /api/org/settings/mail/log": () => ({ items: [], total: 0 }),
+    });
+    const client = createOrgClient(api);
+
+    await client.mailLog({ status: "", page: 0, size: 20 });
+    expect(calls[0].path).toBe("/api/org/settings/mail/log?page=0&size=20");
+
+    await client.mailLog({ status: "FAILED", page: 2, size: 20 });
+    expect(calls[1].path).toBe("/api/org/settings/mail/log?status=FAILED&page=2&size=20");
+  });
+
+  it("다시 보내기는 로그 id 경로로 POST한다", async () => {
+    const { api, calls } = createFakeApi({
+      "POST /api/org/settings/mail/log/:id/retry": () => undefined,
+    });
+    await createOrgClient(api).retryMail("91");
+    expect(calls[0]).toMatchObject({ method: "POST", path: "/api/org/settings/mail/log/91/retry" });
+  });
 });

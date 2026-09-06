@@ -1,5 +1,8 @@
 import type {
   GrantRole,
+  MailMode,
+  MailOutboxStatus,
+  MailTls,
   GrantScope,
   InvitationStatus,
   JoinedVia,
@@ -100,4 +103,47 @@ const EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
 
 export function isValidEmail(value: string): boolean {
   return EMAIL_RE.test(value);
+}
+
+/* ---- 메일 --------------------------------------------------------------- */
+
+export const MAIL_MODE_LABEL: Record<MailMode, string> = {
+  none: "사용 안 함",
+  external: "외부 SMTP",
+  relay: "릴레이",
+  full: "자체 메일 서버",
+  dev: "개발(캡처)",
+};
+
+/** 설치 옵션 표(설계 2026-09-07 §2)의 "용도"를 한 줄로 옮긴 것. */
+export const MAIL_MODE_HINT: Record<MailMode, string> = {
+  none: "메일 없이 운영합니다. 초대는 링크를 복사해 전달합니다.",
+  external: "사내 SMTP·Gmail·SES 등 이미 있는 메일 서버를 씁니다.",
+  relay: "발송 전용 릴레이를 거쳐 보냅니다. 앱은 관문 하나만 봅니다.",
+  full: "우리 서버가 메일 서버입니다. 완전 폐쇄망에서도 주고받습니다.",
+  dev: "개발용 캡처 서버입니다. 실제로 발송되지 않습니다.",
+};
+
+export const MAIL_TLS_LABEL: Record<MailTls, string> = {
+  NONE: "없음",
+  STARTTLS: "STARTTLS",
+  SSL: "SSL/TLS",
+};
+
+export const MAIL_STATUS_LABEL: Record<MailOutboxStatus, string> = {
+  PENDING: "대기",
+  SENT: "성공",
+  FAILED: "실패",
+};
+
+const MAIL_SOURCE_LABEL: Record<string, string> = {
+  wiki: "위키",
+  alm: "ALM",
+  org: "조직",
+  test: "테스트",
+};
+
+/** 모르는 출처는 서버가 준 값을 그대로 보여 준다(새 소비자가 붙어도 빈칸이 되지 않게). */
+export function mailSourceLabel(source: string): string {
+  return MAIL_SOURCE_LABEL[source.toLowerCase()] ?? source;
 }

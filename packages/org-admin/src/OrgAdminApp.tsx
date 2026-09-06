@@ -1,12 +1,13 @@
 import { PageHeader, ToastProvider } from "@chanho/react";
-import { ClipboardCheck, Mail, ShieldCheck, Users, UsersRound } from "lucide-react";
+import { ClipboardCheck, Mail, Send, ShieldCheck, Users, UsersRound } from "lucide-react";
 import type { ReactNode } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router";
-import { OrgAdminProvider } from "./context";
+import { OrgAdminProvider, useOrgAdmin } from "./context";
 import type { OrgAdminLinks, OrgAdminUser, ResolveResource } from "./context";
 import type { OrgApiFetch } from "./api/client";
 import { GlobalRolesScreen } from "./screens/GlobalRolesScreen";
 import { InvitationsScreen } from "./screens/InvitationsScreen";
+import { MailScreen } from "./screens/MailScreen";
 import { PendingScreen } from "./screens/PendingScreen";
 import { TeamsScreen } from "./screens/TeamsScreen";
 import { UsersScreen } from "./screens/UsersScreen";
@@ -30,6 +31,8 @@ interface NavItem {
   to: string;
   label: string;
   icon: ReactNode;
+  /** 전역 관리자에게만 보이는 메뉴. 서버도 같은 권한으로 막는다. */
+  adminOnly?: boolean;
 }
 
 const NAV: NavItem[] = [
@@ -38,6 +41,12 @@ const NAV: NavItem[] = [
   { to: "teams", label: "팀", icon: <UsersRound size={16} aria-hidden="true" /> },
   { to: "roles", label: "전역 역할", icon: <ShieldCheck size={16} aria-hidden="true" /> },
   { to: "pending", label: "승인 대기", icon: <ClipboardCheck size={16} aria-hidden="true" /> },
+  {
+    to: "mail",
+    label: "메일 설정",
+    icon: <Send size={16} aria-hidden="true" />,
+    adminOnly: true,
+  },
 ];
 
 /**
@@ -51,10 +60,12 @@ function normalizeBase(basePath: string): string {
 }
 
 function AdminNav({ basePath }: { basePath: string }) {
+  const { isGlobalAdmin } = useOrgAdmin();
   const prefix = normalizeBase(basePath);
+  const items = NAV.filter((item) => !item.adminOnly || isGlobalAdmin);
   return (
     <nav className={styles.nav} aria-label="조직 관리">
-      {NAV.map((item) => (
+      {items.map((item) => (
         <NavLink
           key={item.to}
           to={`${prefix}/${item.to}`}
@@ -106,6 +117,7 @@ export function OrgAdminApp({
               <Route path="teams" element={<TeamsScreen />} />
               <Route path="roles" element={<GlobalRolesScreen />} />
               <Route path="pending" element={<PendingScreen />} />
+              <Route path="mail" element={<MailScreen />} />
               <Route path="*" element={<Navigate to={usersPath} replace />} />
             </Routes>
           </div>

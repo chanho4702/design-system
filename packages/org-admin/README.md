@@ -5,7 +5,8 @@
 넘겨준 인증 fetch 하나로 `/api/org/*`(org-service)만 부른다.
 
 설계 원본: `platform-backend/docs/superpowers/specs/2026-09-05-user-invite-team-permission-design.md`
-(§3.3 API 계약, §5 공용 관리 화면).
+(§3.3 API 계약, §5 공용 관리 화면), 메일 설정은
+`platform-backend/docs/superpowers/specs/2026-09-07-platform-mail-design.md`(§3 API, §5 화면 구성).
 
 ---
 
@@ -18,6 +19,7 @@
 | `teams` | 팀 | 목록·검색·생성·이름 변경·삭제, 팀원 추가/제거·리더 지정. `kind=EVERYONE` 팀은 읽기 전용 |
 | `roles` | 전역 역할 | `GLOBAL` grant 목록·부여·역할 변경·회수 (마지막 관리자 보호는 서버 409 문구 그대로) |
 | `pending` | 승인 대기 | 초대 없이 로그인해 PENDING으로 격리된 계정 승인·거절 |
+| `mail` | 메일 설정 | 플랫폼 발송 설정(모드 배지·SMTP 폼·테스트 발송)과 발송 로그(상태 필터·다시 보내기). **전역 관리자에게만** 메뉴가 보이고, 서버도 같은 권한으로 막는다 |
 
 별도 export로 **`PendingApprovalGate`** — 앱 셸보다 바깥에서 `/api/org/me`를 한 번 읽어,
 `status === "PENDING"`이면 셸 대신 "승인 대기 중" 안내를 그린다.
@@ -35,7 +37,7 @@ alias로 import 이름을 유지한다.
   "dependencies": {
     "@chanho/tokens":    "npm:@chanho4702/tokens@0.4.0",
     "@chanho/react":     "npm:@chanho4702/react@0.8.1",
-    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.1.0",
+    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.2.0",
     "react-router": "^7.0.0"
   }
 }
@@ -117,7 +119,8 @@ type OrgApiFetch = (path: string, init?: RequestInit) => Promise<Response>;
 - **경로**: 패키지는 언제나 `/api/org/...`로 시작하는 **상대 경로**만 넘긴다. 게이트웨이 prefix·
   절대 URL·포트는 호스트가 붙인다. 멤버 조회는 두 갈래다 — 선택기(팀원 추가·권한 대상)는
   배열을 주는 `GET /members?status=&kind=&q=`, 사용자 목록 화면은 페이지를 주는
-  `GET /members/page?status=&kind=&q=&page=&size=`를 쓴다.
+  `GET /members/page?status=&kind=&q=&page=&size=`를 쓴다. 메일 설정은
+  `/api/org/settings/mail`(GET·PUT), `…/mail/test`, `…/mail/log`, `…/mail/log/{id}/retry`를 부른다.
 - **인증**: 토큰 헤더든 쿠키든 호스트가 붙인다. 패키지는 자격증명을 만들지도, 보지도 않는다.
 - **응답**: `Response`를 그대로 돌려준다. 실패는 던지지 말고 `res.ok === false`로 돌려주면 된다 —
   패키지가 본문의 `{"error": "..."}`를 꺼내 그 문구 그대로 토스트에 띄운다. 401·403에서 로그인으로
@@ -134,6 +137,8 @@ type OrgApiFetch = (path: string, init?: RequestInit) => Promise<Response>;
 | `links?` | `{ space?(id), project?(id) }` — 리소스로 나가는 링크. |
 
 토큰·시크릿은 화면에 절대 표시하지 않는다. 초대는 서버가 준 `inviteUrl`만 복사 버튼으로 노출한다.
+SMTP 비밀번호도 서버가 내려주지 않는다 — 화면은 `passwordSet`만 받아 "저장됨"으로 표시하고, PUT에서
+`password` 키를 **뺀 채로** 보내면 유지, 빈 문자열로 보내면 삭제다(삭제는 확인을 한 번 거친다).
 
 ---
 

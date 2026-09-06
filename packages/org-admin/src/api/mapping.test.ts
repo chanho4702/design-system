@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { toGrant, toInvitation, toMember, toPage, toTeam, toTeamMember } from "./mapping";
+import {
+  toGrant,
+  toInvitation,
+  toMailLogEntry,
+  toMailSetting,
+  toMailTestResult,
+  toMember,
+  toPage,
+  toTeam,
+  toTeamMember,
+} from "./mapping";
 
 describe("toPage", () => {
   it("배열 응답을 한 페이지로 감싼다", () => {
@@ -67,5 +77,51 @@ describe("toInvitation", () => {
     });
     expect(invitation.mailSent).toBeNull();
     expect(invitation.inviteUrl).toBe("https://host/invite/abc");
+  });
+});
+
+describe("toMailSetting", () => {
+  it("모르는 모드는 none으로 떨어뜨리지 않고 null로 둔다", () => {
+    expect(toMailSetting({ mode: "카오스", enabled: true }).mode).toBeNull();
+    expect(toMailSetting({ mode: "RELAY" }).mode).toBe("relay");
+  });
+
+  it("포트가 문자열로 와도 숫자로 읽고, 없으면 null이다", () => {
+    expect(toMailSetting({ port: "587" }).port).toBe(587);
+    expect(toMailSetting({}).port).toBeNull();
+  });
+
+  it("필드가 통째로 없어도 화면이 쓸 수 있는 기본값을 준다", () => {
+    expect(toMailSetting({})).toMatchObject({
+      enabled: false,
+      passwordSet: false,
+      tls: "NONE",
+      host: "",
+      fromAddress: "",
+    });
+  });
+});
+
+describe("toMailLogEntry", () => {
+  it("받는 주소 키가 to든 toAddress든 받는다", () => {
+    expect(toMailLogEntry({ id: 1, to: "a@x.com" }).to).toBe("a@x.com");
+    expect(toMailLogEntry({ id: 1, toAddress: "b@x.com" }).to).toBe("b@x.com");
+  });
+
+  it("모르는 상태는 대기로 두고 시도 횟수는 0으로 채운다", () => {
+    expect(toMailLogEntry({ id: 1, status: "WAT" })).toMatchObject({
+      status: "PENDING",
+      attempts: 0,
+      lastError: null,
+    });
+  });
+});
+
+describe("toMailTestResult", () => {
+  it("ok가 없으면 실패로 보고 오류 문구는 그대로 둔다", () => {
+    expect(toMailTestResult({ error: "535 auth failed" })).toEqual({
+      ok: false,
+      error: "535 auth failed",
+    });
   });
 });

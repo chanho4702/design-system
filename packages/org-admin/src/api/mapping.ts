@@ -16,6 +16,12 @@ import type {
   Invitation,
   InvitationStatus,
   JoinedVia,
+  MailLogEntry,
+  MailMode,
+  MailOutboxStatus,
+  MailSetting,
+  MailTestResult,
+  MailTls,
   Me,
   Member,
   MemberDetail,
@@ -219,5 +225,59 @@ export function toMe(raw: unknown): Me {
       .map((r) => str(r))
       .filter((r): r is string => r !== null),
     teams: arr(m.teams).map(toMemberTeamRef),
+  };
+}
+
+/* ---- 메일 설정 --------------------------------------------------------- */
+
+export const MAIL_MODES = ["none", "external", "relay", "full", "dev"] as const;
+export const MAIL_TLS_MODES = ["NONE", "STARTTLS", "SSL"] as const;
+export const MAIL_OUTBOX_STATUSES = ["PENDING", "SENT", "FAILED"] as const;
+
+/** 포트·시도 횟수처럼 문자열로 올 수도 있는 정수. 숫자가 아니면 null이다. */
+function intOf(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return Math.trunc(value);
+  const s = str(value);
+  return s !== null && /^-?\d+$/.test(s) ? Number(s) : null;
+}
+
+export function toMailSetting(raw: unknown): MailSetting {
+  const m = obj(raw);
+  // 모드는 설치 옵션 값이라 대소문자가 흔들릴 수 있다. 모르는 값은 억지로 none으로 읽지 않고
+  // null로 두어 화면이 "확인 필요"라고 말하게 한다.
+  const mode = str(m.mode)?.toLowerCase() ?? null;
+  return {
+    enabled: bool(m.enabled) ?? false,
+    mode: mode !== null && (MAIL_MODES as readonly string[]).includes(mode) ? (mode as MailMode) : null,
+    host: text(m.host),
+    port: intOf(m.port),
+    username: text(m.username),
+    passwordSet: bool(m.passwordSet) ?? false,
+    tls: oneOf<MailTls>(m.tls, MAIL_TLS_MODES, "NONE"),
+    fromAddress: text(m.fromAddress),
+    fromName: text(m.fromName),
+    updatedAt: str(m.updatedAt),
+    updatedBy: str(m.updatedBy),
+  };
+}
+
+export function toMailTestResult(raw: unknown): MailTestResult {
+  const r = obj(raw);
+  return { ok: bool(r.ok) ?? false, error: str(r.error) };
+}
+
+export function toMailLogEntry(raw: unknown): MailLogEntry {
+  const e = obj(raw);
+  return {
+    id: text(e.id),
+    // 스펙은 `to`, 테이블 컬럼은 `to_address`다 — 둘 다 받는다.
+    to: text(e.to, text(e.toAddress, "-")),
+    subject: text(e.subject, "(제목 없음)"),
+    source: text(e.source, "-"),
+    status: oneOf<MailOutboxStatus>(e.status, MAIL_OUTBOX_STATUSES, "PENDING"),
+    attempts: intOf(e.attempts) ?? 0,
+    lastError: str(e.lastError) ?? str(e.error),
+    createdAt: str(e.createdAt),
+    sentAt: str(e.sentAt),
   };
 }

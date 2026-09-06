@@ -139,3 +139,63 @@ export interface CreateInvitationRequest {
   grants: GrantPreset[];
   message?: string;
 }
+
+/* ---- 메일 설정 (설계 2026-09-07 §3) ------------------------------------- */
+
+/** 설치 시점에 고른 인프라 모드. 운영 중 정본은 `mail_setting`이고 이 값은 표시 전용이다. */
+export type MailMode = "none" | "external" | "relay" | "full" | "dev";
+export type MailTls = "NONE" | "STARTTLS" | "SSL";
+export type MailOutboxStatus = "PENDING" | "SENT" | "FAILED";
+
+export interface MailSetting {
+  enabled: boolean;
+  /** 서버가 모르는 값을 주거나 필드가 없으면 null — 화면은 배지를 "확인 필요"로 그린다. */
+  mode: MailMode | null;
+  host: string;
+  port: number | null;
+  username: string;
+  /** 비밀번호는 절대 내려오지 않는다. 저장돼 있는지 여부만 온다. */
+  passwordSet: boolean;
+  tls: MailTls;
+  fromAddress: string;
+  fromName: string;
+  updatedAt: string | null;
+  updatedBy: string | null;
+}
+
+/** PUT 본문. `password`는 생략하면 유지, `""`이면 삭제다(서버 계약 그대로). */
+export interface MailSettingUpdate {
+  enabled: boolean;
+  host: string;
+  port: number | null;
+  username: string;
+  password?: string;
+  tls: MailTls;
+  fromAddress: string;
+  fromName: string;
+}
+
+/** 테스트 발송 결과. `error`는 SMTP가 준 문구 그대로 — 화면이 손대지 않는다. */
+export interface MailTestResult {
+  ok: boolean;
+  error: string | null;
+}
+
+export interface MailLogEntry {
+  id: string;
+  to: string;
+  subject: string;
+  /** wiki|alm|org|test. 모르는 값은 그대로 보여 준다. */
+  source: string;
+  status: MailOutboxStatus;
+  attempts: number;
+  lastError: string | null;
+  createdAt: string | null;
+  sentAt: string | null;
+}
+
+export interface MailLogQuery {
+  status?: MailOutboxStatus | "";
+  page?: number;
+  size?: number;
+}

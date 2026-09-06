@@ -8,6 +8,9 @@
 import {
   toGrant,
   toInvitation,
+  toMailLogEntry,
+  toMailSetting,
+  toMailTestResult,
   toMe,
   toMember,
   toMemberDetail,
@@ -24,6 +27,11 @@ import type {
   GrantScope,
   Invitation,
   InvitationQuery,
+  MailLogEntry,
+  MailLogQuery,
+  MailSetting,
+  MailSettingUpdate,
+  MailTestResult,
   Me,
   Member,
   MemberDetail,
@@ -246,6 +254,53 @@ export function createOrgClient(api: OrgApiFetch) {
 
     async deleteGrant(id: string): Promise<void> {
       await send(`/api/org/grants/${encodeURIComponent(id)}`, "DELETE");
+    },
+
+    // ---- mail (설계 2026-09-07 §3) ----
+    async mailSetting(): Promise<MailSetting> {
+      return toMailSetting(await call("/api/org/settings/mail"));
+    },
+
+    /**
+     * 설정 저장. `password`를 넣지 않으면 서버가 기존 비밀번호를 유지하고, 빈 문자열이면 지운다 —
+     * 그래서 "손대지 않음"과 "지움"을 키 존재 여부로 구분해 보낸다.
+     * 응답 본문은 쓰지 않는다(저장 뒤 화면이 다시 읽어 passwordSet·updatedAt을 맞춘다).
+     */
+    async saveMailSetting(body: MailSettingUpdate): Promise<void> {
+      const payload: Record<string, unknown> = {
+        enabled: body.enabled,
+        host: body.host,
+        port: body.port,
+        username: body.username,
+        tls: body.tls,
+        fromAddress: body.fromAddress,
+        fromName: body.fromName,
+      };
+      if (body.password !== undefined) payload.password = body.password;
+      await send("/api/org/settings/mail", "PUT", payload);
+    },
+
+    /** 테스트 발송. 받는 주소를 비우면 서버가 요청자 이메일로 보낸다. */
+    async testMail(to?: string): Promise<MailTestResult> {
+      const target = to?.trim() ?? "";
+      const raw = await send(
+        "/api/org/settings/mail/test",
+        "POST",
+        target === "" ? {} : { to: target },
+      );
+      return toMailTestResult(raw);
+    },
+
+    async mailLog(q: MailLogQuery = {}): Promise<Page<MailLogEntry>> {
+      const size = q.size ?? 20;
+      const raw = await call(
+        `/api/org/settings/mail/log${query({ status: q.status, page: q.page, size })}`,
+      );
+      return toPage(raw, toMailLogEntry, size);
+    },
+
+    async retryMail(id: string): Promise<void> {
+      await send(`/api/org/settings/mail/log/${encodeURIComponent(id)}/retry`, "POST");
     },
   };
 }

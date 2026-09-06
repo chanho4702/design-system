@@ -4,7 +4,8 @@ import { describe, expect, it } from "vitest";
 import { OrgAdminApp } from "./OrgAdminApp";
 import { createFakeApi } from "./testing/fakeApi";
 import type { FakeHandler } from "./testing/fakeApi";
-import { ADMIN_USER, renderApp } from "./testing/renderScreen";
+import { ADMIN_USER, PLAIN_USER, renderApp } from "./testing/renderScreen";
+import type { OrgAdminUser } from "./context";
 
 const ROUTES: Record<string, FakeHandler> = {
   "GET /api/org/members/page": () => ({
@@ -28,11 +29,19 @@ const ROUTES: Record<string, FakeHandler> = {
   "GET /api/org/teams/:id/members": () => [],
   "GET /api/org/grants": () => [],
   "GET /api/org/invitations": () => ({ items: [], page: 0, size: 20, total: 0 }),
+  "GET /api/org/me": () => ({ id: 1, displayName: "김채호", globalRoles: ["ADMIN"] }),
+  "GET /api/org/settings/mail": () => ({
+    enabled: false,
+    mode: "none",
+    passwordSet: false,
+    tls: "NONE",
+  }),
+  "GET /api/org/settings/mail/log": () => ({ items: [], total: 0 }),
 };
 
-function mount(route?: string, basePath = "/admin/org") {
+function mount(route?: string, basePath = "/admin/org", currentUser: OrgAdminUser = ADMIN_USER) {
   const { api, calls } = createFakeApi(ROUTES);
-  const view = renderApp(<OrgAdminApp basePath={basePath} api={api} currentUser={ADMIN_USER} />, {
+  const view = renderApp(<OrgAdminApp basePath={basePath} api={api} currentUser={currentUser} />, {
     api,
     route,
     basePath,
@@ -78,6 +87,30 @@ describe("OrgAdminApp", () => {
   it("모르는 하위 경로는 사용자 화면으로 돌려보낸다", async () => {
     mount("/admin/org/없는화면");
     expect(await screen.findByRole("cell", { name: "김채호" })).toBeInTheDocument();
+  });
+
+  it("메일 설정은 전역 관리자에게만 메뉴로 보인다", async () => {
+    mount();
+    await screen.findByRole("cell", { name: "김채호" });
+
+    expect(screen.getByRole("link", { name: "메일 설정" })).toHaveAttribute(
+      "href",
+      "/admin/org/mail",
+    );
+  });
+
+  it("전역 관리자가 아니면 메일 설정 메뉴가 없다", async () => {
+    mount(undefined, "/admin/org", PLAIN_USER);
+    await screen.findByRole("cell", { name: "김채호" });
+
+    expect(screen.queryByRole("link", { name: "메일 설정" })).not.toBeInTheDocument();
+  });
+
+  it("메일 설정 화면으로 이동하면 발송 설정을 그린다", async () => {
+    mount("/admin/org/mail");
+
+    expect(await screen.findByRole("textbox", { name: "호스트" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "발송 로그" })).toBeInTheDocument();
   });
 
   // ALM은 /settings/org 아래에 붙는다 — 패키지가 특정 경로를 가정하지 않는지 잠근다.
