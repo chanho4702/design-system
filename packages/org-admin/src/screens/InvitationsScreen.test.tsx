@@ -5,7 +5,7 @@ import { useLocation } from "react-router";
 import { InvitationsScreen } from "./InvitationsScreen";
 import { FakeError, createFakeApi } from "../testing/fakeApi";
 import type { FakeHandler } from "../testing/fakeApi";
-import { renderScreen } from "../testing/renderScreen";
+import { PLAIN_USER, renderScreen } from "../testing/renderScreen";
 
 /** 프리셋 쿼리가 실제로 지워졌는지 보기 위한 현위치 표시기. */
 function LocationProbe() {
@@ -232,5 +232,113 @@ describe("InvitationsScreen", () => {
     await userEvent.click(screen.getByRole("button", { name: "재발송" }));
 
     expect(await screen.findByText("이 초대를 다시 보낼 권한이 없습니다")).toBeInTheDocument();
+  });
+
+  /**
+   * 메일은 org-service 허브(outbox)를 거친다 — 초대 응답의 `mailSent`는 "보냈다"가 아니라
+   * "발송 대기열에 넣었다"는 뜻이다. 화면이 그보다 센 말을 하지 않는지 여기서 못 박는다.
+   */
+  describe("발송 대기열 문구", () => {
+    const NOTE = "초대 메일은 발송 대기열을 거칩니다. 실제 발송 결과는 메일 설정의 발송 로그에 남습니다.";
+    const QUEUED_NOTE =
+      "메일을 발송 대기열에 넣었습니다. 실제 발송 결과는 메일 설정의 발송 로그에서 확인하세요.";
+    const HUB_OFF_NOTE = "메일 발송이 꺼져 있습니다 — 초대 링크를 복사해 전달하세요.";
+
+    it("안내 문구와 발송 로그 링크를 상시 보여 준다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, { api });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      expect(screen.getByText(NOTE)).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: "발송 로그 보기" })).toHaveAttribute(
+        "href",
+        "/admin/org/mail",
+      );
+    });
+
+    it("전역 관리자가 아니면 링크를 감춘다 — 메일 설정은 관리자 전용 화면이다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, { api, currentUser: PLAIN_USER });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      expect(screen.getByText(NOTE)).toBeInTheDocument();
+      expect(screen.queryByRole("link", { name: "발송 로그 보기" })).not.toBeInTheDocument();
+    });
+
+    it("허브가 받은 초대는 결과 표에 '발송 대기열에 넣음'으로 적는다", async () => {
+      const { api } = createFakeApi(
+        invitationRoutes({
+          "POST /api/org/invitations": ({ body }) =>
+            (body as { emails: string[] }).emails.map((email, index) => ({
+              id: 200 + index,
+              email,
+              status: "PENDING",
+              inviteUrl: `https://wiki.example.com/invite/q-${index}`,
+              mailSent: true,
+              teams: [],
+              grants: [],
+            })),
+        }),
+      );
+      renderScreen(<InvitationsScreen />, { api });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      await userEvent.click(screen.getByRole("button", { name: "새 초대" }));
+      await userEvent.click(screen.getByRole("textbox", { name: "이메일" }));
+      await userEvent.paste("a@example.com");
+      await userEvent.click(screen.getByRole("button", { name: "초대 보내기" }));
+
+      const results = await screen.findByRole("table", { name: "초대 결과" });
+      expect(within(results).getByRole("cell", { name: "발송 대기열에 넣음" })).toBeInTheDocument();
+      expect(screen.getByText(QUEUED_NOTE)).toBeInTheDocument();
+      // 상시 안내와 결과 섹션 양쪽에서 발송 로그로 갈 수 있다.
+      expect(screen.getAllByRole("link", { name: "발송 로그 보기" })).toHaveLength(2);
+    });
+
+    it("허브가 꺼져 있으면 결과는 미발송으로 두고 링크 전달을 안내한다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, { api });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      await userEvent.click(screen.getByRole("button", { name: "새 초대" }));
+      await userEvent.click(screen.getByRole("textbox", { name: "이메일" }));
+      await userEvent.paste("a@example.com");
+      await userEvent.click(screen.getByRole("button", { name: "초대 보내기" }));
+
+      const results = await screen.findByRole("table", { name: "초대 결과" });
+      expect(
+        within(results).getByRole("cell", { name: "미발송 — 링크를 전달하세요" }),
+      ).toBeInTheDocument();
+      expect(screen.getAllByText(HUB_OFF_NOTE).length).toBeGreaterThan(0);
+    });
+
+    it("재발송은 대기열에 넣었다고 알리고 발송 로그를 가리킨다", async () => {
+      const { api } = createFakeApi(
+        invitationRoutes({
+          "POST /api/org/invitations/:id/resend": () => ({ ...PENDING, mailSent: true }),
+        }),
+      );
+      renderScreen(<InvitationsScreen />, { api });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      await userEvent.click(screen.getByRole("button", { name: "재발송" }));
+
+      expect(await screen.findByText("초대 메일을 발송 대기열에 넣었습니다")).toBeInTheDocument();
+      expect(
+        screen.getByText("실제 발송 결과는 메일 설정의 발송 로그에서 확인하세요."),
+      ).toBeInTheDocument();
+    });
+
+    it("허브가 꺼진 재발송은 보냈다고 말하지 않는다", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, { api });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      await userEvent.click(screen.getByRole("button", { name: "재발송" }));
+
+      expect(await screen.findByText("초대를 갱신했습니다")).toBeInTheDocument();
+      expect(screen.getByText(HUB_OFF_NOTE)).toBeInTheDocument();
+      expect(screen.queryByText(/보냈습니다/)).not.toBeInTheDocument();
+    });
   });
 });

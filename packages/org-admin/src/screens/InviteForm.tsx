@@ -5,6 +5,7 @@ import { useOrgAdmin } from "../context";
 import { useAsync } from "../useAsync";
 import { CopyButton } from "../components/CopyButton";
 import { GrantPresetEditor } from "../components/GrantPresetEditor";
+import { MailLogLink } from "../components/MailLogLink";
 import { TeamPresetEditor } from "../components/TeamPresetEditor";
 import { isValidEmail, splitEmails } from "../format";
 import { InvitationStatusLozenge } from "./StatusLozenge";
@@ -21,7 +22,11 @@ export interface InviteFormProps {
 
 /**
  * 새 초대. 이메일은 붙여넣기 덩어리를 쉼표·줄바꿈·공백으로 나누고, 형식이 틀린 것만 인라인으로
- * 짚어 준다. 결과는 발송 여부와 초대 링크를 함께 보여 준다 — 메일이 없으면 링크 복사가 유일한 경로다.
+ * 짚어 준다.
+ *
+ * 결과의 `mailSent`는 "보냈다"가 아니라 "발송 대기열(org-service outbox)에 넣었다"는 뜻이다 —
+ * 실제 발송 결과는 메일 설정 화면의 발송 로그에 있으므로 그쪽 링크를 함께 둔다. 허브가 꺼져
+ * 있으면(`mailSent=false`) 링크 복사가 유일한 경로라 그 안내는 그대로 유지한다.
  */
 export function InviteForm({ onClose, onCreated, initialGrants }: InviteFormProps) {
   const { client, isGlobalAdmin } = useOrgAdmin();
@@ -59,7 +64,15 @@ export function InviteForm({ onClose, onCreated, initialGrants }: InviteFormProp
           setMessage("");
           setTeams([]);
           setGrants([]);
-          toast({ title: `초대 ${created.length}건을 만들었습니다`, appearance: "success" });
+          const queued = created.filter((row) => row.mailSent).length;
+          toast({
+            title: `초대 ${created.length}건을 만들었습니다`,
+            description:
+              queued > 0
+                ? `메일 ${queued}건을 발송 대기열에 넣었습니다. 실제 발송 결과는 메일 설정의 발송 로그에서 확인하세요.`
+                : "메일 발송이 꺼져 있습니다 — 초대 링크를 복사해 전달하세요.",
+            appearance: "success",
+          });
           onCreated();
         },
         (cause: unknown) => {
@@ -82,7 +95,7 @@ export function InviteForm({ onClose, onCreated, initialGrants }: InviteFormProp
     {
       key: "mailSent",
       header: "메일",
-      render: (row) => (row.mailSent ? "발송됨" : "미발송 — 링크를 전달하세요"),
+      render: (row) => (row.mailSent ? "발송 대기열에 넣음" : "미발송 — 링크를 전달하세요"),
     },
     {
       key: "inviteUrl",
@@ -132,7 +145,15 @@ export function InviteForm({ onClose, onCreated, initialGrants }: InviteFormProp
 
         {results ? (
           <section className={styles.stack}>
-            <h3 className={styles.sectionTitle}>초대 결과</h3>
+            <div className={styles.inlineRow}>
+              <h3 className={styles.sectionTitle}>초대 결과</h3>
+              {results.some((row) => row.mailSent) ? <MailLogLink /> : null}
+            </div>
+            <p className={styles.subtle}>
+              {results.some((row) => row.mailSent)
+                ? "메일을 발송 대기열에 넣었습니다. 실제 발송 결과는 메일 설정의 발송 로그에서 확인하세요."
+                : "메일 발송이 꺼져 있습니다 — 초대 링크를 복사해 전달하세요."}
+            </p>
             <Table aria-label="초대 결과" columns={resultColumns} rows={results} />
           </section>
         ) : null}

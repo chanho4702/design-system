@@ -38,6 +38,14 @@
   color: var(--chanho-color-text-default);
 }
 
+/** 제목·안내 문구 옆에 링크를 나란히 두는 한 줄. */
+.inlineRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--chanho-space-100);
+}
+
 .subtle {
   margin: 0;
   font-size: var(--chanho-font-size-75);

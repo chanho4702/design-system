@@ -102,6 +102,10 @@ export interface Invitation {
   acceptedAt: string | null;
   /** PENDING일 때만 재노출된다(링크 복사용). 토큰 자체는 화면에 보이지 않는다. */
   inviteUrl: string | null;
+  /**
+   * 메일을 발송 대기열(org-service outbox)에 넣었는지. 수신자에게 도착했다는 뜻이 아니다 —
+   * 실제 발송 결과는 메일 설정 화면의 발송 로그(`/api/org/settings/mail/log`)에 남는다.
+   */
   mailSent: boolean | null;
   teams: TeamPreset[];
   grants: GrantPreset[];

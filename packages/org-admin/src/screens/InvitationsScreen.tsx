@@ -6,6 +6,7 @@ import { useOrgClient } from "../context";
 import { useAsync } from "../useAsync";
 import { CopyButton } from "../components/CopyButton";
 import { DataSection } from "../components/DataSection";
+import { MailLogLink } from "../components/MailLogLink";
 import { Pagination } from "../components/Pagination";
 import { INVITATION_STATUS_LABEL, formatDate } from "../format";
 import { InviteForm } from "./InviteForm";
@@ -75,9 +76,23 @@ export function InvitationsScreen() {
   const resend = (invitation: Invitation) => {
     setBusyId(invitation.id);
     client.resendInvitation(invitation.id).then(
-      () => {
+      (updated) => {
         setBusyId(null);
-        toast({ title: "초대를 다시 보냈습니다", appearance: "success" });
+        // 재발송은 메일을 직접 보내지 않고 발송 대기열(org-service outbox)에 넣는다 —
+        // "보냈다"고 말하면 허브가 실패했을 때 화면이 거짓말을 하게 된다.
+        toast(
+          updated?.mailSent
+            ? {
+                title: "초대 메일을 발송 대기열에 넣었습니다",
+                description: "실제 발송 결과는 메일 설정의 발송 로그에서 확인하세요.",
+                appearance: "success",
+              }
+            : {
+                title: "초대를 갱신했습니다",
+                description: "메일 발송이 꺼져 있습니다 — 초대 링크를 복사해 전달하세요.",
+                appearance: "success",
+              },
+        );
         result.reload();
       },
       (cause: unknown) => {
@@ -186,6 +201,14 @@ export function InvitationsScreen() {
             {formOpen ? "새 초대 닫기" : "새 초대"}
           </Button>
         </div>
+      </div>
+
+      {/* 토스트에는 링크를 실을 수 없어, 발송 로그로 가는 길을 화면에 상시 둔다. */}
+      <div className={styles.inlineRow}>
+        <span className={styles.subtle}>
+          초대 메일은 발송 대기열을 거칩니다. 실제 발송 결과는 메일 설정의 발송 로그에 남습니다.
+        </span>
+        <MailLogLink />
       </div>
 
       {formOpen ? (

@@ -5,6 +5,7 @@ import { NavLink, Navigate, Route, Routes } from "react-router";
 import { OrgAdminProvider, useOrgAdmin } from "./context";
 import type { OrgAdminLinks, OrgAdminUser, ResolveResource } from "./context";
 import type { OrgApiFetch } from "./api/client";
+import { normalizeBasePath } from "./paths";
 import { GlobalRolesScreen } from "./screens/GlobalRolesScreen";
 import { InvitationsScreen } from "./screens/InvitationsScreen";
 import { MailScreen } from "./screens/MailScreen";
@@ -49,19 +50,9 @@ const NAV: NavItem[] = [
   },
 ];
 
-/**
- * 마운트 경로를 절대 경로 앞머리로 정규화한다. 호스트마다 다른 값이 온다
- * (wiki `/admin/org`, ALM `/settings/org`) — 앞 슬래시 누락·뒤 슬래시를 여기서 흡수한다.
- */
-function normalizeBase(basePath: string): string {
-  const trimmed = basePath.trim().replace(/\/+$/, "");
-  if (trimmed === "") return "";
-  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-}
-
 function AdminNav({ basePath }: { basePath: string }) {
   const { isGlobalAdmin } = useOrgAdmin();
-  const prefix = normalizeBase(basePath);
+  const prefix = normalizeBasePath(basePath);
   const items = NAV.filter((item) => !item.adminOnly || isGlobalAdmin);
   return (
     <nav className={styles.nav} aria-label="조직 관리">
@@ -97,7 +88,7 @@ export function OrgAdminApp({
 }: OrgAdminAppProps) {
   // 리다이렉트 대상은 절대 경로로 만든다 — 스플랫(`*`) 라우트 안에서 상대 경로를 쓰면
   // 현재 경로 뒤에 계속 덧붙어(`…/xxx/users/users/…`) 무한 리다이렉트가 된다.
-  const usersPath = `${normalizeBase(basePath)}/users`;
+  const usersPath = `${normalizeBasePath(basePath)}/users`;
   return (
     <OrgAdminProvider
       api={api}
