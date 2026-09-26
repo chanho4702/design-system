@@ -24,6 +24,7 @@ import type {
   MailTls,
   Me,
   Member,
+  MemberAvatar,
   MemberDetail,
   MemberEvent,
   MemberKind,
@@ -157,6 +158,15 @@ export function toMemberEvent(raw: unknown): MemberEvent {
     actorName: str(e.actorName),
     detail: str(e.detail),
     createdAt: str(e.createdAt),
+  };
+}
+
+export function toMemberAvatar(raw: unknown): MemberAvatar {
+  const a = obj(raw);
+  return {
+    memberId: text(a.memberId),
+    avatarUrl: str(a.avatarUrl),
+    updatedAt: str(a.updatedAt),
   };
 }
 

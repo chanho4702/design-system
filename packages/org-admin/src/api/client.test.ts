@@ -116,4 +116,32 @@ describe("createOrgClient", () => {
     await createOrgClient(api).retryMail("91");
     expect(calls[0]).toMatchObject({ method: "POST", path: "/api/org/settings/mail/log/91/retry" });
   });
+  it("멤버 아바타 업로드는 multipart file 한 칸으로 PUT하고 Content-Type을 직접 붙이지 않는다", async () => {
+    let init: RequestInit | undefined;
+    const api = (_path: string, i?: RequestInit) => {
+      init = i;
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({ memberId: 7, avatarUrl: "/api/org/members/7/avatar?v=1", updatedAt: null }),
+          { status: 200 },
+        ),
+      );
+    };
+    const view = await createOrgClient(api).uploadMemberAvatar(
+      "7",
+      new File([new Uint8Array(4)], "a.png", { type: "image/png" }),
+    );
+    expect(init?.method).toBe("PUT");
+    expect(init?.headers).toBeUndefined();
+    expect((init?.body as FormData).get("file")).toBeInstanceOf(File);
+    expect(view).toEqual({ memberId: "7", avatarUrl: "/api/org/members/7/avatar?v=1", updatedAt: null });
+  });
+
+  it("멤버 아바타 삭제는 id 경로로 DELETE한다(204)", async () => {
+    const { api, calls } = createFakeApi({
+      "DELETE /api/org/members/:id/avatar": () => undefined,
+    });
+    await expect(createOrgClient(api).removeMemberAvatar("7")).resolves.toBeUndefined();
+    expect(calls[0]).toMatchObject({ method: "DELETE", path: "/api/org/members/7/avatar" });
+  });
 });

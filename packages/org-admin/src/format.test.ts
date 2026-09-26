@@ -47,3 +47,20 @@ describe("memberEventLabel", () => {
     expect(memberEventLabel("SOMETHING_NEW")).toBe("SOMETHING_NEW");
   });
 });
+
+describe("memberEventLabel — 서버 열거 전체", () => {
+  it("org-service MemberEventType 전부에 한국어 라벨이 있다", () => {
+    const serverTypes = [
+      "INVITED", "INVITE_RESENT", "INVITE_REVOKED", "INVITE_EXPIRED",
+      "JOINED", "APPROVED", "SUSPENDED", "REACTIVATED", "DEACTIVATED",
+      "TEAM_ADDED", "TEAM_REMOVED", "AVATAR_CHANGED", "AVATAR_REMOVED",
+      "KEYCLOAK_DISABLED_FAILED",
+    ];
+    for (const type of serverTypes) expect(memberEventLabel(type)).not.toBe(type);
+    expect(memberEventLabel("AVATAR_REMOVED")).toBe("아바타 삭제(관리자)");
+  });
+
+  it("모르는 타입은 원문 그대로 보인다", () => {
+    expect(memberEventLabel("SOMETHING_NEW")).toBe("SOMETHING_NEW");
+  });
+});

@@ -6,6 +6,7 @@ import type {
   GrantScope,
   InvitationStatus,
   JoinedVia,
+  MemberEventType,
   MemberKind,
   MemberStatus,
   TeamRole,
@@ -74,8 +75,15 @@ export const TEAM_ROLE_LABEL: Record<TeamRole, string> = {
   MEMBER: "팀원",
 };
 
-export const MEMBER_EVENT_LABEL: Record<string, string> = {
+/**
+ * 구성원 이력 라벨. 키 목록은 org-service `MemberEventType` 열거가 정본이다 — 서버에 값이 늘면
+ * 여기도 같이 늘린다. 모르는 값은 `memberEventLabel`이 원문 그대로 보여 준다.
+ */
+export const MEMBER_EVENT_LABEL: Record<MemberEventType, string> = {
   INVITED: "초대됨",
+  INVITE_RESENT: "초대 재발송",
+  INVITE_REVOKED: "초대 철회",
+  INVITE_EXPIRED: "초대 만료",
   JOINED: "가입",
   APPROVED: "승인됨",
   SUSPENDED: "일시 정지",
@@ -83,11 +91,13 @@ export const MEMBER_EVENT_LABEL: Record<string, string> = {
   DEACTIVATED: "비활성",
   TEAM_ADDED: "팀 추가",
   TEAM_REMOVED: "팀 제거",
+  AVATAR_CHANGED: "아바타 변경(관리자)",
+  AVATAR_REMOVED: "아바타 삭제(관리자)",
   KEYCLOAK_DISABLED_FAILED: "Keycloak 비활성 실패",
 };
 
 export function memberEventLabel(type: string): string {
-  return MEMBER_EVENT_LABEL[type] ?? type;
+  return (MEMBER_EVENT_LABEL as Record<string, string>)[type] ?? type;
 }
 
 /** 붙여넣은 덩어리에서 이메일 후보를 분리한다 — 쉼표·세미콜론·줄바꿈·공백 모두 구분자. */

@@ -51,7 +51,13 @@ export function createFakeApi(routes: Record<string, FakeHandler>): FakeApi {
   const api: OrgApiFetch = (path, init) => {
     const method = (init?.method ?? "GET").toUpperCase();
     const [pathname, search = ""] = path.split("?");
-    const body = typeof init?.body === "string" ? (JSON.parse(init.body) as unknown) : undefined;
+    // JSON 본문은 풀어서, multipart(FormData)는 그대로 넘긴다 — 파일 업로드 검증용.
+    const body: unknown =
+      typeof init?.body === "string"
+        ? (JSON.parse(init.body) as unknown)
+        : init?.body instanceof FormData
+          ? init.body
+          : undefined;
     calls.push({ method, path, body });
 
     const route = compiled.find((r) => r.method === method && r.matcher.test(pathname));

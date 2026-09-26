@@ -153,3 +153,16 @@
   vertical-align: bottom;
   color: var(--chanho-color-text-danger);
 }
+
+/** 화면에는 안 보이지만 보조기기·라벨 쿼리로는 닿는 요소(파일 입력 등). 버튼이 대신 연다. */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

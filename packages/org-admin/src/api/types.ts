@@ -55,13 +55,39 @@ export interface MemberDetail extends Member {
   grants: Grant[];
 }
 
+/** org-service `MemberEventType` 열거 그대로. 응답의 `type`은 새 값이 올 수 있어 string으로 받는다. */
+export type MemberEventType =
+  | "INVITED"
+  | "INVITE_RESENT"
+  | "INVITE_REVOKED"
+  | "INVITE_EXPIRED"
+  | "JOINED"
+  | "APPROVED"
+  | "SUSPENDED"
+  | "REACTIVATED"
+  | "DEACTIVATED"
+  | "TEAM_ADDED"
+  | "TEAM_REMOVED"
+  | "AVATAR_CHANGED"
+  | "AVATAR_REMOVED"
+  | "KEYCLOAK_DISABLED_FAILED";
+
 export interface MemberEvent {
   id: string;
+  /** 대개 `MemberEventType`이지만 서버가 새 값을 먼저 낼 수 있다 — 화면은 모르는 값을 원문으로 보인다. */
   type: string;
   actorId: string | null;
   actorName: string | null;
   detail: string | null;
   createdAt: string | null;
+}
+
+/** 아바타 업로드 응답(org-service `AvatarView`). */
+export interface MemberAvatar {
+  memberId: string;
+  /** 이미지 경로(`?v=`로 캐시를 밀어낸다). 서버가 비워 주면 null. */
+  avatarUrl: string | null;
+  updatedAt: string | null;
 }
 
 export interface Team {

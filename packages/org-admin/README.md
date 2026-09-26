@@ -14,7 +14,7 @@
 
 | 경로 | 화면 | 하는 일 |
 |---|---|---|
-| `users` | 사용자 | 목록·검색·상태/종류 필터·페이지네이션, 상세(상태 변경 · 팀 · 권한 · 이력). 표시명 편집은 없다 |
+| `users` | 사용자 | 목록·검색·상태/종류 필터·페이지네이션, 상세(상태 변경 · 아바타 변경/삭제 · 팀 · 권한 · 이력). 아바타 컨트롤은 **전역 관리자에게만** 보인다(주로 브라우저로 로그인하지 않는 AGENT 멤버용). 표시명 편집은 없다 |
 | `invitations` | 초대 | 새 초대(이메일 여러 개·팀·권한 프리셋·메시지 → 링크 복사·발송 대기열 여부), 상태 탭 목록·재발송·철회 |
 | `teams` | 팀 | 목록·검색·생성·이름 변경·삭제, 팀원 추가/제거·리더 지정. `kind=EVERYONE` 팀은 읽기 전용 |
 | `roles` | 전역 역할 | `GLOBAL` grant 목록·부여·역할 변경·회수 (마지막 관리자 보호는 서버 409 문구 그대로) |
@@ -23,6 +23,43 @@
 
 별도 export로 **`PendingApprovalGate`** — 앱 셸보다 바깥에서 `/api/org/me`를 한 번 읽어,
 `status === "PENDING"`이면 셸 대신 "승인 대기 중" 안내를 그린다.
+
+---
+
+## 관리자 사용 가이드 — 사용자 상세
+
+### 아바타 대신 올리기 (전역 관리자)
+
+사용자 상세의 **아바타** 절에서 남의 아바타를 올리거나 지운다. 브라우저로 로그인하지 않는 AGENT
+멤버는 스스로 올릴 방법이 없으니 이 경로가 유일하다.
+
+| 동작 | 서버에 가는 것 | 규칙 |
+|---|---|---|
+| 아바타 변경 | `PUT /api/org/members/{id}/avatar`, multipart `file` 한 칸 | PNG·JPG·WebP, **2MB 이하**. 형식은 확장자가 아니라 파일 내용(매직 바이트)으로 서버가 판정한다. 화면은 크기·명백한 형식만 먼저 거르고, 나머지는 서버 400 문구를 그대로 토스트한다 |
+| 아바타 삭제 | `DELETE /api/org/members/{id}/avatar` | 확인 다이얼로그를 한 번 거친다. 아바타가 없어도 성공(멱등) |
+
+성공하면 이력과 사용자 목록을 다시 읽는다. 본인이 아닌 멤버의 아바타를 바꾼 경우에만 서버가 이력을 남긴다.
+
+### 이력 라벨
+
+이력의 종류는 org-service `MemberEventType` 열거가 정본이다. 모르는 값이 오면 원문 그대로 보인다.
+
+| 서버 값 | 화면 라벨 |
+|---|---|
+| `INVITED` | 초대됨 |
+| `INVITE_RESENT` | 초대 재발송 |
+| `INVITE_REVOKED` | 초대 철회 |
+| `INVITE_EXPIRED` | 초대 만료 |
+| `JOINED` | 가입 |
+| `APPROVED` | 승인됨 |
+| `SUSPENDED` | 일시 정지 |
+| `REACTIVATED` | 재활성 |
+| `DEACTIVATED` | 비활성 |
+| `TEAM_ADDED` | 팀 추가 |
+| `TEAM_REMOVED` | 팀 제거 |
+| `AVATAR_CHANGED` | 아바타 변경(관리자) |
+| `AVATAR_REMOVED` | 아바타 삭제(관리자) |
+| `KEYCLOAK_DISABLED_FAILED` | Keycloak 비활성 실패 |
 
 ---
 
@@ -134,7 +171,7 @@ alias로 import 이름을 유지한다.
   "dependencies": {
     "@chanho/tokens":    "npm:@chanho4702/tokens@0.4.0",
     "@chanho/react":     "npm:@chanho4702/react@0.8.1",
-    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.2.1",
+    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.2.2",
     "react-router": "^7.0.0"
   }
 }

@@ -13,6 +13,7 @@ import {
   toMailTestResult,
   toMe,
   toMember,
+  toMemberAvatar,
   toMemberDetail,
   toMemberEvent,
   toPage,
@@ -34,6 +35,7 @@ import type {
   MailTestResult,
   Me,
   Member,
+  MemberAvatar,
   MemberDetail,
   MemberEvent,
   MemberQuery,
@@ -145,6 +147,26 @@ export function createOrgClient(api: OrgApiFetch) {
     async memberEvents(id: string): Promise<MemberEvent[]> {
       const raw = await call(`/api/org/members/${encodeURIComponent(id)}/events`);
       return toPage(raw, toMemberEvent, 100).items;
+    },
+
+    /**
+     * 남의 아바타 올리기(전역 관리자 전용, 주로 브라우저로 로그인하지 않는 AGENT 멤버용).
+     * multipart `file` 한 칸. Content-Type은 비워 둔다 — 브라우저가 boundary를 붙여야 한다.
+     * 형식(PNG·JPG·WebP, 매직 바이트 판별)·크기(2MB) 판정은 서버가 하고 400 문구를 그대로 준다.
+     */
+    async uploadMemberAvatar(id: string, file: Blob): Promise<MemberAvatar> {
+      const form = new FormData();
+      form.append("file", file);
+      const raw = await call(`/api/org/members/${encodeURIComponent(id)}/avatar`, {
+        method: "PUT",
+        body: form,
+      });
+      return toMemberAvatar(raw);
+    },
+
+    /** 남의 아바타 지우기(전역 관리자 전용). 아바타가 없어도 204(멱등). */
+    async removeMemberAvatar(id: string): Promise<void> {
+      await send(`/api/org/members/${encodeURIComponent(id)}/avatar`, "DELETE");
     },
 
     async pendingMembers(): Promise<Member[]> {
