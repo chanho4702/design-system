@@ -7,24 +7,26 @@
 ![Components](https://img.shields.io/badge/Components-28-1B66C9)
 
 Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프론트엔드가 공유하도록 만든 **자체 디자인 시스템 모노레포**.
-토큰과 React 컴포넌트를 별도 npm 패키지로 분리해, 소비 앱은 두 패키지만 설치하면 동일한 룩앤필·다크모드·접근성 계약을 그대로 가져간다.
+토큰·React 컴포넌트·공통 조직 관리 화면을 별도 npm 패키지로 분리해, 소비 앱은 필요한 패키지만 설치하면 동일한 룩앤필·다크모드·접근성 계약을 그대로 가져간다.
 
 **구조는 Atlassian을 참고하되 브랜드는 자체 정의** — 스틸 블루 `#1B66C9`(브랜드 탐색 1a), Pretendard 서체.
 
-> 이 저장소는 [독립 git repo](https://github.com/chanho4702/design-system)이며, MSA 우산 repo에서는 별도로 관리한다. MSA 프론트 중 `wiki-front`·`alm-front`가 tarball 방식으로 실제 소비 중이다 — 아래 [소비 프로젝트](#소비-프로젝트) 참고.
+> 이 저장소는 [독립 git repo](https://github.com/chanho4702/design-system)이며, MSA 우산 repo에서는 별도로 관리한다. MSA 프론트 중 `wiki-front`·`alm-front`가 **GitHub Packages(`@chanho4702/*`) + pnpm alias**로 실제 소비 중이다 — 아래 [소비 프로젝트](#소비-프로젝트) 참고.
 
 ---
 
 ## 패키지
 
-루트(`chanho-design-system`)는 배포하지 않는 pnpm 워크스페이스이고, 실제 산출물은 2개다.
+루트(`chanho-design-system`)는 배포하지 않는 pnpm 워크스페이스이고, 실제 산출물은 3개다.
+버전 열은 이 리포 `main`의 `package.json` 기준이다(발행 여부는 태그로 확인 — `v*`·`org-admin-v*`).
 
-| 패키지 | 버전 | 설명 |
-|---|---|---|
-| [`@chanho/tokens`](packages/tokens) | 0.3.0 | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
-| [`@chanho/react`](packages/react) | 0.5.0 | React 19 컴포넌트 28종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| 패키지 | 버전 | 발행 이름(GitHub Packages) | 설명 |
+|---|---|---|---|
+| [`@chanho/tokens`](packages/tokens) | 0.4.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
+| [`@chanho/react`](packages/react) | 0.11.0 | `@chanho4702/react` | React 19 컴포넌트 28종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/org-admin`](packages/org-admin) | 0.2.2 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
 
-두 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
+세 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
 
 ---
 
@@ -40,7 +42,7 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 | 문서 | Storybook 9 (`apps/docs`, a11y·docs 애드온) |
 | 테스트 | Vitest 3 + Testing Library + jsdom |
 | 색상 가드 | Stylelint 16 — hex·색상명·`rgb()`/`hsl()` 등 하드코딩 차단 |
-| 릴리스 | Changesets (baseBranch `master`) |
+| 릴리스 | Changesets(baseBranch `main`)로 변경 기록·버전 반영, 발행은 태그 푸시 → GitHub Actions(`publish.yml`) |
 
 ---
 
@@ -94,15 +96,16 @@ document.documentElement.dataset.theme = "dark"; // 또는 "light"
 
 ### GitHub Packages (기본, 2026-08-30~)
 
-`v*` 태그를 푸시하면 `.github/workflows/publish.yml`이 두 패키지를 GitHub Packages에 올린다.
+태그를 푸시하면 `.github/workflows/publish.yml`이 세 패키지를 GitHub Packages에 올린다(이미 올라간 버전은 건너뛴다).
 GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트리 이름은 `@chanho4702/*`지만, 소비 프로젝트는
-**pnpm alias**로 `@chanho/*` import를 그대로 쓴다.
+**pnpm alias**로 `@chanho/*` import를 그대로 쓴다. 이름은 발행 시점에만 바뀌고 이 리포 안에서는 `@chanho/*`다.
 
 ```jsonc
-// package.json
+// package.json — 버전은 위 패키지 표(또는 태그)에서 고른다
 "dependencies": {
-  "@chanho/react":  "npm:@chanho4702/react@0.7.0",
-  "@chanho/tokens": "npm:@chanho4702/tokens@0.3.0"
+  "@chanho/tokens":    "npm:@chanho4702/tokens@0.4.0",
+  "@chanho/react":     "npm:@chanho4702/react@0.11.0",
+  "@chanho/org-admin": "npm:@chanho4702/org-admin@0.2.2"   // 조직 관리 화면이 필요할 때만
 }
 ```
 
@@ -116,13 +119,11 @@ GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트�
   (gh 토큰에 `read:packages` 스코프가 있다) 또는 PAT.
 - CI: 패키지가 공개(public)라 `secrets.GITHUB_TOKEN`으로 읽힌다 — `actions/setup-node`에 `registry-url: https://npm.pkg.github.com`,
   `scope: '@chanho4702'`를 주고 install 스텝에 `NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}`.
-- 새 버전: `packages/*/package.json` 버전 올리고 `git tag v<react 버전>` 푸시. 이미 올라간 버전은 건너뛴다.
+- `@chanho/org-admin`은 `@chanho/react`·`@chanho/tokens`·`react-router`를 **peer**로 둔다 — 소비자가 위 alias 키를 갖고 있어야 한다.
 
 ### tarball 로컬 참조 (대안 — 레지스트리를 못 쓰는 환경)
 
-> 아직 npm 레지스트리에 배포 전이다. 현재는 **tarball(.tgz) 로컬 참조** 방식을 쓴다.
-
-**① 이 저장소에서 패키지 파일 생성**
+폐쇄망처럼 GitHub Packages에 닿지 못할 때만 쓴다. `pnpm pack` 산출물(.tgz)을 `file:`로 참조한다.
 
 ```bash
 pnpm install && pnpm -r build
@@ -130,40 +131,30 @@ cd packages/tokens && pnpm pack --pack-destination ../../artifacts
 cd ../react && pnpm pack --pack-destination ../../artifacts
 ```
 
-→ `artifacts/`에 `chanho-tokens-0.3.0.tgz`, `chanho-react-0.5.0.tgz` 생성(npm에 올라갈 산출물과 동일).
-
-**② 소비 프로젝트 `package.json`**
-
 ```jsonc
+// 소비 프로젝트 package.json — <버전>은 pack 결과 파일명 그대로
 "dependencies": {
-  "@chanho/react":  "file:<경로>/design-system/artifacts/chanho-react-0.5.0.tgz",
-  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.3.0.tgz"
+  "@chanho/react":  "file:<경로>/design-system/artifacts/chanho-react-<버전>.tgz",
+  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-<버전>.tgz"
 }
 ```
 
-**③ 소비 프로젝트 `pnpm-workspace.yaml`**(없으면 생성) — `@chanho/react`가 내부 의존하는 tokens를 tarball로 해석시키는 설정:
-
-```yaml
-overrides:
-  "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-0.3.0.tgz"
-```
-
-설치 구조는 [`examples/consumer`](examples/consumer)에서 확인할 수 있다. 이 예제는 현재
-React 0.3.0 / tokens 0.2.0 tarball에 고정돼 있으므로, 최신 산출물을 검증할 때는 위 버전으로
-`package.json`을 맞춘다.
-
-npm 배포 후에는 한 줄로 줄어든다: `pnpm add @chanho/react @chanho/tokens`
+`@chanho/react`가 내부 의존하는 tokens도 tarball로 해석시키려면 소비 프로젝트 `pnpm-workspace.yaml`에
+`overrides: { "@chanho/tokens": "file:<경로>/design-system/artifacts/chanho-tokens-<버전>.tgz" }`를 둔다.
+설치 구조는 [`examples/consumer`](examples/consumer)에서 볼 수 있다(오래된 React 0.3.0 / tokens 0.2.0 tarball에 고정된 검증용 예제).
 
 ### 소비 프로젝트
 
 | 소비처 | 방식 | 용도 |
 |---|---|---|
 | `apps/docs` | `workspace:*` | Storybook 문서·개발 환경 |
-| `examples/consumer` | 배포 tarball(`file:`, React 0.3.0 / tokens 0.2.0) | 커밋된 tarball 의존성의 설치·빌드 검증 |
-| `wiki-front` (별도 repo) | 배포 tarball(React 0.5.0 / tokens 0.3.0) | 위키 프론트 — UI 100% 이 시스템으로 구성 |
-| `alm-front` (별도 repo) | 배포 tarball(React 0.3.0 / tokens 0.2.0) | ALM 프론트 — UI 100% 이 시스템으로 구성 |
+| `examples/consumer` | 배포 tarball(`file:`, React 0.3.0 / tokens 0.2.0) | tarball 설치·빌드 검증(대안 경로) |
+| `wiki-front` (별도 repo) | GitHub Packages alias — tokens 0.4.0 / react 0.11.0 / org-admin 0.2.1 | 위키 프론트 — UI 100% 이 시스템, `/admin/org`에 조직 관리 화면 마운트 |
+| `alm-front` (별도 repo) | GitHub Packages alias — tokens 0.4.0 / react 0.11.0 / org-admin 0.2.1 | ALM 프론트 — UI 100% 이 시스템, `/settings/org`에 조직 관리 화면 마운트 |
 
-myFront는 MUI 기반이라 이 시스템을 소비하지 않는다.
+소비처 버전은 2026-10-18 각 리포 `main` 기준이다. 새 org-admin을 발행하면 두 프론트를 **같은 버전으로 함께** 올린다.
+
+**myFront는 의도적으로 이 시스템을 쓰지 않는다** — 제품 소개 사이트라 MUI(v9) 기반이고, Vite도 ^6으로 다른 두 프론트(^7)와 다르다.
 
 ---
 
@@ -183,13 +174,12 @@ pnpm build-storybook  # 정적 Storybook
 
 ### 릴리스
 
-Changesets 워크플로:
+1. 변경 PR/커밋에 `pnpm changeset`으로 변경 기록(`.changeset/*.md`, 패키지·patch/minor/major)을 남긴다.
+2. 발행할 때 `pnpm version-packages`로 버전·CHANGELOG를 반영해 `main`에 커밋한다(baseBranch `main`).
+3. 태그를 푸시하면 `publish.yml`이 GitHub Packages에 올린다 — tokens·react는 `v<react 버전>`, org-admin은 `org-admin-v<버전>`.
+   어느 태그든 세 패키지를 모두 검사하고 이미 있는 버전은 건너뛴다.
 
-```bash
-pnpm changeset          # 변경 내용 기록
-pnpm version-packages   # 버전·CHANGELOG 반영
-pnpm release            # pnpm -r build && pnpm -r publish --access public
-```
+루트 `pnpm release` 스크립트(`pnpm -r publish`)는 npm 공개 레지스트리용 옛 경로라 쓰지 않는다.
 
 ---
 
@@ -201,8 +191,9 @@ design-system/
 │  ├─ tokens/            @chanho/tokens — palette·semantic·static + CSS 빌드
 │  │  └─ src/            index.ts · palette.ts · semantic.ts · static.ts
 │  │                     buildCss.ts(+test) · build.ts
-│  └─ react/             @chanho/react — 컴포넌트 28종 (Vite lib mode)
-│     └─ src/<Component>/ 각 컴포넌트 + *.test.tsx + CSS
+│  ├─ react/             @chanho/react — 컴포넌트 28종 (Vite lib mode)
+│  │  └─ src/<Component>/ 각 컴포넌트 + *.test.tsx + CSS
+│  └─ org-admin/         @chanho/org-admin — 공통 조직 관리 화면 (/api/org 소비)
 ├─ apps/
 │  └─ docs/              Storybook 9 (workspace 참조)
 ├─ examples/
