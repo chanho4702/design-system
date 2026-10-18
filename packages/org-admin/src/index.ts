@@ -15,6 +15,8 @@ export type {
 export type {
   CreateInvitationRequest,
   Grant,
+  GrantAuditAction,
+  GrantAuditEntry,
   GrantPreset,
   GrantRole,
   GrantScope,

@@ -1,4 +1,5 @@
 import type {
+  GrantAuditAction,
   GrantRole,
   MailMode,
   MailOutboxStatus,
@@ -69,6 +70,24 @@ export const GRANT_ROLE_LABEL: Record<GrantRole, string> = {
   EDITOR: "편집",
   ADMIN: "관리자",
 };
+
+/** 서버가 모르는 역할 이름을 주면 원문 그대로, 비어 있으면 "-". */
+export function grantRoleLabel(role: string | null | undefined): string {
+  if (!role) return "-";
+  return (GRANT_ROLE_LABEL as Record<string, string>)[role] ?? role;
+}
+
+/** 권한 이력의 "한 일". 키는 org-service `GrantAudit.Action`(+`GRANT_` 접두사)이 정본이다. */
+export const GRANT_AUDIT_ACTION_LABEL: Record<GrantAuditAction, string> = {
+  GRANT_GRANTED: "부여",
+  GRANT_CHANGED: "역할 변경",
+  GRANT_REVOKED: "회수",
+};
+
+/** 모르는 action은 원문 그대로 — 서버가 새 종류를 내보내도 빈칸이 되지 않는다. */
+export function grantAuditActionLabel(action: string): string {
+  return (GRANT_AUDIT_ACTION_LABEL as Record<string, string>)[action] ?? action;
+}
 
 export const TEAM_ROLE_LABEL: Record<TeamRole, string> = {
   LEAD: "리더",

@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatDateTime, isValidEmail, memberEventLabel, splitEmails } from "./format";
+import {
+  formatDate,
+  formatDateTime,
+  grantAuditActionLabel,
+  grantRoleLabel,
+  isValidEmail,
+  memberEventLabel,
+  splitEmails,
+} from "./format";
 
 describe("splitEmails", () => {
   it("쉼표·줄바꿈·공백이 섞인 붙여넣기를 주소 목록으로 나눈다", () => {
@@ -38,6 +46,26 @@ describe("formatDate", () => {
   it("ISO 문자열을 YYYY-MM-DD로 준다", () => {
     expect(formatDate("2026-09-05T01:02:03Z")).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(formatDateTime("2026-09-05T01:02:03Z")).toMatch(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
+  });
+});
+
+describe("grantAuditActionLabel", () => {
+  it("서버 action 세 가지에 한국어 라벨을 준다", () => {
+    expect(grantAuditActionLabel("GRANT_GRANTED")).toBe("부여");
+    expect(grantAuditActionLabel("GRANT_CHANGED")).toBe("역할 변경");
+    expect(grantAuditActionLabel("GRANT_REVOKED")).toBe("회수");
+  });
+
+  it("모르는 action은 원문 그대로 보인다", () => {
+    expect(grantAuditActionLabel("GRANT_EXPIRED")).toBe("GRANT_EXPIRED");
+  });
+});
+
+describe("grantRoleLabel", () => {
+  it("알려진 역할은 라벨로, 모르는 값은 원문, 빈 값은 -", () => {
+    expect(grantRoleLabel("EDITOR")).toBe("편집");
+    expect(grantRoleLabel("OWNER")).toBe("OWNER");
+    expect(grantRoleLabel(null)).toBe("-");
   });
 });
 

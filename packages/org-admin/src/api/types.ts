@@ -50,6 +50,27 @@ export interface Grant {
   role: GrantRole;
 }
 
+/** org-service `GrantAudit.Action`에 `GRANT_` 접두사를 붙인 값. 응답은 새 값이 올 수 있어 string으로 받는다. */
+export type GrantAuditAction = "GRANT_GRANTED" | "GRANT_CHANGED" | "GRANT_REVOKED";
+
+/**
+ * 권한 변경 기록 한 줄(org-service `GET /api/org/grants/audit`, `GrantAuditResponse`).
+ * 필드 이름은 wiki-backend 감사 항목과 같다. 서버는 최신순으로 최근 100건까지만 준다.
+ */
+export interface GrantAuditEntry {
+  id: string;
+  /** 대개 `GrantAuditAction`이지만 서버가 새 값을 먼저 낼 수 있다 — 화면은 모르는 값을 원문으로 보인다. */
+  action: string;
+  targetType: SubjectType;
+  targetId: string | null;
+  /** 기록 당시의 주체 이름(스냅샷). 없으면 화면이 id로 대체한다. */
+  targetLabel: string | null;
+  /** 역할 이름(VIEWER·EDITOR·ADMIN). CHANGED면 바뀐 뒤의 역할이다. */
+  role: string | null;
+  actorId: string | null;
+  createdAt: string | null;
+}
+
 export interface MemberDetail extends Member {
   teams: MemberTeamRef[];
   grants: Grant[];

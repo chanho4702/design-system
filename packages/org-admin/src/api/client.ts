@@ -7,6 +7,7 @@
  */
 import {
   toGrant,
+  toGrantAuditEntry,
   toInvitation,
   toMailLogEntry,
   toMailSetting,
@@ -23,6 +24,7 @@ import {
 import type {
   CreateInvitationRequest,
   Grant,
+  GrantAuditEntry,
   GrantPreset,
   GrantRole,
   GrantScope,
@@ -251,6 +253,17 @@ export function createOrgClient(api: OrgApiFetch) {
     async grants(scope: GrantScope, resourceId?: string): Promise<Grant[]> {
       const raw = await call(`/api/org/grants${query({ resourceType: scope, resourceId })}`);
       return toPage(raw, toGrant, 200).items;
+    },
+
+    /**
+     * 권한 변경 이력(최신순, 서버 상한 100건). 조회 범위는 grant 목록과 같다 — 그 리소스의 ADMIN.
+     * 서버는 기간·대상·행위자 필터와 페이지를 받지 않으므로 화면이 받은 범위 안에서 거른다.
+     */
+    async grantAudit(scope: GrantScope, resourceId?: string): Promise<GrantAuditEntry[]> {
+      const raw = await call(
+        `/api/org/grants/audit${query({ resourceType: scope, resourceId })}`,
+      );
+      return toPage(raw, toGrantAuditEntry, 100).items;
     },
 
     async createGrant(body: {

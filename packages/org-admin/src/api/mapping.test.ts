@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   toGrant,
+  toGrantAuditEntry,
   toInvitation,
   toMailLogEntry,
   toMailSetting,
@@ -48,6 +49,42 @@ describe("toGrant", () => {
   it("스코프 키가 scope든 resourceType이든 받는다", () => {
     expect(toGrant({ id: 1, scope: "SPACE", resourceId: "DEV" }).scope).toBe("SPACE");
     expect(toGrant({ id: 1, resourceType: "PROJECT", resourceId: "9" }).scope).toBe("PROJECT");
+  });
+});
+
+describe("toGrantAuditEntry", () => {
+  it("서버 GrantAuditResponse를 읽고 detail을 역할로 옮긴다", () => {
+    expect(
+      toGrantAuditEntry({
+        id: "108",
+        action: "GRANT_GRANTED",
+        targetType: "TEAM",
+        targetId: "42",
+        targetLabel: "플랫폼팀",
+        detail: "EDITOR",
+        actorId: "1",
+        createdAt: "2026-09-05T02:11:43Z",
+      }),
+    ).toEqual({
+      id: "108",
+      action: "GRANT_GRANTED",
+      targetType: "TEAM",
+      targetId: "42",
+      targetLabel: "플랫폼팀",
+      role: "EDITOR",
+      actorId: "1",
+      createdAt: "2026-09-05T02:11:43Z",
+    });
+  });
+
+  it("빠진 필드는 null로 두어 화면이 대체 표기를 쓰게 한다", () => {
+    const entry = toGrantAuditEntry({ id: 1 });
+    expect(entry.action).toBe("UNKNOWN");
+    expect(entry.targetType).toBe("USER");
+    expect(entry.targetLabel).toBeNull();
+    expect(entry.role).toBeNull();
+    expect(entry.actorId).toBeNull();
+    expect(entry.createdAt).toBeNull();
   });
 });
 

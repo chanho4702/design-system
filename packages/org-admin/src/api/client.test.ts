@@ -144,4 +144,34 @@ describe("createOrgClient", () => {
     await expect(createOrgClient(api).removeMemberAvatar("7")).resolves.toBeUndefined();
     expect(calls[0]).toMatchObject({ method: "DELETE", path: "/api/org/members/7/avatar" });
   });
+
+  it("권한 이력은 resourceType만 붙여 부르고, 403 문구를 그대로 던진다", async () => {
+    const { api, calls } = createFakeApi({
+      "GET /api/org/grants/audit": ({ params }) =>
+        params.get("resourceType") === "GLOBAL"
+          ? [{ id: "1", action: "GRANT_REVOKED", targetType: "USER", targetId: "3", detail: "ADMIN", actorId: "1" }]
+          : new FakeError(403, "권한이 없습니다"),
+    });
+    const client = createOrgClient(api);
+    const rows = await client.grantAudit("GLOBAL");
+    expect(calls[0].path).toBe("/api/org/grants/audit?resourceType=GLOBAL");
+    expect(rows[0]).toMatchObject({ action: "GRANT_REVOKED", role: "ADMIN" });
+
+    await expect(client.grantAudit("SPACE", "DEV")).rejects.toThrow("권한이 없습니다");
+    expect(calls[1].path).toBe("/api/org/grants/audit?resourceType=SPACE&resourceId=DEV");
+  });
+
+  // org-service 401은 {"error":"로그인이 필요합니다"} 본문을 싣는다(P-11) — 문구를 손대지 않는다.
+  it("401 본문의 error 문구를 그대로 쓴다", async () => {
+    const api = () =>
+      Promise.resolve(
+        new Response(JSON.stringify({ error: "로그인이 필요합니다" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    const failure = createOrgClient(api).grantAudit("GLOBAL");
+    await expect(failure).rejects.toThrow("로그인이 필요합니다");
+    await expect(createOrgClient(api).me()).rejects.toMatchObject({ status: 401 });
+  });
 });

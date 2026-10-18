@@ -166,3 +166,14 @@
   white-space: nowrap;
   border: 0;
 }
+
+/** 값 표기(아이콘+텍스트) — 역할·대상 종류처럼 열거 값은 텍스트만 두지 않는다. */
+.iconValue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--chanho-space-50);
+}
+
+.lozengeWithIcon {
+  gap: var(--chanho-space-50);
+}

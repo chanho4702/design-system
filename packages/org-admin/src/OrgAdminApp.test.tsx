@@ -37,6 +37,19 @@ const ROUTES: Record<string, FakeHandler> = {
     tls: "NONE",
   }),
   "GET /api/org/settings/mail/log": () => ({ items: [], total: 0 }),
+  "GET /api/org/grants/audit": () => [
+    {
+      id: "7",
+      action: "GRANT_GRANTED",
+      targetType: "USER",
+      targetId: "1",
+      targetLabel: "김채호",
+      detail: "ADMIN",
+      actorId: "1",
+      createdAt: "2026-10-01T00:00:00Z",
+    },
+  ],
+  "GET /api/org/members/:id": () => ({ id: 1, displayName: "김채호", status: "ACTIVE" }),
 };
 
 function mount(route?: string, basePath = "/admin/org", currentUser: OrgAdminUser = ADMIN_USER) {
@@ -104,6 +117,31 @@ describe("OrgAdminApp", () => {
     await screen.findByRole("cell", { name: "김채호" });
 
     expect(screen.queryByRole("link", { name: "메일 설정" })).not.toBeInTheDocument();
+  });
+
+  it("권한 이력은 전역 관리자에게만 메뉴로 보인다", async () => {
+    mount();
+    await screen.findByRole("cell", { name: "김채호" });
+    expect(screen.getByRole("link", { name: "권한 이력" })).toHaveAttribute(
+      "href",
+      "/admin/org/grant-audit",
+    );
+  });
+
+  it("전역 관리자가 아니면 권한 이력 메뉴가 없다", async () => {
+    mount(undefined, "/admin/org", PLAIN_USER);
+    await screen.findByRole("cell", { name: "김채호" });
+    expect(screen.queryByRole("link", { name: "권한 이력" })).not.toBeInTheDocument();
+  });
+
+  it("권한 이력 탭으로 옮기면 전역 권한 변경 기록을 그린다", async () => {
+    const { calls } = mount();
+    await screen.findByRole("cell", { name: "김채호" });
+
+    await userEvent.click(screen.getByRole("link", { name: "권한 이력" }));
+
+    expect(await screen.findByRole("table", { name: "권한 이력" })).toBeInTheDocument();
+    expect(calls.some((c) => c.path === "/api/org/grants/audit?resourceType=GLOBAL")).toBe(true);
   });
 
   it("메일 설정 화면으로 이동하면 발송 설정을 그린다", async () => {

@@ -10,6 +10,7 @@
  */
 import type {
   Grant,
+  GrantAuditEntry,
   GrantPreset,
   GrantRole,
   GrantScope,
@@ -137,6 +138,21 @@ export function toGrant(raw: unknown): Grant {
     scope: oneOf<GrantScope>(g.scope ?? g.resourceType, GRANT_SCOPES, "GLOBAL"),
     resourceId: str(g.resourceId),
     role: oneOf<GrantRole>(g.role, GRANT_ROLES, "VIEWER"),
+  };
+}
+
+/** 권한 변경 기록. 시각·이름이 없으면 null로 두고 화면이 "-"·id로 대체한다. */
+export function toGrantAuditEntry(raw: unknown): GrantAuditEntry {
+  const a = obj(raw);
+  return {
+    id: text(a.id),
+    action: text(a.action, "UNKNOWN"),
+    targetType: oneOf<SubjectType>(a.targetType, SUBJECT_TYPES, "USER"),
+    targetId: str(a.targetId),
+    targetLabel: str(a.targetLabel),
+    role: str(a.detail) ?? str(a.role),
+    actorId: str(a.actorId),
+    createdAt: str(a.createdAt),
   };
 }
 

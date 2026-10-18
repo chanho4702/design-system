@@ -1,5 +1,13 @@
 import { PageHeader, ToastProvider } from "@chanho/react";
-import { ClipboardCheck, Mail, Send, ShieldCheck, Users, UsersRound } from "lucide-react";
+import {
+  ClipboardCheck,
+  History,
+  Mail,
+  Send,
+  ShieldCheck,
+  Users,
+  UsersRound,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router";
 import { OrgAdminProvider, useOrgAdmin } from "./context";
@@ -7,6 +15,7 @@ import type { OrgAdminLinks, OrgAdminUser, ResolveResource } from "./context";
 import type { OrgApiFetch } from "./api/client";
 import { normalizeBasePath } from "./paths";
 import { GlobalRolesScreen } from "./screens/GlobalRolesScreen";
+import { GrantAuditScreen } from "./screens/GrantAuditScreen";
 import { InvitationsScreen } from "./screens/InvitationsScreen";
 import { MailScreen } from "./screens/MailScreen";
 import { PendingScreen } from "./screens/PendingScreen";
@@ -41,6 +50,12 @@ const NAV: NavItem[] = [
   { to: "invitations", label: "초대", icon: <Mail size={16} aria-hidden="true" /> },
   { to: "teams", label: "팀", icon: <UsersRound size={16} aria-hidden="true" /> },
   { to: "roles", label: "전역 역할", icon: <ShieldCheck size={16} aria-hidden="true" /> },
+  {
+    to: "grant-audit",
+    label: "권한 이력",
+    icon: <History size={16} aria-hidden="true" />,
+    adminOnly: true,
+  },
   { to: "pending", label: "승인 대기", icon: <ClipboardCheck size={16} aria-hidden="true" /> },
   {
     to: "mail",
@@ -107,6 +122,7 @@ export function OrgAdminApp({
               <Route path="invitations" element={<InvitationsScreen />} />
               <Route path="teams" element={<TeamsScreen />} />
               <Route path="roles" element={<GlobalRolesScreen />} />
+              <Route path="grant-audit" element={<GrantAuditScreen />} />
               <Route path="pending" element={<PendingScreen />} />
               <Route path="mail" element={<MailScreen />} />
               <Route path="*" element={<Navigate to={usersPath} replace />} />
