@@ -196,7 +196,7 @@ alias로 import 이름을 유지한다.
   "dependencies": {
     "@chanho/tokens":    "npm:@chanho4702/tokens@0.4.0",
     "@chanho/react":     "npm:@chanho4702/react@0.8.1",
-    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.2.2",
+    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.0",
     "react-router": "^7.0.0"
   }
 }
