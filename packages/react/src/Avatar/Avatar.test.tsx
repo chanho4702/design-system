@@ -58,6 +58,11 @@ describe("Avatar", () => {
     expect(screen.getByRole("img", { name: "개발 위키" })).toHaveTextContent(/^개$/);
   });
 
+  it("small에서 라틴·한글이 섞인 이름을 한 글자로 접을 때도 대문자로 보여준다", () => {
+    render(<Avatar name="chanho 김" size="small" />);
+    expect(screen.getByText("C")).toBeInTheDocument();
+  });
+
   it("medium 이상에서는 한글도 두 글자 이니셜을 유지하고, small 라틴 이니셜은 두 글자다", () => {
     const { rerender } = render(<Avatar name="개발 위키" />);
     expect(screen.getByRole("img", { name: "개발 위키" })).toHaveTextContent(/^개위$/);

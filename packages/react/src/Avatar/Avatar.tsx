@@ -33,7 +33,7 @@ function initialsOf(name: string, size: "small" | "medium" | "large"): string {
   if (words.length === 1) return first.toUpperCase();
   const initials = (first + Array.from(words[words.length - 1])[0]).toUpperCase();
   // small(24px)에 한글 두 글자("개위")를 넣으면 원 밖으로 넘친다 — 첫 글자 하나만.
-  return size === "small" && WIDE_SCRIPT.test(initials) ? first : initials;
+  return size === "small" && WIDE_SCRIPT.test(initials) ? first.toUpperCase() : initials;
 }
 
 /** name을 안정적인 인덱스로 해시해 틴트를 고른다. 렌더 간·세션 간 결정론적. */
