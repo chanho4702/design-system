@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { DropdownMenu as RadixDropdownMenu } from "radix-ui";
 import styles from "./Dropdown.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface DropdownItem {
   label?: string;
@@ -76,7 +77,7 @@ export function Dropdown({ trigger, items, className, align = "start" }: Dropdow
       <RadixDropdownMenu.Trigger asChild>{trigger}</RadixDropdownMenu.Trigger>
       <RadixDropdownMenu.Portal>
         <RadixDropdownMenu.Content
-          className={[styles.content, className].filter(Boolean).join(" ")}
+          className={[styles.content, motion.popover, className].filter(Boolean).join(" ")}
           sideOffset={4}
           align={align}
           // 가장자리에서 8px 띄워 뒤집기·좌우 이동(Atlassian 팝업과 같은 여백)

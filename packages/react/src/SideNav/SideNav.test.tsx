@@ -71,4 +71,16 @@ describe("SideNav", () => {
     const expandBtn = screen.getByRole("button", { name: "사이드바 펼치기" });
     expect(expandBtn).toHaveAttribute("aria-expanded", "false");
   });
+
+  it("density=compact면 compact 밀도가 되고, 기본은 그대로다", () => {
+    const { rerender } = render(
+      <SideNav items={ITEMS} activeId="issues" collapsed={false} onToggleCollapse={noop} />,
+    );
+    const nav = screen.getByRole("navigation", { name: "주 내비게이션" });
+    expect(nav.className).not.toMatch(/compact/);
+    rerender(
+      <SideNav items={ITEMS} activeId="issues" collapsed={false} onToggleCollapse={noop} density="compact" />,
+    );
+    expect(nav.className).toMatch(/compact/);
+  });
 });

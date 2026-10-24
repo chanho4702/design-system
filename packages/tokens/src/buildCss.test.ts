@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildCss, flatten } from "./buildCss";
 import { themes } from "./semantic";
+import { motion, reducedMotion } from "./static";
 
 describe("flatten", () => {
   it("중첩 객체를 점 표기 키로 평탄화한다", () => {
@@ -33,5 +34,34 @@ describe("buildCss", () => {
 describe("semantic themes", () => {
   it("light와 dark는 동일한 토큰 키 세트를 가진다", () => {
     expect(Object.keys(themes.dark).sort()).toEqual(Object.keys(themes.light).sort());
+  });
+});
+
+describe("motion", () => {
+  it("모션 토큰을 --chanho-motion-* 변수로 출력한다", () => {
+    const css = buildCss(flatten({ motion }), {}, {});
+    expect(css).toContain("--chanho-motion-duration-instant: 50ms;");
+    expect(css).toContain("--chanho-motion-duration-fast: 100ms;");
+    expect(css).toContain("--chanho-motion-duration-base: 150ms;");
+    expect(css).toContain("--chanho-motion-duration-moderate: 200ms;");
+    expect(css).toContain("--chanho-motion-duration-slow: 300ms;");
+    expect(css).toContain("--chanho-motion-easing-enter: cubic-bezier(0.2, 0, 0, 1);");
+    expect(css).toContain("--chanho-motion-easing-exit: cubic-bezier(0.8, 0, 0, 0.8);");
+    expect(css).toContain("--chanho-motion-easing-standard: cubic-bezier(0.4, 0, 0, 1);");
+  });
+
+  it("움직임 줄이기 미디어 블록이 모든 지속시간을 1ms로 덮는다", () => {
+    const css = buildCss(flatten({ motion }), {}, {}, flatten(reducedMotion));
+    const media = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(media).toContain(":root {");
+    for (const key of Object.keys(motion.duration)) {
+      expect(media).toContain(`--chanho-motion-duration-${key}: 1ms;`);
+    }
+    // 이징은 덮지 않는다
+    expect(media).not.toContain("easing");
+  });
+
+  it("reducedMotion이 없으면 미디어 블록을 내보내지 않는다", () => {
+    expect(buildCss({}, {}, {})).not.toContain("@media");
   });
 });

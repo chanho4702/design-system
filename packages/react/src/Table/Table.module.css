@@ -97,7 +97,7 @@
   border-right: 4px solid transparent;
   border-bottom: 5px solid currentColor;
   opacity: 0;
-  transition: transform 0.12s ease;
+  transition: transform var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard);
 }
 
 .sort:hover .arrow {
@@ -124,6 +124,12 @@
      이메일·URL처럼 아무 데서나 끊어도 되는 값은 소비자가 셀 안에서 overflow-wrap: anywhere를 준다. */
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+/* compact — 리니어식 고밀도 목록: 세로 4px·가로 8px(행 4 + 22 + 4 + 1 = 31px). 글자 크기·행간은 그대로 */
+.compact .th,
+.compact .td {
+  padding: var(--chanho-space-50) var(--chanho-space-100);
 }
 
 .row:last-child .td {

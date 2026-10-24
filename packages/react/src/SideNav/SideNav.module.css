@@ -7,7 +7,8 @@
   background: var(--chanho-color-background-subtle);
   border-right: 1px solid var(--chanho-color-border-default);
   font-family: var(--chanho-font-family-sans);
-  transition: width 0.18s ease;
+  /* 접기·펼치기 — 이미 있는 면이 움직이므로 standard 이징 */
+  transition: width var(--chanho-motion-duration-moderate) var(--chanho-motion-easing-standard);
   overflow: visible;
 }
 
@@ -52,6 +53,10 @@
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
+  /* hover·선택 전환 — 배경·글자색만 짧게(움직임 없음) */
+  transition:
+    background-color var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard),
+    color var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard);
 }
 
 .item:hover {
@@ -87,11 +92,24 @@
   font-size: var(--chanho-font-size-50);
   font-weight: var(--chanho-font-weight-semibold);
   color: var(--chanho-color-text-subtle);
+  transition:
+    background-color var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard),
+    color var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard);
 }
 
 .item.active .icon {
   background: var(--chanho-color-background-brand);
   color: var(--chanho-color-text-inverse);
+}
+
+/* compact — 리니어 사이드바 밀도: 항목 28px, 아이콘 20px. 접힘 폭(56px)·글자 크기는 그대로 */
+.compact .item {
+  height: 28px;
+}
+
+.compact .icon {
+  width: 20px;
+  height: 20px;
 }
 
 .label {

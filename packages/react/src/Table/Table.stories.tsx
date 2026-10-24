@@ -145,3 +145,8 @@ export const NodeHeader: Story = {
 export const Loading: Story = {
   args: { "aria-label": "팀원", columns, rows: [], loading: true, loadingRows: 4 },
 };
+
+/** compact — 리니어식 고밀도 목록(셀 세로 4px·가로 8px, 행 약 31px). 이슈 목록처럼 행이 많은 표에서. */
+export const Compact: Story = {
+  args: { "aria-label": "팀원", columns, rows: members, density: "compact" },
+};

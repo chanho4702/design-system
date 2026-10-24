@@ -20,6 +20,11 @@ export interface SideNavProps {
   onToggleCollapse: () => void;
   header?: ReactNode;
   footer?: ReactNode;
+  /**
+   * 항목 밀도. compact는 항목 높이 28px·아이콘 20px(리니어 사이드바 밀도) — 메뉴가 많은 화면에서.
+   * @default 'default' (32px, Atlassian 사이드바)
+   */
+  density?: "default" | "compact";
 }
 
 /**
@@ -33,10 +38,13 @@ export function SideNav({
   onToggleCollapse,
   header,
   footer,
+  density = "default",
 }: SideNavProps) {
   return (
     <nav
-      className={[styles.sidenav, collapsed ? styles.collapsed : null].filter(Boolean).join(" ")}
+      className={[styles.sidenav, collapsed ? styles.collapsed : null, density === "compact" ? styles.compact : null]
+        .filter(Boolean)
+        .join(" ")}
       aria-label="주 내비게이션"
     >
       {header ? <div className={styles.header}>{header}</div> : null}

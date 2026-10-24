@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { Tooltip as RadixTooltip } from "radix-ui";
 import styles from "./Tooltip.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface TooltipProps {
   /** 툴팁 안에 표시할 내용. */
@@ -34,7 +35,7 @@ export function Tooltip({
         <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
         <RadixTooltip.Portal>
           <RadixTooltip.Content
-            className={[styles.content, className].filter(Boolean).join(" ")}
+            className={[styles.content, motion.tooltip, className].filter(Boolean).join(" ")}
             side={side}
             sideOffset={6}
             // 화면 가장자리에서 8px 띄우고, 공간이 없으면 반대편으로 뒤집는다

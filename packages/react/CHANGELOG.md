@@ -1,5 +1,32 @@
 # @chanho/react
 
+## 0.15.0
+
+### Minor Changes
+
+리니어 강점 반영 — 모션·밀도. 공개 API는 **추가만** 했다(기존 프롭 이름·타입·기본값 그대로). **tokens 0.7.0 필요**
+(`--chanho-motion-*` 변수). 옛 tokens CSS와 섞이면 변수가 없어 애니메이션·전환이 그냥 꺼질 뿐 화면은 깨지지 않는다.
+
+- 등장·퇴장 모션(공유 `motion.module.css`, 시간·이징은 전부 모션 토큰, 움직임 줄이기면 1ms):
+  - `Dropdown`·`ContextMenu`(하위 메뉴 포함)·`Popover`·`Select`·`MultiSelect` — 페이드 + 열린 쪽(`data-side`)에서 4px 미끄러짐,
+    등장 base 150ms enter / 퇴장 fast 100ms exit(페이드만). 충돌로 위로 뒤집히면 아래에서 올라온다.
+  - `Tooltip` — 2px, 등장 fast 100ms / 퇴장 instant 50ms.
+  - `Modal`·`ConfirmDialog`·`CommandPalette` — 블랭킷 페이드(moderate 200 / fast 100), 본체 페이드 + 98%→100% 스케일.
+    `scale`·`translate` 개별 속성으로만 움직여 가운데 정렬 `transform`을 건드리지 않는다.
+  - `Toast` — 오른쪽(스와이프 방향)에서 미끄러져 들어온다(moderate 200). 스와이프 중엔 손가락을 따라가고 취소되면 제자리로.
+  - `Tabs` — 선택 밑줄이 탭마다 따로 켜지지 않고 **하나가 선택 탭으로 미끄러진다**(moderate 200, standard). 첫 배치는 제자리,
+    측정 전·측정 불가(폭 0)면 예전처럼 선택 탭 자체 밑줄. 밑줄은 `aria-hidden` 절대 배치라 레이아웃·접근성 트리 그대로.
+  - `SideNav` 항목 hover·선택 배경/글자색 전환(fast 100), 접기 폭 전환을 토큰으로(0.18s → moderate 200 standard).
+  - 위치 이동 전환을 토큰으로: `Switch` 손잡이(120ms → fast 100), `ProgressBar` 폭(250ms → slow 300), `Table` 정렬 화살표.
+  - 퇴장 중(`data-state="closed"`)인 오버레이는 `pointer-events: none` — 사라지는 100ms 동안 클릭이 뒤로 통과한다.
+  - 포커스: Radix가 퇴장 애니메이션이 끝나 언마운트될 때 트리거로 돌려준다(브라우저 실측: 닫힘 100ms 동안 포커스는
+    닫히는 표면 안, 끝나면 트리거). 움직임 줄이기면 1ms라 사실상 즉시.
+  - 테스트(jsdom): 모션을 `animation` 단축형으로만 선언해 jsdom이 animation-name을 펼치지 않는다 → Presence가 즉시
+    언마운트한다. 소비 앱 테스트도 닫힌 오버레이를 기다릴 필요가 없다. `Skeleton` 쉬머는 그대로.
+- 밀도(리니어식 고밀도 옵션, 기본값 그대로):
+  - `Table`에 `density="compact"` — 셀 세로 4px·가로 8px(행 약 31px, 기본 약 39px). 글자 크기·행간 그대로.
+  - `SideNav`에 `density="compact"` — 항목 28px·아이콘 20px(기본 32px·24px). 접힘 폭 56px 그대로.
+
 ## 0.14.0
 
 ### Minor Changes

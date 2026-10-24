@@ -30,4 +30,9 @@ TextArea · TextField · Toast(ToastProvider/useToast) · Tooltip · TopBar
 
 로딩 표시: 페이지·목록·패널은 `Skeleton` 계열(또는 `Table`의 `loading`)을 쓰고, `Spinner`는 버튼 안처럼 작은 진행 표시에만 쓴다.
 
+모션: 오버레이(메뉴·팝오버·툴팁·모달·명령 팔레트·토스트)와 탭 밑줄은 `@chanho/tokens`의 `--chanho-motion-*`로 짧게 움직이고,
+OS의 "동작 줄이기"(`prefers-reduced-motion: reduce`)면 tokens.css가 지속시간을 1ms로 덮어 멈춘다 — 소비 앱이 따로 할 일은 없다.
+
+밀도: 행이 많은 목록은 `Table`의 `density="compact"`(행 약 31px), 메뉴가 많은 사이드바는 `SideNav`의 `density="compact"`(항목 28px).
+
 peerDependencies: react ^19, react-dom ^19

@@ -42,6 +42,45 @@ export const transition = {
   slow: "250ms ease",
 } as const;
 
+/**
+ * 모션 — 오버레이 등장·퇴장, 위치·크기 전환. `transition.*`(상태 색 전환 단축형)은 그대로 두고 그 위에 얹는다.
+ *
+ * - 지속시간: 25ms 격자(`@atlaskit/motion` 9.4.0 `durationStep = 25`) 위에서 리니어처럼 짧게 —
+ *   Atlassian `durations.small` 100ms가 fast, 퇴장은 등장의 절반 안팎(`EXITING_MOTION_MULTIPLIER = 0.5`).
+ *   instant 50(툴팁 퇴장·미세 피드백) / fast 100(메뉴 퇴장·hover) / base 150(메뉴·팝오버 등장) /
+ *   moderate 200(모달·토스트 등장, 밑줄 이동) / slow 300(큰 면 이동 — 드물게).
+ * - 이징: `@atlaskit/motion` `utils/curves.js` 값 그대로.
+ *   standard = easeIn40Out(이미 화면에 있는 것이 움직일 때 — 탭 밑줄·사이드바 폭),
+ *   enter = easeOut(빠르게 나타나 감속 — 등장), exit = easeIn(가속하며 사라짐 — 퇴장).
+ * - 움직임 줄이기(`prefers-reduced-motion: reduce`)면 tokens.css가 지속시간을 전부 1ms로 덮는다(`reducedMotion`).
+ *   0이 아니라 1ms인 이유: 애니메이션 이름은 그대로라 Radix Presence가 animationend를 기다리는데, 1ms면
+ *   이벤트가 확실히 와서 퇴장 중인 오버레이가 남지 않는다.
+ */
+export const motion = {
+  duration: {
+    instant: "50ms",
+    fast: "100ms",
+    base: "150ms",
+    moderate: "200ms",
+    slow: "300ms",
+  },
+  easing: {
+    standard: "cubic-bezier(0.4, 0, 0, 1)",
+    enter: "cubic-bezier(0.2, 0, 0, 1)",
+    exit: "cubic-bezier(0.8, 0, 0, 0.8)",
+  },
+} as const;
+
+/** 움직임 줄이기에서 덮어쓸 값 — 모든 `motion.duration.*`를 1ms로. 이징은 그대로 둔다. */
+export const reducedMotion = {
+  motion: {
+    duration: Object.fromEntries(Object.keys(motion.duration).map((k) => [k, "1ms"])) as Record<
+      keyof typeof motion.duration,
+      string
+    >,
+  },
+} as const;
+
 export const font = {
   family: {
     sans: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif",

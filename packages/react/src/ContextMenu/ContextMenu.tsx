@@ -3,6 +3,7 @@ import { ContextMenu as RadixContextMenu } from "radix-ui";
 // 같은 시각 체계 — Dropdown의 표면·항목 스타일을 그대로 쓴다(오버레이 표면·반경 8·그림자 overlay).
 import menu from "../Dropdown/Dropdown.module.css";
 import styles from "./ContextMenu.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface ContextMenuItem {
   label?: string;
@@ -120,7 +121,7 @@ function renderItems(items: ContextMenuItem[], className?: string): ReactNode {
           </RadixContextMenu.SubTrigger>
           <RadixContextMenu.Portal>
             <RadixContextMenu.SubContent
-              className={[menu.content, styles.content, className].filter(Boolean).join(" ")}
+              className={[menu.content, styles.content, motion.popover, className].filter(Boolean).join(" ")}
               sideOffset={2}
               alignOffset={-4}
               collisionPadding={8}
@@ -178,7 +179,7 @@ export function ContextMenu({ children, items, className, disabled, onOpenChange
       </RadixContextMenu.Trigger>
       <RadixContextMenu.Portal>
         <RadixContextMenu.Content
-          className={[menu.content, styles.content, className].filter(Boolean).join(" ")}
+          className={[menu.content, styles.content, motion.popover, className].filter(Boolean).join(" ")}
           collisionPadding={8}
         >
           {renderItems(items, className)}

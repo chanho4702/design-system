@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { Dialog as RadixDialog } from "radix-ui";
 import styles from "./Modal.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface ModalProps {
   /** 클릭 시 모달을 여는 트리거 요소. 제어형(open/onOpenChange)으로 열 때는 생략 가능. */
@@ -43,9 +44,9 @@ export function Modal({
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       {trigger ? <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger> : null}
       <RadixDialog.Portal>
-        <RadixDialog.Overlay className={styles.overlay} />
+        <RadixDialog.Overlay className={[styles.overlay, motion.blanket].join(" ")} />
         <RadixDialog.Content
-          className={[styles.content, className].filter(Boolean).join(" ")}
+          className={[styles.content, motion.dialog, className].filter(Boolean).join(" ")}
           {...(description ? {} : { "aria-describedby": undefined })}
         >
           <div className={styles.header}>

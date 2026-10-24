@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode, RefObject } from "react";
 import { Popover as RadixPopover } from "radix-ui";
 import styles from "./Popover.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface PopoverProps {
   /** 클릭으로 여닫는 트리거. 포커스 가능한 요소(버튼 등)여야 한다. */
@@ -54,6 +55,7 @@ export function Popover({
         <RadixPopover.Content
           className={[
             styles.content,
+            motion.popover,
             padding === "none" ? styles.paddingNone : null,
             matchTriggerWidth ? styles.matchTrigger : null,
             className,

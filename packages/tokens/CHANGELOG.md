@@ -1,5 +1,29 @@
 # @chanho/tokens
 
+## 0.7.0
+
+### Minor Changes
+
+- 모션 토큰 추가(`motion`, CSS `--chanho-motion-*`). 기존 `transition.fast/base/slow`(100/150/250ms ease)는 그대로 둔다.
+
+  | 토큰 | 값 | 용도 |
+  |---|---|---|
+  | `motion.duration.instant` | 50ms | 툴팁 퇴장·미세 피드백 |
+  | `motion.duration.fast` | 100ms | 메뉴·모달 퇴장, hover·선택 전환 |
+  | `motion.duration.base` | 150ms | 메뉴·팝오버 등장 |
+  | `motion.duration.moderate` | 200ms | 모달·토스트 등장, 탭 밑줄·사이드바 폭 |
+  | `motion.duration.slow` | 300ms | 큰 면 이동(드물게), 진행 막대 |
+  | `motion.easing.standard` | `cubic-bezier(0.4, 0, 0, 1)` | 이미 화면에 있는 것이 움직일 때 |
+  | `motion.easing.enter` | `cubic-bezier(0.2, 0, 0, 1)` | 등장(ease-out 계열) |
+  | `motion.easing.exit` | `cubic-bezier(0.8, 0, 0, 0.8)` | 퇴장(ease-in 계열) |
+
+  근거: `@atlaskit/motion` 9.4.0 — 지속시간 격자 `durationStep = 25`, `durations.small = 100`, 퇴장 배수
+  `EXITING_MOTION_MULTIPLIER = 0.5`; 이징은 `utils/curves.js`의 `easeIn40Out`·`easeOut`·`easeIn` 그대로.
+  지속시간은 리니어처럼 짧게(Atlassian medium 350ms 대신 150~200ms) 잡았다.
+- `tokens.css`가 `@media (prefers-reduced-motion: reduce) { :root { --chanho-motion-duration-*: 1ms } }`를 직접 내보낸다.
+  0이 아니라 1ms — 애니메이션 이름은 남아 있어 Radix Presence가 animationend를 기다리는데, 1ms면 이벤트가 확실히 온다.
+  TS: `motion`, `reducedMotion` export. `buildCss(static, light, dark, reducedMotion?)` 네 번째 인자(생략 가능) 추가.
+
 ## 0.6.1
 
 ### Patch Changes

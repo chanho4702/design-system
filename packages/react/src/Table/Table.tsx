@@ -72,6 +72,11 @@ export interface TableProps<Row extends { id: string }> {
   loadingRows?: number;
   /** 로딩 중 스크린리더 문구. @default '불러오는 중' */
   loadingLabel?: string;
+  /**
+   * 행 밀도. compact는 셀 세로 패딩 4px·가로 8px(행 약 31px, 리니어 목록 밀도) — 이슈 목록처럼 행이 많은 표에서.
+   * @default 'default' (세로 8px·가로 12px, 약 39px)
+   */
+  density?: "default" | "compact";
 }
 
 /** 스켈레톤 셀 너비 — 행마다 조금씩 달라 실제 데이터처럼 보이게 한다. */
@@ -134,6 +139,7 @@ export function Table<Row extends { id: string }>({
   loading = false,
   loadingRows = 5,
   loadingLabel = "불러오는 중",
+  density = "default",
 }: TableProps<Row>) {
   const [innerWidths, setInnerWidths] = useState<Record<string, number>>({});
   const [innerOrder, setInnerOrder] = useState<string[] | undefined>(undefined);
@@ -240,7 +246,9 @@ export function Table<Row extends { id: string }>({
         </span>
       ) : null}
       <table
-        className={[styles.table, resizable ? styles.tableFixed : null].filter(Boolean).join(" ")}
+        className={[styles.table, resizable ? styles.tableFixed : null, density === "compact" ? styles.compact : null]
+          .filter(Boolean)
+          .join(" ")}
         aria-label={ariaLabel}
         aria-busy={loading || undefined}
       >

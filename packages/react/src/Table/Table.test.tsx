@@ -169,4 +169,11 @@ describe("Table", () => {
     expect(screen.getByRole("table")).not.toHaveAttribute("aria-busy");
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
+
+  it("density=compact면 표가 compact 밀도가 되고, 기본은 그대로다", () => {
+    const { rerender } = render(<Table aria-label="사용자" columns={columns} rows={rows} />);
+    expect(screen.getByRole("table", { name: "사용자" }).className).not.toMatch(/compact/);
+    rerender(<Table aria-label="사용자" columns={columns} rows={rows} density="compact" />);
+    expect(screen.getByRole("table", { name: "사용자" }).className).toMatch(/compact/);
+  });
 });

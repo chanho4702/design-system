@@ -25,11 +25,22 @@ function block(selector: string, tokens: Record<string, string>, colorScheme: "l
   return `${selector} {\n  color-scheme: ${colorScheme};\n${lines.join("\n")}\n}`;
 }
 
-/** 정적 토큰 + 라이트 테마는 :root에, 다크 테마는 [data-theme="dark"]에 출력한다. */
+/**
+ * 정적 토큰 + 라이트 테마는 :root에, 다크 테마는 [data-theme="dark"]에 출력한다.
+ * reducedMotion을 주면 `@media (prefers-reduced-motion: reduce)` 안의 :root로 그 값을 덮는다 —
+ * 테마 블록은 모션 토큰을 다시 정의하지 않으므로 라이트·다크 모두에 적용된다.
+ */
 export function buildCss(
   staticTokens: Record<string, string>,
   light: Record<string, string>,
   dark: Record<string, string>,
+  reducedMotion: Record<string, string> = {},
 ): string {
-  return [block(":root", { ...staticTokens, ...light }, "light"), block('[data-theme="dark"]', dark, "dark")].join("\n\n") + "\n";
+  const blocks = [block(":root", { ...staticTokens, ...light }, "light"), block('[data-theme="dark"]', dark, "dark")];
+  const reduced = Object.entries(reducedMotion);
+  if (reduced.length > 0) {
+    const lines = reduced.map(([key, value]) => `    ${toVarName(key)}: ${value};`);
+    blocks.push(`@media (prefers-reduced-motion: reduce) {\n  :root {\n${lines.join("\n")}\n  }\n}`);
+  }
+  return blocks.join("\n\n") + "\n";
 }

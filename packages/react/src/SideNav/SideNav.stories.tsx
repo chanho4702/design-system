@@ -24,7 +24,13 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-function Demo({ collapsed: initialCollapsed = false }: { collapsed?: boolean }) {
+function Demo({
+  collapsed: initialCollapsed = false,
+  density,
+}: {
+  collapsed?: boolean;
+  density?: "default" | "compact";
+}) {
   const [activeId, setActiveId] = useState("issues");
   const [collapsed, setCollapsed] = useState(initialCollapsed);
   return (
@@ -35,6 +41,7 @@ function Demo({ collapsed: initialCollapsed = false }: { collapsed?: boolean }) 
         onSelect={setActiveId}
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed((c) => !c)}
+        density={density}
       />
     </div>
   );
@@ -46,4 +53,9 @@ export const Default: Story = {
 
 export const Collapsed: Story = {
   render: () => <Demo collapsed />,
+};
+
+/** compact — 리니어 사이드바 밀도(항목 28px·아이콘 20px). 메뉴가 많은 화면에서. */
+export const Compact: Story = {
+  render: () => <Demo density="compact" />,
 };

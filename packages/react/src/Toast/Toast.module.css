@@ -82,3 +82,26 @@
   outline: none;
   box-shadow: var(--chanho-focus-ring);
 }
+
+/* 등장 — 스와이프 방향(오른쪽)에서 미끄러져 들어온다. 움직임 줄이기면 지속시간 1ms(토큰)라 그냥 나타난다.
+   닫힘은 onOpenChange에서 바로 목록에서 빼므로 퇴장 애니메이션은 없다. */
+.toast[data-state="open"] {
+  animation: toastIn var(--chanho-motion-duration-moderate) var(--chanho-motion-easing-enter);
+}
+
+/* 스와이프로 닫기 — 끄는 동안 손가락을 따라가고, 놓아서 취소되면 제자리로 돌아온다 */
+.toast[data-swipe="move"] {
+  translate: var(--radix-toast-swipe-move-x) 0;
+}
+
+.toast[data-swipe="cancel"] {
+  translate: 0 0;
+  transition: translate var(--chanho-motion-duration-base) var(--chanho-motion-easing-standard);
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    translate: calc(100% + var(--chanho-space-200)) 0;
+  }
+}

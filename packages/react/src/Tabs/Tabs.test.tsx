@@ -1,7 +1,7 @@
 // Tabs는 Radix 합성 컴포넌트를 감싼 복합 루트라 ref를 노출하지 않는다 (공통 테스트 ref 예외).
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Tabs } from "./Tabs";
 
 const ITEMS = [
@@ -78,5 +78,61 @@ describe("Tabs", () => {
       />,
     );
     expect(screen.getByRole("tab", { name: "버그" })).toBeInTheDocument();
+  });
+
+  describe("움직이는 선택 밑줄", () => {
+    // jsdom은 레이아웃이 없어 offset*이 0이다 — 탭 폭·위치를 흉내 낸다(탭 순서대로 100px씩).
+    function mockLayout() {
+      const width = vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(function (this: HTMLElement) {
+        return this.getAttribute("role") === "tab" ? 100 : 0;
+      });
+      const left = vi.spyOn(HTMLElement.prototype, "offsetLeft", "get").mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("role") !== "tab") return 0;
+        return Array.from(this.parentElement?.querySelectorAll('[role="tab"]') ?? []).indexOf(this) * 100;
+      });
+      return () => {
+        width.mockRestore();
+        left.mockRestore();
+      };
+    }
+
+    it("측정할 수 없으면(폭 0) 밑줄 요소 없이 선택 탭 자체 밑줄로 그린다", () => {
+      render(<Tabs label="이슈 상세" items={ITEMS} />);
+      expect(screen.getByRole("tablist")).not.toHaveAttribute("data-indicator");
+    });
+
+    it("선택 탭 위치에 밑줄을 그리고, 첫 배치는 애니메이션 없이 — 탭을 바꾸면 그 자리로 미끄러진다", async () => {
+      const restore = mockLayout();
+      try {
+        const { container } = render(<Tabs label="이슈 상세" items={ITEMS} />);
+        const list = screen.getByRole("tablist");
+        expect(list).toHaveAttribute("data-indicator");
+        const bar = container.querySelector<HTMLElement>('[class*="indicator"]');
+        expect(bar).toHaveAttribute("aria-hidden", "true");
+        expect(bar?.style.getPropertyValue("--_chanho-tabs-indicator-x")).toBe("0px");
+        expect(bar?.style.getPropertyValue("--_chanho-tabs-indicator-w")).toBe("100px");
+        expect(bar).not.toHaveAttribute("data-animate");
+
+        await userEvent.click(screen.getByRole("tab", { name: "활동" }));
+        expect(bar?.style.getPropertyValue("--_chanho-tabs-indicator-x")).toBe("200px");
+        expect(bar).toHaveAttribute("data-animate");
+        // 밑줄은 접근성 트리에 나오지 않는다 — 탭 목록의 탭 수 그대로
+        expect(screen.getAllByRole("tab")).toHaveLength(3);
+      } finally {
+        restore();
+      }
+    });
+
+    it("제어형 value가 바뀌어도 밑줄이 따라간다", () => {
+      const restore = mockLayout();
+      try {
+        const { container, rerender } = render(<Tabs label="이슈 상세" items={ITEMS} value="overview" />);
+        rerender(<Tabs label="이슈 상세" items={ITEMS} value="settings" />);
+        const bar = container.querySelector<HTMLElement>('[class*="indicator"]');
+        expect(bar?.style.getPropertyValue("--_chanho-tabs-indicator-x")).toBe("100px");
+      } finally {
+        restore();
+      }
+    });
   });
 });

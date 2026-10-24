@@ -4,6 +4,7 @@ import { Select as RadixSelect } from "radix-ui";
 import { Popover } from "../Popover/Popover";
 import { CheckIcon, ChevronIcon, OptionIcon, OptionList, groupOptions } from "./OptionList";
 import styles from "./Select.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface SelectOption {
   value: string;
@@ -129,7 +130,7 @@ export function Select({
             {/* 포털 + 충돌 회피: 모달·스크롤 컨테이너 안에서도 잘리지 않고, 아래 공간이 모자라면 위로 뒤집힌다.
                 최대 높이(300px, Atlassian select 기본)는 CSS가 뷰포트 남은 높이와 함께 제한한다. */}
             <RadixSelect.Content
-              className={styles.content}
+              className={[styles.content, motion.popover].join(" ")}
               position="popper"
               sideOffset={4}
               collisionPadding={8}

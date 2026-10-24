@@ -1,0 +1,123 @@
+/* 공유 등장·퇴장 모션 — 오버레이 컴포넌트가 className으로 함께 붙인다.
+   - 시간·이징은 전부 --chanho-motion-* 토큰. 움직임 줄이기면 tokens.css가 지속시간을 1ms로 덮는다.
+   - 이동은 개별 변형 속성(translate·scale)으로만 한다 — 모달처럼 transform으로 가운데 정렬한 요소의
+     transform을 덮지 않고, 소비자가 className으로 준 transform과도 섞이지 않는다.
+   - Radix Presence는 data-state="closed"가 된 뒤 이 애니메이션의 animationend를 기다렸다가 언마운트한다.
+     퇴장은 짧게(등장의 절반 안팎, @atlaskit/motion EXITING_MOTION_MULTIPLIER 0.5), 그동안 클릭은 통과시킨다.
+   - 레이아웃에 영향 없음: opacity·translate·scale만 움직인다(박스 크기·흐름 그대로). */
+
+/* ── 팝오버 계열(Dropdown·ContextMenu·Popover·Select·MultiSelect): 짧은 페이드 + 트리거 쪽에서 4px 미끄러짐 ── */
+.popover {
+  --_chanho-motion-x: 0px;
+  --_chanho-motion-y: 0px;
+}
+
+/* data-side = Radix가 실제로 놓은 쪽(충돌로 뒤집히면 바뀐다). 아래에 열리면 위에서 내려온다. */
+.popover[data-side="bottom"] {
+  --_chanho-motion-y: -4px;
+}
+
+.popover[data-side="top"] {
+  --_chanho-motion-y: 4px;
+}
+
+.popover[data-side="right"] {
+  --_chanho-motion-x: -4px;
+}
+
+.popover[data-side="left"] {
+  --_chanho-motion-x: 4px;
+}
+
+.popover[data-state="open"] {
+  animation: slideIn var(--chanho-motion-duration-base) var(--chanho-motion-easing-enter);
+}
+
+.popover[data-state="closed"] {
+  pointer-events: none;
+  animation: fadeOut var(--chanho-motion-duration-fast) var(--chanho-motion-easing-exit) forwards;
+}
+
+/* ── 툴팁: 더 짧고 2px. 지연 후 열림·즉시 열림 모두 같은 등장 ── */
+.tooltip {
+  --_chanho-motion-x: 0px;
+  --_chanho-motion-y: 0px;
+}
+
+.tooltip[data-side="bottom"] {
+  --_chanho-motion-y: -2px;
+}
+
+.tooltip[data-side="top"] {
+  --_chanho-motion-y: 2px;
+}
+
+.tooltip[data-side="right"] {
+  --_chanho-motion-x: -2px;
+}
+
+.tooltip[data-side="left"] {
+  --_chanho-motion-x: 2px;
+}
+
+.tooltip[data-state="delayed-open"],
+.tooltip[data-state="instant-open"] {
+  animation: slideIn var(--chanho-motion-duration-fast) var(--chanho-motion-easing-enter);
+}
+
+.tooltip[data-state="closed"] {
+  pointer-events: none;
+  animation: fadeOut var(--chanho-motion-duration-instant) var(--chanho-motion-easing-exit) forwards;
+}
+
+/* ── 블랭킷(모달·명령 팔레트 뒤 어둡게) ── */
+.blanket[data-state="open"] {
+  animation: fadeIn var(--chanho-motion-duration-moderate) var(--chanho-motion-easing-enter);
+}
+
+.blanket[data-state="closed"] {
+  animation: fadeOut var(--chanho-motion-duration-fast) var(--chanho-motion-easing-exit) forwards;
+}
+
+/* ── 대화상자 본체(Modal·ConfirmDialog·CommandPalette): 페이드 + 98% → 100% 스케일 ── */
+.dialog[data-state="open"] {
+  animation: dialogIn var(--chanho-motion-duration-moderate) var(--chanho-motion-easing-enter);
+}
+
+.dialog[data-state="closed"] {
+  pointer-events: none;
+  animation: dialogOut var(--chanho-motion-duration-fast) var(--chanho-motion-easing-exit) forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    translate: var(--_chanho-motion-x) var(--_chanho-motion-y);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@keyframes dialogOut {
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}

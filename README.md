@@ -22,8 +22,8 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 | 패키지 | 버전 | 발행 이름(GitHub Packages) | 설명 |
 |---|---|---|---|
-| [`@chanho/tokens`](packages/tokens) | 0.6.1 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
-| [`@chanho/react`](packages/react) | 0.14.0 | `@chanho4702/react` | React 19 컴포넌트 33종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/tokens`](packages/tokens) | 0.7.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
+| [`@chanho/react`](packages/react) | 0.15.0 | `@chanho4702/react` | React 19 컴포넌트 33종 — Radix UI 기반 동작 + 토큰 스타일링 |
 | [`@chanho/org-admin`](packages/org-admin) | 0.3.2 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
 
 세 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
@@ -52,7 +52,7 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 - **`palette.ts`** — 원시 컬러 램프. 브랜드 `blue`(500 = `#1868DB`), 라이트용 `gray`, 다크 전용 `darkGray`(단순 반전이 아니라 명도 재조정), 상태색(red·green·orange·teal 등). 컴포넌트에서 직접 참조 금지.
 - **`semantic.ts`** — 시맨틱 토큰(라이트·다크 동일 키 세트, 일부 알파 값). 그룹: `color.background.*` · `color.text.*` · `color.border.*` · `color.blanket` · `shadow.*`(elevation). 라이트/다크는 동일 키 세트를 가져야 하며 `buildCss.test.ts`가 이를 강제한다.
-- **`static.ts`** — 테마 무관 정적 토큰: `space`(4px 그리드) · `radius` · `font`(family·size·weight·lineHeight, Pretendard Variable / IBM Plex Mono) · `z`(z-index 층위) · `focus`(2중 포커스 링).
+- **`static.ts`** — 테마 무관 정적 토큰: `space`(4px 그리드) · `radius` · `font`(family·size·weight·lineHeight, Pretendard Variable / IBM Plex Mono) · `z`(z-index 층위) · `focus`(2중 포커스 링) · `transition`(상태 색 전환 단축형) · `motion`(지속시간 `instant 50`~`slow 300`ms·이징 `standard`/`enter`/`exit`, `@atlaskit/motion` 근거). `tokens.css`는 `prefers-reduced-motion: reduce`에서 모션 지속시간을 1ms로 덮는 미디어 블록을 함께 내보낸다.
 
 `exports`: `.`(TS 상수) / `./css`(`dist/tokens.css`).
 

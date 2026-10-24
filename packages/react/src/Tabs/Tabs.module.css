@@ -44,6 +44,7 @@
   font-size: var(--chanho-font-size-100);
   font-weight: var(--chanho-font-weight-medium);
   cursor: pointer;
+  transition: color var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard);
 }
 
 .trigger::after {
@@ -54,6 +55,7 @@
   left: var(--chanho-space-100);
   height: 0;
   border-bottom: 2px solid transparent;
+  transition: border-color var(--chanho-motion-duration-fast) var(--chanho-motion-easing-standard);
 }
 
 .trigger:hover::after {
@@ -72,6 +74,29 @@
 
 .trigger[data-state="active"]::after {
   border-bottom-color: var(--chanho-color-border-selected);
+}
+
+/* 움직이는 밑줄이 그려지면 선택 탭 자체 밑줄은 숨긴다(hover 밑줄도 선택 탭에는 겹치지 않게) */
+.list[data-indicator] > .trigger[data-state="active"]::after {
+  border-bottom-color: transparent;
+}
+
+/* 선택 밑줄 — 선택 탭의 좌우 8px 안쪽, 2px. 위치·폭만 바뀌어 레이아웃을 밀지 않는다(절대 배치) */
+.indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(var(--_chanho-tabs-indicator-w) - 2 * var(--chanho-space-100));
+  height: 2px;
+  background: var(--chanho-color-border-selected);
+  translate: calc(var(--_chanho-tabs-indicator-x) + var(--chanho-space-100)) 0;
+  pointer-events: none;
+}
+
+.indicator[data-animate] {
+  transition:
+    translate var(--chanho-motion-duration-moderate) var(--chanho-motion-easing-standard),
+    width var(--chanho-motion-duration-moderate) var(--chanho-motion-easing-standard);
 }
 
 .content {

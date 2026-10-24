@@ -3,6 +3,7 @@ import type { KeyboardEvent, ReactNode } from "react";
 import { Dialog as RadixDialog } from "radix-ui";
 import { SkeletonListItem } from "../Skeleton/Skeleton";
 import styles from "./CommandPalette.module.css";
+import motion from "../motion/motion.module.css";
 
 export interface CommandItem {
   /** 목록 안에서 고유한 식별자. */
@@ -234,9 +235,9 @@ export function CommandPalette({
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Portal>
-        <RadixDialog.Overlay className={styles.overlay} />
+        <RadixDialog.Overlay className={[styles.overlay, motion.blanket].join(" ")} />
         <RadixDialog.Content
-          className={styles.content}
+          className={[styles.content, motion.dialog].join(" ")}
           aria-describedby={undefined}
           onOpenAutoFocus={(e) => {
             e.preventDefault();
