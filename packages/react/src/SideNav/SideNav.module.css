@@ -69,7 +69,8 @@
 .item.active {
   background: var(--chanho-color-background-selected);
   color: var(--chanho-color-text-selected);
-  font-weight: var(--chanho-font-weight-semibold);
+  /* 실측(지라·컨플 사이드바 선택 항목): 굵기는 일반 항목과 같은 400, 배경·글자색으로만 구분 */
+  font-weight: var(--chanho-font-weight-regular);
 }
 
 .icon {
