@@ -27,7 +27,9 @@
 }
 
 .title {
+  max-width: 100%;
   margin: 0 0 var(--chanho-space-50);
+  overflow-wrap: anywhere;
   font-size: var(--chanho-font-size-200);
   line-height: var(--chanho-font-lineHeight-200);
   font-weight: var(--chanho-font-weight-semibold);
@@ -36,7 +38,8 @@
 
 .desc {
   margin: 0;
-  max-width: 360px;
+  max-width: min(360px, 100%);
+  overflow-wrap: anywhere;
   font-size: var(--chanho-font-size-100);
   line-height: var(--chanho-font-lineHeight-100);
   color: var(--chanho-color-text-subtle);
@@ -44,6 +47,9 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
   gap: var(--chanho-space-100);
   margin-top: var(--chanho-space-300);
 }

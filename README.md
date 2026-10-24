@@ -4,7 +4,7 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-5FA04E?logo=nodedotjs&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-11.10.0-F69220?logo=pnpm&logoColor=white)
-![Components](https://img.shields.io/badge/Components-28-1868DB)
+![Components](https://img.shields.io/badge/Components-31-1868DB)
 
 Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프론트엔드가 공유하도록 만든 **자체 디자인 시스템 모노레포**.
 토큰·React 컴포넌트·공통 조직 관리 화면을 별도 npm 패키지로 분리해, 소비 앱은 필요한 패키지만 설치하면 동일한 룩앤필·다크모드·접근성 계약을 그대로 가져간다.
@@ -22,9 +22,9 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 | 패키지 | 버전 | 발행 이름(GitHub Packages) | 설명 |
 |---|---|---|---|
-| [`@chanho/tokens`](packages/tokens) | 0.5.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
-| [`@chanho/react`](packages/react) | 0.12.0 | `@chanho4702/react` | React 19 컴포넌트 28종 — Radix UI 기반 동작 + 토큰 스타일링 |
-| [`@chanho/org-admin`](packages/org-admin) | 0.3.0 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
+| [`@chanho/tokens`](packages/tokens) | 0.6.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
+| [`@chanho/react`](packages/react) | 0.13.0 | `@chanho4702/react` | React 19 컴포넌트 31종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/org-admin`](packages/org-admin) | 0.3.1 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
 
 세 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
 
@@ -58,11 +58,11 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 ---
 
-## 컴포넌트 (`@chanho/react`) — 28종
+## 컴포넌트 (`@chanho/react`) — 31종
 
-- **표시:** Avatar · Badge · Card · Comment · EmptyState · Lozenge · ProgressBar · Spinner · Table · Tag
+- **표시:** Avatar · Badge · Card · Comment · EmptyState · Lozenge · ProgressBar · Skeleton(`SkeletonText`·`SkeletonAvatar`·`SkeletonListItem`) · Spinner · Table · Tag
 - **폼:** Button · Checkbox · InlineEdit · Radio/RadioGroup · Select · Switch · TextArea · TextField
-- **오버레이·내비게이션:** Banner · ConfirmDialog · Dropdown · Modal · PageHeader · SideNav · Tabs · Toast(`ToastProvider`/`useToast`) · Tooltip · TopBar
+- **오버레이·내비게이션:** Banner · CommandPalette · ConfirmDialog · ContextMenu · Dropdown · Modal · PageHeader · SideNav · Tabs · Toast(`ToastProvider`/`useToast`) · Tooltip · TopBar
 
 각 컴포넌트는 값 export와 함께 타입(`ButtonProps` 등)을 노출한다. `react`/`react-dom`은 peer(^19), `radix-ui`·`@chanho/tokens`는 런타임 의존이자 번들 external.
 
@@ -103,9 +103,9 @@ GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트�
 ```jsonc
 // package.json — 버전은 위 패키지 표(또는 태그)에서 고른다
 "dependencies": {
-  "@chanho/tokens":    "npm:@chanho4702/tokens@0.5.0",
-  "@chanho/react":     "npm:@chanho4702/react@0.12.0",
-  "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.0"   // 조직 관리 화면이 필요할 때만
+  "@chanho/tokens":    "npm:@chanho4702/tokens@0.6.0",
+  "@chanho/react":     "npm:@chanho4702/react@0.13.0",
+  "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.1"   // 조직 관리 화면이 필요할 때만
 }
 ```
 
@@ -191,7 +191,7 @@ design-system/
 │  ├─ tokens/            @chanho/tokens — palette·semantic·static + CSS 빌드
 │  │  └─ src/            index.ts · palette.ts · semantic.ts · static.ts
 │  │                     buildCss.ts(+test) · build.ts
-│  ├─ react/             @chanho/react — 컴포넌트 28종 (Vite lib mode)
+│  ├─ react/             @chanho/react — 컴포넌트 31종 (Vite lib mode)
 │  │  └─ src/<Component>/ 각 컴포넌트 + *.test.tsx + CSS
 │  └─ org-admin/         @chanho/org-admin — 공통 조직 관리 화면 (/api/org 소비)
 ├─ apps/

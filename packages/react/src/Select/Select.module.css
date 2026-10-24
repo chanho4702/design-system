@@ -2,6 +2,9 @@
   display: inline-flex;
   flex-direction: column;
   gap: var(--chanho-space-50);
+  /* 기본 최소 폭 180px(이전과 같음) — 단, 부모가 그보다 좁으면 부모 폭까지만. 트리거는 이 폭으로 늘어난다(stretch). */
+  min-width: min(180px, 100%);
+  max-width: 100%;
   font-family: var(--chanho-font-family-sans);
 }
 
@@ -18,7 +21,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--chanho-space-100);
-  min-width: 180px;
+  /* 최소 폭은 .field가 정한다 — 여기서 %를 쓰면 내용 크기 래퍼에 순환 참조가 돼 0으로 풀린다. 긴 선택값은 말줄임 */
+  min-width: 0;
+  max-width: 100%;
   height: 36px;
   padding: 0 var(--chanho-space-75);
   border: 1px solid var(--chanho-color-border-input);
@@ -52,14 +57,23 @@
   color: var(--chanho-color-text-subtlest);
 }
 
+/* 목록 — Atlassian select 메뉴(react-select maxMenuHeight 300, PopupSelect 폭 220~440):
+   폭은 트리거 이상, 최대 440px, 높이는 300px와 뷰포트 남은 공간 중 작은 값. 넘치면 목록이 스크롤된다. */
 .content {
   overflow: hidden;
-  min-width: 180px;
+  box-sizing: border-box;
+  min-width: max(var(--radix-select-trigger-width, 180px), 180px);
+  max-width: min(440px, var(--radix-select-content-available-width, 440px));
+  max-height: min(300px, var(--radix-select-content-available-height, 300px));
   border-radius: var(--chanho-radius-large);
   background: var(--chanho-color-background-surface-overlay);
   box-shadow: var(--chanho-shadow-overlay);
   font-family: var(--chanho-font-family-sans);
   z-index: var(--chanho-z-popover);
+}
+
+.viewport {
+  padding-block: var(--chanho-space-50);
 }
 
 .item {
@@ -107,10 +121,99 @@
 .itemContent,
 .triggerValue {
   display: inline-flex;
+  flex: 1 1 auto;
   align-items: center;
   gap: var(--chanho-space-100);
   min-width: 0;
   overflow: hidden;
+  white-space: nowrap;
+}
+
+/* 긴 한글 라벨은 한 줄 말줄임(전체 문구는 title 툴팁) */
+.itemText,
+.valueText {
+  min-width: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.chevron {
+  display: inline-flex;
+  flex: none;
+}
+
+/* 선택 표시 — 현재 값 오른쪽 체크 */
+.check {
+  display: inline-flex;
+  flex: none;
+  color: var(--chanho-color-text-selected);
+}
+
+/* 그룹 제목 — Atlassian select group heading: 12/16 · bold · text-subtle, 대문자 변환 없음 */
+.group + .group,
+.item + .group,
+.group + .item {
+  margin-top: var(--chanho-space-50);
+  border-top: 1px solid var(--chanho-color-border-default);
+  padding-top: var(--chanho-space-50);
+}
+
+.groupLabel {
+  padding: var(--chanho-space-100) var(--chanho-space-150) var(--chanho-space-50);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-bold);
+  line-height: var(--chanho-font-lineHeight-50);
+}
+
+/* 검색형(searchable) — 검색 입력 + 스크롤 목록 */
+.searchContent {
+  display: flex;
+  flex-direction: column;
+  min-width: max(var(--radix-popover-trigger-width, 220px), 220px);
+  max-width: min(440px, var(--radix-popover-content-available-width, 440px));
+  max-height: min(300px, var(--radix-popover-content-available-height, 300px));
+}
+
+.searchContent .viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.search {
+  flex: none;
+  padding: var(--chanho-space-100) var(--chanho-space-100) var(--chanho-space-50);
+}
+
+.searchInput {
+  box-sizing: border-box;
+  width: 100%;
+  height: 32px;
+  padding: 0 var(--chanho-space-75);
+  border: 1px solid var(--chanho-color-border-input);
+  border-radius: var(--chanho-radius-medium);
+  background: var(--chanho-color-background-input);
+  color: var(--chanho-color-text-default);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+}
+
+.searchInput::placeholder {
+  color: var(--chanho-color-text-subtlest);
+}
+
+.searchInput:focus-visible {
+  outline: none;
+  border-color: var(--chanho-color-border-focused);
+  box-shadow: inset 0 0 0 1px var(--chanho-color-border-focused);
+}
+
+.empty {
+  margin: 0;
+  padding: var(--chanho-space-100) var(--chanho-space-150) var(--chanho-space-150);
+  color: var(--chanho-color-text-subtlest);
+  font-size: var(--chanho-font-size-100);
+  text-align: center;
 }

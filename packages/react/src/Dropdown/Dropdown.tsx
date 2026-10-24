@@ -17,6 +17,11 @@ export interface DropdownItem {
   separator?: boolean;
   /** 지정하면 항목 대신 그룹 제목(선택 불가)을 렌더한다. */
   heading?: string;
+  /**
+   * 지정하면 체크 항목(`menuitemcheckbox`)이 된다 — true면 오른쪽에 체크 표시(지라 "보기 옵션" 메뉴처럼).
+   * 고르면 onSelect가 불리고, 상태는 소비자가 바꿔 다시 넘긴다.
+   */
+  checked?: boolean;
 }
 
 export interface DropdownProps {
@@ -32,6 +37,39 @@ export interface DropdownProps {
   align?: "start" | "center" | "end";
 }
 
+function CheckIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true">
+      <path d="M3.5 8.5l3 3 6-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ItemBody({ item }: { item: DropdownItem }) {
+  return (
+    <>
+      {item.icon ? (
+        <span className={styles.itemIcon} aria-hidden="true">
+          {item.icon}
+        </span>
+      ) : null}
+      {item.description ? (
+        <span className={styles.itemText}>
+          <span className={styles.itemLabel} title={item.label}>
+            {item.label}
+          </span>
+          <span className={styles.itemDescription}>{item.description}</span>
+        </span>
+      ) : (
+        // 긴 라벨은 한 줄 말줄임(Atlassian 메뉴 항목 기본), 전체 문구는 title 툴팁
+        <span className={styles.itemLabelText} title={item.label}>
+          {item.label}
+        </span>
+      )}
+    </>
+  );
+}
+
 export function Dropdown({ trigger, items, className, align = "start" }: DropdownProps) {
   return (
     <RadixDropdownMenu.Root>
@@ -41,6 +79,8 @@ export function Dropdown({ trigger, items, className, align = "start" }: Dropdow
           className={[styles.content, className].filter(Boolean).join(" ")}
           sideOffset={4}
           align={align}
+          // 가장자리에서 8px 띄워 뒤집기·좌우 이동(Atlassian 팝업과 같은 여백)
+          collisionPadding={8}
         >
           {items.map((item, i) =>
             item.separator ? (
@@ -49,6 +89,21 @@ export function Dropdown({ trigger, items, className, align = "start" }: Dropdow
               <RadixDropdownMenu.Label key={`heading-${i}`} className={styles.heading}>
                 {item.heading}
               </RadixDropdownMenu.Label>
+            ) : item.checked !== undefined ? (
+              <RadixDropdownMenu.CheckboxItem
+                key={item.label ?? i}
+                className={[styles.item, item.danger ? styles.danger : null, item.description ? styles.itemRich : null]
+                  .filter(Boolean)
+                  .join(" ")}
+                checked={item.checked}
+                disabled={item.disabled}
+                onSelect={item.onSelect}
+              >
+                <ItemBody item={item} />
+                <RadixDropdownMenu.ItemIndicator className={styles.check}>
+                  <CheckIcon />
+                </RadixDropdownMenu.ItemIndicator>
+              </RadixDropdownMenu.CheckboxItem>
             ) : (
               <RadixDropdownMenu.Item
                 key={item.label ?? i}
@@ -62,19 +117,7 @@ export function Dropdown({ trigger, items, className, align = "start" }: Dropdow
                 disabled={item.disabled}
                 onSelect={item.onSelect}
               >
-                {item.icon ? (
-                  <span className={styles.itemIcon} aria-hidden="true">
-                    {item.icon}
-                  </span>
-                ) : null}
-                {item.description ? (
-                  <span className={styles.itemText}>
-                    <span className={styles.itemLabel}>{item.label}</span>
-                    <span className={styles.itemDescription}>{item.description}</span>
-                  </span>
-                ) : (
-                  item.label
-                )}
+                <ItemBody item={item} />
               </RadixDropdownMenu.Item>
             ),
           )}

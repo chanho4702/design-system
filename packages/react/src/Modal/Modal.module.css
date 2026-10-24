@@ -10,8 +10,11 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  /* 패딩·테두리를 폭에 포함 — content-box면 좁은 화면에서 패딩(48px)만큼 뷰포트 밖으로 밀려난다 */
+  box-sizing: border-box;
   width: min(480px, calc(100vw - 32px));
   max-height: calc(100vh - 64px);
+  max-height: calc(100dvh - 64px);
   overflow-y: auto;
   padding: var(--chanho-space-300);
   border-radius: var(--chanho-radius-xlarge);
@@ -32,12 +35,15 @@
 
 /* Atlassian 모달 제목(@atlaskit/modal-dialog 17.1.1 modal-title): heading-medium 20px · 653 */
 .title {
+  min-width: 0;
   margin: 0;
+  overflow-wrap: anywhere;
   font-size: var(--chanho-font-size-300);
   font-weight: var(--chanho-font-weight-bold);
 }
 
 .close {
+  flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -68,4 +74,13 @@
   margin: 0 0 var(--chanho-space-200);
   color: var(--chanho-color-text-subtle);
   font-size: var(--chanho-font-size-100);
+}
+
+/* 작은 화면(폰): 여백을 줄여 본문 폭을 확보한다 */
+@media (max-width: 480px) {
+  .content {
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 32px);
+    padding: var(--chanho-space-200);
+  }
 }

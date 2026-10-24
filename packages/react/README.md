@@ -21,9 +21,13 @@ import { Button, TextField, ToastProvider } from "@chanho/react";
 
 다크 모드: `document.documentElement.dataset.theme = "dark"`.
 
-## 컴포넌트 (15)
+## 컴포넌트 (31)
 
-Avatar · Badge · Button · Checkbox · Dropdown · Lozenge · Modal · Radio/RadioGroup ·
-Select · Spinner · Switch · Tabs · TextField · Toast(ToastProvider/useToast) · Tooltip
+Avatar · Badge · Banner · Button · Card · Checkbox · CommandPalette · Comment · ConfirmDialog · ContextMenu ·
+Dropdown · EmptyState · InlineEdit · Lozenge · Modal · PageHeader · ProgressBar · Radio/RadioGroup · Select ·
+SideNav · Skeleton(SkeletonText·SkeletonAvatar·SkeletonListItem) · Spinner · Switch · Table · Tabs · Tag ·
+TextArea · TextField · Toast(ToastProvider/useToast) · Tooltip · TopBar
+
+로딩 표시: 페이지·목록·패널은 `Skeleton` 계열(또는 `Table`의 `loading`)을 쓰고, `Spinner`는 버튼 안처럼 작은 진행 표시에만 쓴다.
 
 peerDependencies: react ^19, react-dom ^19

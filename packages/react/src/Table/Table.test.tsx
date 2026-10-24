@@ -152,4 +152,21 @@ describe("Table", () => {
     expect(screen.getByRole("button", { name: /이름/ })).toBeInTheDocument();
     expect(screen.getByRole("separator", { name: "나이 열 너비 조절" })).toBeInTheDocument();
   });
+
+  it("loading이면 행 대신 스켈레톤 행을 그리고 aria-busy·로딩 문구를 낸다", () => {
+    render(<Table aria-label="사용자" columns={columns} rows={rows} loading loadingRows={3} />);
+    const table = screen.getByRole("table", { name: "사용자" });
+    expect(table).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByRole("status")).toHaveTextContent("불러오는 중");
+    expect(screen.queryByText("김철수")).not.toBeInTheDocument();
+    // 헤더는 그대로 남는다
+    expect(screen.getByRole("columnheader", { name: /이름/ })).toBeInTheDocument();
+    expect(table.querySelectorAll("tbody tr")).toHaveLength(3);
+  });
+
+  it("loading이 끝나면 aria-busy가 사라진다", () => {
+    render(<Table aria-label="사용자" columns={columns} rows={rows} />);
+    expect(screen.getByRole("table")).not.toHaveAttribute("aria-busy");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
 });

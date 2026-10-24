@@ -1,5 +1,42 @@
 # @chanho/react
 
+## 0.13.0
+
+### Minor Changes
+
+공개 API는 **추가만** 했다(기존 프롭 이름·타입 그대로). 화면 겹침·잘림 점검(갤러리 라이트/다크 × 1440/390, 자동 겹침 검사) 결과를 고쳤다.
+
+- 새 컴포넌트
+  - `Skeleton`·`SkeletonText`·`SkeletonAvatar`·`SkeletonListItem` — Atlassian `@atlaskit/skeleton`과 같은 색(`--chanho-color-skeleton`)·쉬머
+    (skeleton ↔ skeleton-subtle 배경색 1.5s 왕복, 움직임 줄이기면 정지). 블록은 장식(`aria-hidden`)이고, 로딩 영역 하나에 `label`을 주면
+    `role="status"` + 숨김 문구로 알린다. 페이지·목록 로딩은 스피너 대신 이것을 쓴다.
+  - `CommandPalette` — 리니어식 ⌘K 팔레트(모달). 그룹·아이콘·단축키 힌트(kbd)·하위 페이지("상태 변경 →")·`filter`(점수 정렬 가능)·
+    `onQueryChange`(서버 검색)·`loading`(스켈레톤)·빈 결과. ↑↓/Home/End/Enter, Esc는 하위 페이지면 뒤로·아니면 닫기, 빈 입력 Backspace는 뒤로.
+    열기 단축키는 소비 앱이 바인딩하고 컴포넌트는 `open`/`onOpenChange`로 제어한다.
+  - `ContextMenu` — 우클릭(포커스 후 Shift+F10·메뉴 키) 메뉴. Radix ContextMenu 기반, 하위 메뉴·체크 항목·단축키 힌트(`aria-keyshortcuts`)·위험 항목.
+    시각은 Dropdown과 같다.
+- `Table`: `loading`·`loadingRows`·`loadingLabel` — 헤더는 두고 행 자리에 스켈레톤, 표는 `aria-busy`. 셀은 `overflow-wrap: anywhere`라
+  끊을 곳 없는 이메일·URL이 옆 열을 한 글자 폭으로 짓누르지 않는다.
+- `Select`
+  - 목록 최대 높이 300px(Atlassian select 기본)과 뷰포트 남은 높이 중 작은 값 + 스크롤, 폭은 트리거 이상·최대 440px, `collisionPadding` 8px로
+    가장자리에서 뒤집기·좌우 이동. 이전에는 옵션이 많으면 목록이 화면 위아래로 넘쳐 잘렸다.
+  - 새 프롭 `searchable`(+`searchPlaceholder`·`noOptionsMessage`) — 목록 위 검색 입력(Atlassian PopupSelect 방식, WAI-ARIA combobox).
+  - `SelectOption.group` — 연달아 같은 group인 옵션을 제목 아래 묶는다.
+  - 선택 표시를 아래 화살표에서 체크 아이콘으로, 긴 옵션·선택값은 한 줄 말줄임 + `title`. 좁은 부모에서는 180px보다 줄어든다.
+- `Dropdown`: 최대 높이 = 뷰포트 남은 높이(넘치면 메뉴 안 스크롤), 최대 폭 800px·뷰포트, 최소 폭 = max(160px, 트리거 폭), `collisionPadding` 8px.
+  긴 라벨 말줄임 + `title`. 새 항목 필드 `checked`(`menuitemcheckbox` + 체크 표시).
+- `InlineEdit`: 확인/취소 버튼을 포털 팝오버로 — 스크롤 컨테이너·모달 본문에 잘리지 않고 아래 공간이 없으면 위로 뒤집힌다. 모달 안에서 Esc가
+  편집 취소와 함께 **모달까지 닫던 문제**를 고쳤다. Tab 순서 인풋 → 저장 → 취소, 끝나면 포커스를 보기 버튼으로 돌린다.
+- `Tooltip`: `collisionPadding` 8px, 긴 단어 줄바꿈.
+- `Modal`: `box-sizing: border-box` — 폰 폭에서 패딩(48px)만큼 화면 밖으로 밀려나던 문제. `100dvh` 높이, 480px 이하에서 여백 축소, 긴 제목 줄바꿈.
+- `Card`: `box-sizing: border-box` — `width: 100%`에 패딩이 더해져 부모 밖으로 50px 넘치던 문제(org-admin 전역 역할·메일 설정·팀 만들기 카드).
+- `Tabs`: 탭이 폭을 넘으면 줄바꿈 대신 가로 스크롤(스크롤바 숨김), 포커스 링은 안쪽 2px.
+- `TopBar`: 720px 이하에서 3열 대칭을 풀어 검색이 남는 폭을 쓰고, 브랜드는 말줄임, 우측 액션은 줄지 않는다(검색 18px로 짓눌리던 문제).
+- `Button`: 문자열 라벨은 좁은 부모에서 말줄임(`max-width: 100%`). `Lozenge` 최대 200px·`Tag` 글자 최대 180px 말줄임(Atlassian 기본값).
+- `Checkbox`·`Radio`·`Switch`: 긴 라벨 옆에서 컨트롤이 7px로 찌그러지던 문제(`flex: none`).
+- `PageHeader`: 좁으면 액션이 제목 아래로 줄바꿈, 브레드크럼 말줄임, 구분자 색 `text.subtlest`(Atlassian). `EmptyState`·`Comment` 액션 줄바꿈·긴 단어 줄바꿈.
+- `Banner`·`Toast` 닫기 버튼 22·20px → 24px(WCAG 2.5.8 타깃 크기).
+
 ## 0.12.0
 
 ### Minor Changes

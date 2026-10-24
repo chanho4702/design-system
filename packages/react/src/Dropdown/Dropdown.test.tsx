@@ -100,4 +100,29 @@ describe("Dropdown", () => {
     await userEvent.click(item);
     expect(onSelect).toHaveBeenCalledTimes(1);
   });
+
+  it("checked가 있는 항목은 menuitemcheckbox로 체크 상태를 알린다", async () => {
+    const onSelect = vi.fn();
+    render(
+      <Dropdown
+        trigger={<button type="button">보기</button>}
+        items={[
+          { label: "완료 항목 보기", checked: true, onSelect },
+          { label: "하위 항목 보기", checked: false },
+        ]}
+      />,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "보기" }));
+    expect(screen.getByRole("menuitemcheckbox", { name: "완료 항목 보기" })).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("menuitemcheckbox", { name: "하위 항목 보기" })).toHaveAttribute("aria-checked", "false");
+    await userEvent.click(screen.getByRole("menuitemcheckbox", { name: "완료 항목 보기" }));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+  });
+
+  it("긴 라벨은 title로 전체 문구를 노출한다", async () => {
+    const long = "아주 긴 한글 메뉴 항목 라벨이 들어가서 말줄임되는 경우";
+    render(<Dropdown trigger={<button type="button">더보기</button>} items={[{ label: long }]} />);
+    await userEvent.click(screen.getByRole("button", { name: "더보기" }));
+    expect(screen.getByRole("menuitem", { name: long }).querySelector("[title]")).toHaveAttribute("title", long);
+  });
 });

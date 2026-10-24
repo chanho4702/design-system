@@ -1,8 +1,8 @@
 /* Atlassian 현행 로젠지(@atlaskit/lozenge 17.0.6 new/lozenge-base): 높이 20px·반경 4px·좌우 4px,
    body-small(12/16)·대문자 변환 없음, subtler 배경 + bolder 텍스트. */
+/* inline-block — 맨 텍스트에도 말줄임이 걸린다(flex 컨테이너의 텍스트는 말줄임이 안 된다) */
 .lozenge {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
   box-sizing: border-box;
   height: 20px;
   padding: var(--chanho-space-25) var(--chanho-space-50);
@@ -12,6 +12,11 @@
   font-weight: var(--chanho-font-weight-regular);
   line-height: var(--chanho-font-lineHeight-50);
   white-space: nowrap;
+  /* Atlassian lozenge maxWidth 기본 200px — 넘치면 말줄임 */
+  max-width: min(200px, 100%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 
 .neutral {

@@ -13,11 +13,19 @@
   font-size: var(--chanho-font-size-75);
   color: var(--chanho-color-text-default);
   overflow: hidden;
+  max-width: 100%;
+  vertical-align: middle;
 }
 
+/* Atlassian tag: 글자 최대 폭 180px(11.25rem), 넘치면 말줄임 */
 .label {
+  min-width: 0;
+  max-width: 180px;
   padding: 0 var(--chanho-space-50);
+  overflow: hidden;
   line-height: var(--chanho-font-lineHeight-50);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .labelLink {
@@ -37,6 +45,7 @@
 }
 
 .remove {
+  flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -89,7 +89,13 @@ export function Button({
           {iconBefore}
         </span>
       )}
-      <span className={styles.label}>{children}</span>
+      <span
+        className={[styles.label, typeof children === "string" ? styles.labelText : null]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {children}
+      </span>
     </button>
   );
 }

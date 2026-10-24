@@ -12,6 +12,8 @@
 }
 
 .circle {
+  /* 긴 라벨 옆에서도 컨트롤이 찌그러지지 않는다 */
+  flex: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -71,6 +73,8 @@
 .label {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
+  overflow-wrap: anywhere;
   gap: var(--chanho-space-50);
   color: var(--chanho-color-text-default);
   font-size: var(--chanho-font-size-100);

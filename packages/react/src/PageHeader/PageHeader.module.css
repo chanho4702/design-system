@@ -16,6 +16,16 @@
   display: flex;
   align-items: center;
   gap: var(--chanho-space-50);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.breadcrumbLink,
+.breadcrumbCurrent {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .breadcrumbLink {
@@ -42,21 +52,26 @@
   color: var(--chanho-color-text-subtle);
 }
 
+/* Atlassian breadcrumbs 구분자: text-subtlest */
 .breadcrumbSep {
-  color: var(--chanho-color-text-disabled);
+  flex: none;
+  color: var(--chanho-color-text-subtlest);
   font-size: var(--chanho-font-size-75);
 }
 
+/* 좁은 폭에서는 액션이 제목 아래로 내려간다(겹침 대신 줄바꿈) */
 .row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--chanho-space-200);
+  gap: var(--chanho-space-100) var(--chanho-space-200);
 }
 
 .title {
   margin: 0;
-  flex: 1;
+  flex: 1 1 240px;
   min-width: 0;
+  overflow-wrap: anywhere;
   font-size: var(--chanho-font-size-400);
   line-height: var(--chanho-font-lineHeight-400);
   font-weight: var(--chanho-font-weight-bold);
@@ -65,8 +80,10 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--chanho-space-100);
+  margin-left: auto;
 }
 
 .bottom {

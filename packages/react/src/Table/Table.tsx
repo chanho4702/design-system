@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import { Skeleton } from "../Skeleton/Skeleton";
 import styles from "./Table.module.css";
 
 export type SortDirection = "asc" | "desc";
@@ -62,7 +63,19 @@ export interface TableProps<Row extends { id: string }> {
   /** 제어형 열 순서(key 배열). 빠진 키는 뒤에 원래 순서로 붙는다 */
   columnOrder?: string[];
   onColumnOrderChange?: (keys: string[]) => void;
+  /**
+   * true면 행 대신 스켈레톤 행을 그린다(헤더는 그대로). 표는 `aria-busy`가 되고 `loadingLabel`을 알린다.
+   * 지라 목록처럼 로딩 중에도 열 구조가 보여 레이아웃이 밀리지 않는다.
+   */
+  loading?: boolean;
+  /** 로딩 중 스켈레톤 행 수. @default 5 */
+  loadingRows?: number;
+  /** 로딩 중 스크린리더 문구. @default '불러오는 중' */
+  loadingLabel?: string;
 }
+
+/** 스켈레톤 셀 너비 — 행마다 조금씩 달라 실제 데이터처럼 보이게 한다. */
+const SKELETON_WIDTHS = ["72%", "56%", "84%", "64%", "48%"];
 
 const MIN_WIDTH = 56;
 
@@ -118,6 +131,9 @@ export function Table<Row extends { id: string }>({
   reorderable = false,
   columnOrder,
   onColumnOrderChange,
+  loading = false,
+  loadingRows = 5,
+  loadingLabel = "불러오는 중",
 }: TableProps<Row>) {
   const [innerWidths, setInnerWidths] = useState<Record<string, number>>({});
   const [innerOrder, setInnerOrder] = useState<string[] | undefined>(undefined);
@@ -218,9 +234,15 @@ export function Table<Row extends { id: string }>({
         .join(" ")}
       style={maxHeight != null ? { maxHeight } : undefined}
     >
+      {loading ? (
+        <span role="status" className={styles.visuallyHidden}>
+          {loadingLabel}
+        </span>
+      ) : null}
       <table
         className={[styles.table, resizable ? styles.tableFixed : null].filter(Boolean).join(" ")}
         aria-label={ariaLabel}
+        aria-busy={loading || undefined}
       >
         {resizable ? (
           <colgroup>
@@ -332,7 +354,21 @@ export function Table<Row extends { id: string }>({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
+          {loading
+            ? Array.from({ length: Math.max(1, loadingRows) }, (_, r) => (
+                <tr key={`skeleton-${r}`} className={styles.row} aria-hidden="true">
+                  {ordered.map((col, c) => (
+                    <td key={col.key} className={[styles.td, alignClass(col.align)].filter(Boolean).join(" ")}>
+                      <Skeleton
+                        variant="text"
+                        width={SKELETON_WIDTHS[(r + c) % SKELETON_WIDTHS.length]}
+                        className={col.align === "right" ? styles.skeletonEnd : col.align === "center" ? styles.skeletonCenter : undefined}
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            : rows.map((row) => (
             <tr
               key={row.id}
               className={[

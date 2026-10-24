@@ -37,6 +37,8 @@ export function Tooltip({
             className={[styles.content, className].filter(Boolean).join(" ")}
             side={side}
             sideOffset={6}
+            // 화면 가장자리에서 8px 띄우고, 공간이 없으면 반대편으로 뒤집는다
+            collisionPadding={8}
           >
             {content}
           </RadixTooltip.Content>

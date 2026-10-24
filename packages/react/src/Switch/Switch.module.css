@@ -8,6 +8,8 @@
 /* Atlassian 현행 토글(@atlaskit/toggle 17.3.5 regular): 트랙 32×16·neutral-bold, 켜짐 success-bold(초록),
    썸 12px·2px 여백·icon-inverse. */
 .track {
+  /* 긴 라벨 옆에서도 컨트롤이 찌그러지지 않는다 */
+  flex: none;
   position: relative;
   width: 32px;
   height: 16px;
@@ -67,6 +69,8 @@
 .label {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
+  overflow-wrap: anywhere;
   gap: var(--chanho-space-50);
   color: var(--chanho-color-text-default);
   font-size: var(--chanho-font-size-100);

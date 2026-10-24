@@ -96,4 +96,109 @@ describe("Select", () => {
     expect(trigger).toHaveTextContent("낮음");
     expect(container.querySelectorAll("[data-icon]")).toHaveLength(0);
   });
+
+  it("group이 있는 옵션은 그룹 제목 아래 묶이고 제목은 선택지가 아니다", async () => {
+    render(
+      <Select
+        label="담당자"
+        placeholder="선택"
+        options={[
+          { value: "me", label: "나", group: "추천" },
+          { value: "a", label: "김철수", group: "전체" },
+          { value: "b", label: "이영희", group: "전체" },
+        ]}
+      />,
+    );
+    await userEvent.click(screen.getByRole("combobox", { name: "담당자" }));
+    expect(screen.getAllByRole("option")).toHaveLength(3);
+    expect(screen.getByText("추천")).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "전체" })).toBeInTheDocument();
+  });
+
+  it("긴 옵션 라벨은 title로 전체 문구를 노출한다", async () => {
+    const long = "아주 긴 한글 옵션 라벨이 들어가서 말줄임되는 경우";
+    render(<Select label="상태" options={[{ value: "x", label: long }]} placeholder="선택" />);
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    expect(screen.getByRole("option", { name: long })).toHaveAttribute("title", long);
+  });
+});
+
+describe("Select searchable", () => {
+  const MANY = [
+    { value: "todo", label: "할 일" },
+    { value: "doing", label: "진행 중" },
+    { value: "review", label: "검토 중", disabled: true },
+    { value: "done", label: "완료" },
+  ];
+
+  it("열면 검색 입력에 포커스가 가고, 입력한 글자로 옵션이 걸러진다", async () => {
+    render(<Select label="상태" options={MANY} placeholder="선택" searchable />);
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    const search = screen.getByRole("combobox", { name: "상태 검색" });
+    expect(search).toHaveFocus();
+    expect(screen.getAllByRole("option")).toHaveLength(4);
+    await userEvent.type(search, "중");
+    expect(screen.getAllByRole("option").map((o) => o.textContent)).toEqual(["진행 중", "검토 중"]);
+  });
+
+  it("↓·Enter로 고르면 onValueChange가 불리고 트리거에 값이 남으며 포커스가 트리거로 돌아온다", async () => {
+    const onValueChange = vi.fn();
+    render(<Select label="상태" options={MANY} placeholder="선택" searchable onValueChange={onValueChange} />);
+    const trigger = screen.getByRole("combobox", { name: "상태" });
+    await userEvent.click(trigger);
+    await userEvent.keyboard("{ArrowDown}{Enter}");
+    expect(onValueChange).toHaveBeenCalledWith("doing");
+    expect(trigger).toHaveTextContent("진행 중");
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("비활성 옵션은 키보드 이동에서 건너뛰고 End는 마지막 활성 옵션으로 간다", async () => {
+    const onValueChange = vi.fn();
+    render(<Select label="상태" options={MANY} searchable onValueChange={onValueChange} defaultValue="doing" />);
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    const search = screen.getByRole("combobox", { name: "상태 검색" });
+    // 현재 값(진행 중)에서 시작 → ↓는 비활성 '검토 중'을 건너뛰고 '완료'
+    await userEvent.keyboard("{ArrowDown}");
+    expect(search).toHaveAttribute("aria-activedescendant", screen.getByRole("option", { name: "완료" }).id);
+    await userEvent.keyboard("{Home}");
+    expect(search).toHaveAttribute("aria-activedescendant", screen.getByRole("option", { name: "할 일" }).id);
+    await userEvent.keyboard("{End}{Enter}");
+    expect(onValueChange).toHaveBeenCalledWith("done");
+  });
+
+  it("현재 값 옵션은 aria-selected이고, 결과가 없으면 안내 문구를 보인다", async () => {
+    render(<Select label="상태" options={MANY} searchable defaultValue="done" />);
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    expect(screen.getByRole("option", { name: "완료" })).toHaveAttribute("aria-selected", "true");
+    await userEvent.type(screen.getByRole("combobox", { name: "상태 검색" }), "없는값");
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
+    expect(screen.getByText("일치하는 항목이 없습니다")).toBeInTheDocument();
+  });
+
+  it("Esc로 닫으면 선택 없이 트리거로 포커스가 돌아온다", async () => {
+    const onValueChange = vi.fn();
+    render(<Select label="상태" options={MANY} searchable onValueChange={onValueChange} />);
+    const trigger = screen.getByRole("combobox", { name: "상태" });
+    await userEvent.click(trigger);
+    await userEvent.keyboard("{Escape}");
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("트리거에서 ↓를 누르면 목록이 열린다", async () => {
+    render(<Select label="상태" options={MANY} searchable />);
+    screen.getByRole("combobox", { name: "상태" }).focus();
+    await userEvent.keyboard("{ArrowDown}");
+    expect(screen.getByRole("listbox", { name: "상태" })).toBeInTheDocument();
+  });
+
+  it("disabled 옵션은 클릭해도 선택되지 않는다", async () => {
+    const onValueChange = vi.fn();
+    render(<Select label="상태" options={MANY} searchable onValueChange={onValueChange} />);
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    await userEvent.click(screen.getByRole("option", { name: "검토 중" }));
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
 });

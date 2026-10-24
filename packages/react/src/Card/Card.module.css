@@ -1,5 +1,6 @@
 .card {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   text-align: left;
   background: var(--chanho-color-background-surface);
@@ -58,6 +59,8 @@
 .title {
   margin: 0;
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: var(--chanho-font-size-200);
   line-height: var(--chanho-font-lineHeight-200);
   font-weight: var(--chanho-font-weight-semibold);
@@ -65,5 +68,6 @@
 
 .actions {
   display: flex;
+  flex: none;
   gap: var(--chanho-space-50);
 }

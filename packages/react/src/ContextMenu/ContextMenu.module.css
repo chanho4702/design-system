@@ -1,0 +1,38 @@
+/* 표면·항목은 Dropdown.module.css를 공유한다. 여기는 우클릭 메뉴에만 있는 것 — 뷰포트 한계·단축키·하위 메뉴 표시. */
+.content {
+  max-width: min(800px, var(--radix-context-menu-content-available-width, 800px));
+  max-height: var(--radix-context-menu-content-available-height, calc(100vh - 16px));
+}
+
+/* 단축키 힌트 — 오른쪽 끝, 옅은 글자(Atlassian 메뉴 elemAfter 자리) */
+.shortcut {
+  flex: none;
+  margin-left: auto;
+  padding-left: var(--chanho-space-300);
+  color: var(--chanho-color-text-subtlest);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-50);
+}
+
+/* 하위 메뉴 화살표 */
+.subIcon {
+  display: inline-flex;
+  flex: none;
+  margin-left: auto;
+  padding-left: var(--chanho-space-100);
+  color: var(--chanho-color-text-subtle);
+}
+
+.shortcut + .subIcon {
+  margin-left: 0;
+}
+
+[data-state="open"] > .subIcon {
+  color: inherit;
+}
+
+/* 하위 메뉴가 열린 동안 그 트리거를 강조로 남긴다 */
+.content > [data-state="open"] {
+  background: var(--chanho-color-background-neutral);
+}

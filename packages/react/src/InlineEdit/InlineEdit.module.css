@@ -65,10 +65,8 @@
   outline: none;
 }
 
+/* 확인/취소 — 포털 팝오버(인풋 오른쪽 아래, 공간이 없으면 위) */
 .controls {
-  position: absolute;
-  right: 0;
-  top: calc(100% + var(--chanho-space-50));
   display: flex;
   gap: var(--chanho-space-50);
   z-index: var(--chanho-z-popover);

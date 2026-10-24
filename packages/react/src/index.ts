@@ -10,10 +10,14 @@ export { Card } from "./Card/Card";
 export type { CardProps } from "./Card/Card";
 export { Checkbox } from "./Checkbox/Checkbox";
 export type { CheckboxProps } from "./Checkbox/Checkbox";
+export { CommandPalette } from "./CommandPalette/CommandPalette";
+export type { CommandItem, CommandPaletteProps } from "./CommandPalette/CommandPalette";
 export { Comment } from "./Comment/Comment";
 export type { CommentAction, CommentProps } from "./Comment/Comment";
 export { ConfirmDialog } from "./ConfirmDialog/ConfirmDialog";
 export type { ConfirmDialogProps } from "./ConfirmDialog/ConfirmDialog";
+export { ContextMenu } from "./ContextMenu/ContextMenu";
+export type { ContextMenuItem, ContextMenuProps } from "./ContextMenu/ContextMenu";
 export { Dropdown } from "./Dropdown/Dropdown";
 export type { DropdownItem, DropdownProps } from "./Dropdown/Dropdown";
 export { EmptyState } from "./EmptyState/EmptyState";
@@ -34,6 +38,13 @@ export { Select } from "./Select/Select";
 export type { SelectOption, SelectProps } from "./Select/Select";
 export { SideNav } from "./SideNav/SideNav";
 export type { SideNavItem, SideNavProps } from "./SideNav/SideNav";
+export { Skeleton, SkeletonAvatar, SkeletonListItem, SkeletonText } from "./Skeleton/Skeleton";
+export type {
+  SkeletonAvatarProps,
+  SkeletonListItemProps,
+  SkeletonProps,
+  SkeletonTextProps,
+} from "./Skeleton/Skeleton";
 export { Spinner } from "./Spinner/Spinner";
 export type { SpinnerProps } from "./Spinner/Spinner";
 export { Switch } from "./Switch/Switch";

@@ -5,9 +5,17 @@
   font-family: var(--chanho-font-family-sans);
 }
 
+/* 탭이 많아 폭을 넘으면 줄바꿈 대신 가로로 스크롤한다(스크롤바는 숨김 — ←→로 이동하면 포커스 탭이 보이게 굴러간다) */
 .list {
   position: relative;
   display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
 }
 
 .list::before {
@@ -22,6 +30,8 @@
 
 .trigger {
   position: relative;
+  flex: none;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: var(--chanho-space-75);
@@ -50,9 +60,10 @@
   border-bottom-color: var(--chanho-color-border-default);
 }
 
+/* 스크롤 목록 안이라 바깥 링은 잘린다 — 안쪽 2px 링 */
 .trigger:focus-visible {
   outline: none;
-  box-shadow: var(--chanho-focus-ring);
+  box-shadow: inset 0 0 0 2px var(--chanho-color-border-focused);
 }
 
 .trigger[data-state="active"] {

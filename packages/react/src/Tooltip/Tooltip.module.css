@@ -1,7 +1,9 @@
 /* Atlassian 툴팁(@atlaskit/tooltip 24.4.2 tooltip-container): neutral-bold 배경·반경 4px·패딩 4px 6px,
    body-small 12/16, 최대 폭 240px, 그림자 없음. */
 .content {
-  max-width: 240px;
+  max-width: min(240px, var(--radix-tooltip-content-available-width, 240px));
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
   padding: var(--chanho-space-50) var(--chanho-space-75);
   border-radius: var(--chanho-radius-small);
   background: var(--chanho-color-background-neutral-bold);

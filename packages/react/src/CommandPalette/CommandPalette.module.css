@@ -1,0 +1,238 @@
+/* 명령 팔레트 — 표면은 Dropdown/모달과 같은 오버레이 체계(surface-overlay·반경 8·shadow-overlay).
+   위치는 리니어·지라 검색처럼 화면 위쪽 1/5, 폭 640px. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--chanho-color-blanket);
+  z-index: var(--chanho-z-blanket);
+}
+
+.content {
+  position: fixed;
+  top: max(var(--chanho-space-200), 15vh);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(480px, calc(100dvh - 15vh - 16px));
+  overflow: hidden;
+  border-radius: var(--chanho-radius-large);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-overlay);
+  color: var(--chanho-color-text-default);
+  font-family: var(--chanho-font-family-sans);
+  z-index: var(--chanho-z-modal);
+}
+
+.content:focus {
+  outline: none;
+}
+
+.searchRow {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  padding: 0 var(--chanho-space-200);
+  border-bottom: 1px solid var(--chanho-color-border-default);
+}
+
+.searchIcon {
+  display: inline-flex;
+  flex: none;
+  color: var(--chanho-color-text-subtle);
+}
+
+/* 하위 페이지 위치 — 입력 앞 작은 칩 */
+.crumb {
+  flex: none;
+  max-width: 40%;
+  padding: var(--chanho-space-25) var(--chanho-space-75);
+  overflow: hidden;
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-50);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--chanho-color-text-default);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-200);
+}
+
+.input::placeholder {
+  color: var(--chanho-color-text-subtlest);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--chanho-space-50);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.group + .group {
+  margin-top: var(--chanho-space-50);
+}
+
+/* 그룹 제목 — Atlassian 메뉴 그룹 제목과 같은 12/16 · bold · text-subtle */
+.groupLabel {
+  padding: var(--chanho-space-100) var(--chanho-space-150) var(--chanho-space-50);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-bold);
+  line-height: var(--chanho-font-lineHeight-50);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  min-height: 40px;
+  padding: 0 var(--chanho-space-150);
+  border-radius: var(--chanho-radius-small);
+  color: var(--chanho-color-text-default);
+  font-size: var(--chanho-font-size-100);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 강조 — Atlassian 메뉴 hover와 같은 neutral 틴트, 키보드 위치는 왼쪽 2px 막대로도 보인다(색만으로 구분하지 않음) */
+.item[data-highlighted] {
+  background: var(--chanho-color-background-neutral);
+  box-shadow: inset 2px 0 0 var(--chanho-color-border-selected);
+}
+
+.item[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--chanho-color-text-subtle);
+}
+
+.label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--chanho-color-text-subtlest);
+  font-size: var(--chanho-font-size-75);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.keys {
+  display: inline-flex;
+  flex: none;
+  gap: var(--chanho-space-25);
+  margin-left: auto;
+}
+
+.description + .keys {
+  margin-left: 0;
+}
+
+/* 키 캡 — 옅은 테두리 상자 */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--chanho-space-50);
+  border: 1px solid var(--chanho-color-border-default);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-surface);
+  color: var(--chanho-color-text-subtle);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-50);
+  line-height: 1;
+}
+
+.chevron {
+  display: inline-flex;
+  flex: none;
+  margin-left: auto;
+  color: var(--chanho-color-text-subtle);
+}
+
+.keys + .chevron {
+  margin-left: 0;
+}
+
+.empty {
+  margin: 0;
+  padding: var(--chanho-space-300) var(--chanho-space-200);
+  color: var(--chanho-color-text-subtlest);
+  font-size: var(--chanho-font-size-100);
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: var(--chanho-space-200);
+  padding: var(--chanho-space-100) var(--chanho-space-200);
+  border-top: 1px solid var(--chanho-color-border-default);
+  color: var(--chanho-color-text-subtlest);
+  font-size: var(--chanho-font-size-75);
+}
+
+.footer .kbd + .kbd {
+  margin-left: var(--chanho-space-25);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .content {
+    top: var(--chanho-space-100);
+    width: calc(100vw - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+
+  .description {
+    display: none;
+  }
+}

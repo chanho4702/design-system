@@ -140,3 +140,8 @@ export const NodeHeader: Story = {
     );
   },
 };
+
+/** 로딩 — 헤더는 그대로 두고 행 자리에 스켈레톤(스피너 대신). 끝나도 레이아웃이 밀리지 않는다. */
+export const Loading: Story = {
+  args: { "aria-label": "팀원", columns, rows: [], loading: true, loadingRows: 4 },
+};

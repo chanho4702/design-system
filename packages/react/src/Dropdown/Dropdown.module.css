@@ -1,6 +1,12 @@
+/* Atlassian 드롭다운 메뉴(@atlaskit/dropdown-menu 21.0.2): 최소 160px, 최대 폭 800px, 최대 높이 calc(100vh - 16px).
+   여기서는 트리거보다 좁아지지 않게 하고, 폭·높이는 뷰포트 남은 공간까지만 — 넘치면 메뉴 안에서 스크롤된다. */
 .content {
-  overflow: hidden;
-  min-width: 160px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  min-width: max(160px, var(--radix-dropdown-menu-trigger-width, 160px));
+  max-width: min(800px, var(--radix-dropdown-menu-content-available-width, 800px));
+  max-height: var(--radix-dropdown-menu-content-available-height, calc(100vh - 16px));
   padding: var(--chanho-space-50);
   border-radius: var(--chanho-radius-large);
   background: var(--chanho-color-background-surface-overlay);
@@ -33,7 +39,25 @@
 
 .itemIcon {
   display: inline-flex;
+  flex: none;
   margin-right: var(--chanho-space-100);
+}
+
+/* 한 줄 라벨 — 말줄임 */
+.itemLabelText {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 체크 항목의 선택 표시 */
+.check {
+  display: inline-flex;
+  flex: none;
+  margin-left: var(--chanho-space-100);
+  color: var(--chanho-color-text-selected);
 }
 
 .separator {
@@ -77,13 +101,17 @@
 
 .itemText {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
 
 .itemLabel {
+  overflow: hidden;
   font-weight: var(--chanho-font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .itemDescription {

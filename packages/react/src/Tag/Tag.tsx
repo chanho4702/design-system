@@ -16,11 +16,13 @@ export interface TagProps {
  */
 export function Tag({ label, href, onRemove, className }: TagProps) {
   const body = href ? (
-    <a className={[styles.label, styles.labelLink].filter(Boolean).join(" ")} href={href}>
+    <a className={[styles.label, styles.labelLink].filter(Boolean).join(" ")} href={href} title={label}>
       {label}
     </a>
   ) : (
-    <span className={styles.label}>{label}</span>
+    <span className={styles.label} title={label}>
+      {label}
+    </span>
   );
 
   return (

@@ -18,6 +18,7 @@
 .header {
   padding: var(--chanho-space-200) var(--chanho-space-150) var(--chanho-space-100);
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -25,6 +26,7 @@
   margin-top: auto;
   padding: var(--chanho-space-150);
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

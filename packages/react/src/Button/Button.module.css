@@ -9,6 +9,7 @@
   font-size: var(--chanho-font-size-100);
   font-weight: var(--chanho-font-weight-medium);
   cursor: pointer;
+  max-width: 100%;
   white-space: nowrap;
   transition: background-color var(--chanho-transition-base), border-color var(--chanho-transition-base),
     box-shadow var(--chanho-transition-base);
@@ -186,10 +187,20 @@
 
 .icon {
   display: inline-flex;
+  flex: none;
 }
 
 .label {
   display: inline-flex;
+  min-width: 0;
+}
+
+/* 문자열 라벨 — 좁은 컨테이너에서 버튼 밖으로 넘치지 않고 말줄임된다 */
+.labelText {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @keyframes button-spin {

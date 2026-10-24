@@ -1,0 +1,83 @@
+/* Atlassian 스켈레톤(@atlaskit/skeleton 4.4.4): 배경 --ds-skeleton, 반경 기본 radius-small,
+   쉬머는 skeleton ↔ skeleton-subtle 배경색을 1.5s linear infinite alternate로 왕복한다. */
+.skeleton {
+  display: block;
+  flex: none;
+  max-width: 100%;
+  height: var(--chanho-space-200);
+  border-radius: var(--chanho-radius-small);
+  background-color: var(--chanho-color-skeleton);
+}
+
+.rect {
+  width: 100%;
+}
+
+/* 본문 한 줄 — 12px 막대, 줄 간격은 묶음(.textGroup)이 행간 22px에 맞춘다 */
+.text {
+  width: 100%;
+  height: var(--chanho-space-150);
+}
+
+.circle {
+  border-radius: var(--chanho-radius-full);
+}
+
+.shimmer {
+  animation: skeleton-shimmer 1.5s linear infinite alternate;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-color: var(--chanho-color-skeleton);
+  }
+
+  to {
+    background-color: var(--chanho-color-skeleton-subtle);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    animation: none;
+  }
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--chanho-space-100) + var(--chanho-space-25));
+  width: 100%;
+  padding-block: var(--chanho-space-50);
+}
+
+/* @atlaskit/menu SkeletonItem: 높이 40px, 좌우 20px, 앞머리 20px + 14px 간격, 글 막대 9px·알약 */
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-150);
+  min-height: var(--chanho-space-500);
+  padding: 0 var(--chanho-space-250);
+  box-sizing: border-box;
+}
+
+.listItemTall {
+  min-height: var(--chanho-space-600);
+}
+
+.listText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--chanho-space-75);
+  min-width: 0;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
