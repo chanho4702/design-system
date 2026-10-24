@@ -21,7 +21,12 @@ describe("buildCss", () => {
 
   it('다크 토큰은 [data-theme="dark"] 블록으로 출력한다', () => {
     const css = buildCss({}, {}, { "color.text.default": "#EEEEEE" });
-    expect(css).toContain('[data-theme="dark"] {\n  --chanho-color-text-default: #EEEEEE;\n}');
+    expect(css).toContain('[data-theme="dark"] {\n  color-scheme: dark;\n  --chanho-color-text-default: #EEEEEE;\n}');
+  });
+
+  it("테마마다 color-scheme을 선언해 브라우저 기본 컨트롤도 테마를 따른다", () => {
+    const css = buildCss({}, { "color.text.default": "#111111" }, {});
+    expect(css).toContain(":root {\n  color-scheme: light;\n");
   });
 });
 

@@ -1,5 +1,11 @@
 # @chanho/tokens
 
+## 0.5.1
+
+### Patch Changes
+
+- 테마 블록에 `color-scheme`(`:root` light, `[data-theme="dark"]` dark) 선언 — Atlassian 테마 CSS와 같은 방식. 다크에서 체크박스·스크롤바·date 입력 등 브라우저 기본 컨트롤이 흰색으로 남던 문제.
+
 ## 0.5.0
 
 ### Minor Changes

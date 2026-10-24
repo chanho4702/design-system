@@ -18,9 +18,11 @@ function toVarName(key: string): string {
   return PREFIX + key.replaceAll(".", "-");
 }
 
-function block(selector: string, tokens: Record<string, string>): string {
+function block(selector: string, tokens: Record<string, string>, colorScheme: "light" | "dark"): string {
   const lines = Object.entries(tokens).map(([key, value]) => `  ${toVarName(key)}: ${value};`);
-  return `${selector} {\n${lines.join("\n")}\n}`;
+  // Atlassian 테마 CSS처럼 테마마다 color-scheme을 선언한다 — 체크박스·스크롤바·date 입력 같은
+  // 브라우저 기본 컨트롤이 다크에서 흰색으로 남지 않게.
+  return `${selector} {\n  color-scheme: ${colorScheme};\n${lines.join("\n")}\n}`;
 }
 
 /** 정적 토큰 + 라이트 테마는 :root에, 다크 테마는 [data-theme="dark"]에 출력한다. */
@@ -29,5 +31,5 @@ export function buildCss(
   light: Record<string, string>,
   dark: Record<string, string>,
 ): string {
-  return [block(":root", { ...staticTokens, ...light }), block('[data-theme="dark"]', dark)].join("\n\n") + "\n";
+  return [block(":root", { ...staticTokens, ...light }, "light"), block('[data-theme="dark"]', dark, "dark")].join("\n\n") + "\n";
 }
