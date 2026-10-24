@@ -1,5 +1,14 @@
 # @chanho/tokens
 
+## 0.6.0
+
+### Minor Changes
+
+- 스켈레톤 시맨틱 토큰 추가(라이트·다크 동시, 근거 `@atlaskit/tokens` 20.7.0 `atlassian-light`/`atlassian-dark`):
+  `color.skeleton`(`--chanho-color-skeleton`, 라이트 #0515240F · 다크 #CECED912),
+  `color.skeleton-subtle`(`--chanho-color-skeleton-subtle`, 라이트 #17171708 · 다크 #BDBDBD0A).
+  기존 변수는 바꾸거나 지우지 않았다.
+
 ## 0.5.1
 
 ### Patch Changes

@@ -64,6 +64,9 @@ export const themes = {
     "color.background.disabled": "#0515240F",
     "color.background.inverse": palette.gray[900],
     "color.blanket": "#050C1F75",
+    // 스켈레톤 — Atlassian `--ds-skeleton`/`--ds-skeleton-subtle`(atlassian-light). 쉬머는 두 값 사이를 오간다.
+    "color.skeleton": "#0515240F",
+    "color.skeleton-subtle": "#17171708",
     "color.text.default": palette.gray[900],
     "color.text.subtle": palette.gray[700],
     "color.text.subtlest": palette.gray[600],
@@ -137,6 +140,8 @@ export const themes = {
     "color.background.disabled": "#E3E4F21F",
     "color.background.inverse": palette.darkGray[1000],
     "color.blanket": "#10121499",
+    "color.skeleton": "#CECED912",
+    "color.skeleton-subtle": "#BDBDBD0A",
     "color.text.default": palette.darkGray[1000],
     "color.text.subtle": palette.darkGray[800],
     "color.text.subtlest": palette.darkGray[700],
