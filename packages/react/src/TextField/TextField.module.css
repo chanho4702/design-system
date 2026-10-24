@@ -13,8 +13,11 @@
   line-height: var(--chanho-font-lineHeight-50);
 }
 
+/* 외곽 40px(테두리 포함) — Atlassian textfield(@atlaskit/textfield 10.2.6: 1+1+8+20+8+1+1)·Select 트리거와 같은 높이.
+   이전에는 content-box 36px + 테두리 2px = 38px이라 Select(36px)와 어긋났다. */
 .input {
-  height: 36px;
+  box-sizing: border-box;
+  height: 40px;
   padding: 0 var(--chanho-space-75);
   border: 1px solid var(--chanho-color-border-input);
   border-radius: var(--chanho-radius-medium);

@@ -52,4 +52,16 @@ describe("Avatar", () => {
     const auto = render(<Avatar name="문서 공간" color="auto" />).container.firstChild as HTMLElement;
     expect(auto.className).not.toBe(neutral.className);
   });
+
+  it("small에서 한글 두 단어 이름은 원 밖으로 넘치지 않게 첫 글자 하나만 보여준다", () => {
+    render(<Avatar name="개발 위키" size="small" />);
+    expect(screen.getByRole("img", { name: "개발 위키" })).toHaveTextContent(/^개$/);
+  });
+
+  it("medium 이상에서는 한글도 두 글자 이니셜을 유지하고, small 라틴 이니셜은 두 글자다", () => {
+    const { rerender } = render(<Avatar name="개발 위키" />);
+    expect(screen.getByRole("img", { name: "개발 위키" })).toHaveTextContent(/^개위$/);
+    rerender(<Avatar name="chanho kim" size="small" />);
+    expect(screen.getByRole("img", { name: "chanho kim" })).toHaveTextContent(/^CK$/);
+  });
 });

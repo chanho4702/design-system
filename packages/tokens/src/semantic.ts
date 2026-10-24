@@ -85,7 +85,9 @@ export const themes = {
     "color.text.accent-teal": palette.teal[600],
     "color.text.link": palette.blue[500],
     "color.text.link-hovered": palette.blue[600],
-    "color.text.selected": palette.blue[500],
+    // AA: #1868DB는 selected-hovered(#CFE1FD) 위에서 3.92:1 — 한 단계 진한 #1558BC(5.02:1, selected 위 5.90:1).
+    //     Atlassian 원값보다 한 단계 진하다(text-information과 같은 색).
+    "color.text.selected": palette.blue[600],
     "color.border.default": "#0B120E24",
     "color.border.bold": palette.gray[500],
     "color.border.accent-gray-subtle": palette.gray[300],

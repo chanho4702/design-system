@@ -23,11 +23,17 @@ export interface AvatarProps extends ComponentPropsWithRef<"span"> {
 
 const TINTS = ["blue", "green", "orange", "red", "teal"] as const;
 
-function initialsOf(name: string): string {
+/** 한글·한자·가나 — 한 글자 폭이 라틴 대문자의 1.5배쯤이라 24px 원에 두 글자가 들어가지 않는다. */
+const WIDE_SCRIPT = /[\u1100-\u11FF\u3040-\u30FF\u3130-\u318F\u3400-\u9FFF\uAC00-\uD7AF\uF900-\uFAFF]/;
+
+function initialsOf(name: string, size: "small" | "medium" | "large"): string {
   const words = name.trim().split(/\s+/).filter(Boolean);
   if (words.length === 0) return "";
-  if (words.length === 1) return words[0].slice(0, 1).toUpperCase();
-  return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  const first = Array.from(words[0])[0];
+  if (words.length === 1) return first.toUpperCase();
+  const initials = (first + Array.from(words[words.length - 1])[0]).toUpperCase();
+  // small(24px)에 한글 두 글자("개위")를 넣으면 원 밖으로 넘친다 — 첫 글자 하나만.
+  return size === "small" && WIDE_SCRIPT.test(initials) ? first : initials;
 }
 
 /** name을 안정적인 인덱스로 해시해 틴트를 고른다. 렌더 간·세션 간 결정론적. */
@@ -58,7 +64,7 @@ export function Avatar({ name, src, size = "medium", color = "neutral", classNam
   }
   return (
     <span role="img" aria-label={name} className={cls} {...rest}>
-      {initialsOf(name)}
+      {initialsOf(name, size)}
     </span>
   );
 }

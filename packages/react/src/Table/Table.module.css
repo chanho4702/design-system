@@ -110,8 +110,12 @@
   color: var(--chanho-color-text-default);
   line-height: var(--chanho-font-lineHeight-100);
   vertical-align: middle;
-  /* 이메일·URL처럼 끊을 곳 없는 긴 값이 열 하나를 끝없이 넓혀 옆 열을 한 글자 폭으로 짓누르지 않게 */
-  overflow-wrap: anywhere;
+  /* 한글은 어절 단위로 줄바꿈(keep-all), 긴 단어는 넘칠 때만 끊는다(break-word — 열 최소 폭을 줄이지 않는다).
+     0.13.0의 anywhere는 열이 많은 좁은 화면에서 모든 열을 한 글자 폭까지 짓눌러 "김/찬/호"·"사/람"·날짜가 글자마다 끊겼다.
+     이제 열이 단어보다 좁아지지 않고, 표가 폭을 넘으면 래퍼 안에서 가로로 스크롤된다.
+     이메일·URL처럼 아무 데서나 끊어도 되는 값은 소비자가 셀 안에서 overflow-wrap: anywhere를 준다. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .row:last-child .td {

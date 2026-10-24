@@ -128,8 +128,8 @@ export function TeamsScreen() {
 
   const memberColumns = useMemo<TableColumn<TeamMember>[]>(
     () => [
-      { key: "displayName", header: "이름" },
-      { key: "email", header: "이메일", render: (row) => row.email ?? "-" },
+      { key: "displayName", header: "이름", render: (row) => <span className={styles.personName}>{row.displayName}</span> },
+      { key: "email", header: "이메일", render: (row) => <span className={styles.breakAnywhere}>{row.email ?? "-"}</span> },
       {
         key: "role",
         header: "역할",

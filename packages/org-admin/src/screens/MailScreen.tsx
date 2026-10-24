@@ -256,7 +256,7 @@ export function MailScreen() {
 
   const columns = useMemo<TableColumn<MailLogEntry>[]>(
     () => [
-      { key: "to", header: "받는 주소" },
+      { key: "to", header: "받는 주소", render: (row) => <span className={styles.breakAnywhere}>{row.to}</span> },
       { key: "subject", header: "제목" },
       { key: "source", header: "출처", render: (row) => mailSourceLabel(row.source) },
       { key: "status", header: "상태", render: (row) => <MailStatusLozenge status={row.status} /> },

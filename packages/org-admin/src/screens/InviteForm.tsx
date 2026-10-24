@@ -86,7 +86,7 @@ export function InviteForm({ onClose, onCreated, initialGrants }: InviteFormProp
   };
 
   const resultColumns: TableColumn<Invitation>[] = [
-    { key: "email", header: "이메일" },
+    { key: "email", header: "이메일", render: (row) => <span className={styles.breakAnywhere}>{row.email}</span> },
     {
       key: "status",
       header: "상태",

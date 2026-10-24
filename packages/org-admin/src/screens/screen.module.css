@@ -218,3 +218,18 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* 표의 사람 이름 칸 — 최소 5em(한글 이름·"구성원 12" 정도)은 한 줄로 지키고, 그보다 긴 이름만 줄바꿈한다. */
+.personName {
+  display: inline-block;
+  min-width: 5em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 이메일·주소 칸 — 보통 길이(12em)는 한 줄, 그보다 긴 주소는 아무 데서나 끊어 표 폭을 지킨다. */
+.breakAnywhere {
+  display: inline-block;
+  min-width: 12em;
+  overflow-wrap: anywhere;
+}

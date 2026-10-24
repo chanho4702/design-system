@@ -22,9 +22,9 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 | 패키지 | 버전 | 발행 이름(GitHub Packages) | 설명 |
 |---|---|---|---|
-| [`@chanho/tokens`](packages/tokens) | 0.6.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
-| [`@chanho/react`](packages/react) | 0.13.0 | `@chanho4702/react` | React 19 컴포넌트 31종 — Radix UI 기반 동작 + 토큰 스타일링 |
-| [`@chanho/org-admin`](packages/org-admin) | 0.3.1 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
+| [`@chanho/tokens`](packages/tokens) | 0.6.1 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
+| [`@chanho/react`](packages/react) | 0.13.1 | `@chanho4702/react` | React 19 컴포넌트 31종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/org-admin`](packages/org-admin) | 0.3.2 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
 
 세 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
 
@@ -103,9 +103,9 @@ GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트�
 ```jsonc
 // package.json — 버전은 위 패키지 표(또는 태그)에서 고른다
 "dependencies": {
-  "@chanho/tokens":    "npm:@chanho4702/tokens@0.6.0",
-  "@chanho/react":     "npm:@chanho4702/react@0.13.0",
-  "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.1"   // 조직 관리 화면이 필요할 때만
+  "@chanho/tokens":    "npm:@chanho4702/tokens@0.6.1",
+  "@chanho/react":     "npm:@chanho4702/react@0.13.1",
+  "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.2"   // 조직 관리 화면이 필요할 때만
 }
 ```
 

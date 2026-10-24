@@ -113,7 +113,7 @@ export function GlobalRolesScreen() {
         header: "대상 종류",
         render: (row) => (row.subjectType === "TEAM" ? "팀" : "사용자"),
       },
-      { key: "subjectId", header: "대상", render: (row) => nameOf(row) },
+      { key: "subjectId", header: "대상", render: (row) => <span className={styles.personName}>{nameOf(row)}</span> },
       {
         key: "role",
         header: "역할",

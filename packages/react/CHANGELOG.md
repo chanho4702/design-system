@@ -1,5 +1,19 @@
 # @chanho/react
 
+## 0.13.1
+
+### Patch Changes
+
+- 입력류 높이를 외곽 40px 하나로 — `TextField`(content-box 36 + 테두리 = 38px)와 `Select` 트리거(36px)가 어긋났다.
+  근거: `@atlaskit/textfield` 10.2.6(테두리 1 + 안쪽 1 + 패딩 8 + 행간 20 + 8 + 1 + 1 = 40px), react-select control 최소 40px.
+  `TextField` 입력은 `box-sizing: border-box`.
+- `Table` 셀 줄바꿈: `word-break: keep-all` + `overflow-wrap: break-word`. 0.13.0의 `anywhere`가 열 많은 좁은 화면에서 모든 열을
+  한 글자 폭까지 짓눌러 이름·"사람"·날짜가 글자마다 끊겼다. 이제 열은 단어보다 좁아지지 않고 표가 래퍼 안에서 가로로 스크롤된다.
+  이메일·URL처럼 아무 데서나 끊어도 되는 값은 셀 안에서 `overflow-wrap: anywhere`를 준다(org-admin 0.3.2가 그렇게 한다).
+- `Avatar` small(24px)에서 한글·한자·가나 이니셜은 첫 글자 하나만("개발 위키" → "개") — 두 글자가 원 밖으로 넘쳤다. medium 이상은 그대로.
+- `Comment` 액션(답글·편집·삭제) 최소 24×24px(WCAG 2.5.8).
+- 선택 글자색은 tokens 0.6.1(`text.selected` 한 단계 진하게)을 따른다 — Select 현재 값·SideNav·Tabs 선택 대비 AA.
+
 ## 0.13.0
 
 ### Minor Changes

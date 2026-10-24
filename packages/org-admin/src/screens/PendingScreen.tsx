@@ -74,8 +74,8 @@ export function PendingScreen() {
 
   const columns = useMemo<TableColumn<Member>[]>(
     () => [
-      { key: "displayName", header: "이름" },
-      { key: "email", header: "이메일", render: (row) => row.email ?? "-" },
+      { key: "displayName", header: "이름", render: (row) => <span className={styles.personName}>{row.displayName}</span> },
+      { key: "email", header: "이메일", render: (row) => <span className={styles.breakAnywhere}>{row.email ?? "-"}</span> },
       { key: "createdAt", header: "로그인한 날", render: (row) => formatDate(row.createdAt) },
       {
         key: "actions",

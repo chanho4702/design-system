@@ -24,7 +24,9 @@
   /* 최소 폭은 .field가 정한다 — 여기서 %를 쓰면 내용 크기 래퍼에 순환 참조가 돼 0으로 풀린다. 긴 선택값은 말줄임 */
   min-width: 0;
   max-width: 100%;
-  height: 36px;
+  /* 외곽 40px — TextField와 같은 높이(Atlassian select control minHeight 40) */
+  box-sizing: border-box;
+  height: 40px;
   padding: 0 var(--chanho-space-75);
   border: 1px solid var(--chanho-color-border-input);
   border-radius: var(--chanho-radius-medium);

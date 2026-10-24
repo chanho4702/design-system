@@ -1,5 +1,13 @@
 # @chanho/tokens
 
+## 0.6.1
+
+### Patch Changes
+
+- 라이트 `color.text.selected` #1868DB(blue 500) → #1558BC(blue 600). `background.selected-hovered`(#CFE1FD) 위 대비가
+  3.92:1로 AA(4.5) 미달이었다 — 바꾼 뒤 5.02:1, `background.selected` 위 5.90:1, 흰 배경 위 6.66:1.
+  Atlassian 원값보다 한 단계 진하다(같은 색이 Atlassian `text-information`). 다크(#669DF1, 4.61:1 이상)는 그대로.
+
 ## 0.6.0
 
 ### Minor Changes
