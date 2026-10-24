@@ -66,7 +66,7 @@
 
 .split {
   display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
   gap: var(--chanho-space-200);
   align-items: start;
 }
@@ -176,4 +176,45 @@
 
 .lozengeWithIcon {
   gap: var(--chanho-space-50);
+}
+
+/* 사이드 목록 항목(팀 목록) — Atlassian 사이드바 항목: 32px·반경 6px·왼쪽 정렬, 선택은 selected 배경·글자 */
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: var(--chanho-space-100);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 32px;
+  padding: 0 var(--chanho-space-100);
+  border: none;
+  border-radius: var(--chanho-radius-medium);
+  background: transparent;
+  color: var(--chanho-color-text-default);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+  text-align: left;
+  cursor: pointer;
+}
+
+.listItem:hover {
+  background: var(--chanho-color-background-neutral);
+}
+
+.listItem:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.listItem[aria-pressed="true"] {
+  background: var(--chanho-color-background-selected);
+  color: var(--chanho-color-text-selected);
+}
+
+.listItemText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

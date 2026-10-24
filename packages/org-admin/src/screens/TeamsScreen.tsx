@@ -205,14 +205,17 @@ export function TeamsScreen() {
             <ul className={styles.eventList} aria-label="팀 목록">
               {list.map((team) => (
                 <li key={team.id}>
-                  <Button
-                    variant={team.id === selectedId ? "secondary" : "ghost"}
-                    fullWidth
+                  {/* 사이드 목록 항목 — 왼쪽 정렬, 긴 이름은 말줄임, 선택은 selected 배경(지라·컨플 사이드바와 같은 규칙) */}
+                  <button
+                    type="button"
+                    className={styles.listItem}
+                    aria-pressed={team.id === selectedId}
+                    title={team.name}
                     onClick={() => setSelectedId(team.id)}
                   >
-                    {team.name}
+                    <span className={styles.listItemText}>{team.name}</span>
                     {team.memberCount !== null ? <Badge>{team.memberCount}</Badge> : null}
-                  </Button>
+                  </button>
                 </li>
               ))}
             </ul>

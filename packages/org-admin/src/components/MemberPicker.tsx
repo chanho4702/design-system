@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Avatar, Spinner, TextField } from "@chanho/react";
+import { Avatar, SkeletonListItem, TextField } from "@chanho/react";
 import { useOrgClient } from "../context";
 import type { Member } from "../api/types";
 import styles from "./MemberPicker.module.css";
@@ -72,7 +72,12 @@ export function MemberPicker({
           {error}
         </p>
       ) : null}
-      {loading ? <Spinner size="small" label="검색 중" /> : null}
+      {loading ? (
+        <div className={styles.results} aria-busy="true">
+          <SkeletonListItem media="avatar" lines={2} label="검색 중" />
+          <SkeletonListItem media="avatar" lines={2} width="45%" />
+        </div>
+      ) : null}
       {!loading && !error && visible.length === 0 ? (
         <p className={styles.hint}>검색 결과가 없습니다.</p>
       ) : null}

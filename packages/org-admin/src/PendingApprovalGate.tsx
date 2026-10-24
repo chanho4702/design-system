@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Button, Spinner } from "@chanho/react";
+import { Button, Skeleton, SkeletonText } from "@chanho/react";
 import { Hourglass } from "lucide-react";
 import type { ReactNode } from "react";
 import { createOrgClient } from "./api/client";
@@ -28,8 +28,9 @@ export function PendingApprovalGate({ api, actions, children }: PendingApprovalG
 
   if (me.loading) {
     return (
-      <div className={styles.gate}>
-        <Spinner size="large" label="계정 상태 확인 중" />
+      <div className={styles.gate} aria-busy="true">
+        <Skeleton width="min(320px, 60%)" height={28} radius="medium" label="계정 상태 확인 중" />
+        <SkeletonText lines={3} width="min(480px, 100%)" />
       </div>
     );
   }

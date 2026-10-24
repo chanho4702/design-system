@@ -1,6 +1,6 @@
 {
   "name": "@chanho/org-admin",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Chanho Design System — 플랫폼 공통 조직 관리 화면 (사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정)",
   "license": "MIT",
   "repository": {
@@ -43,8 +43,8 @@
     "lint:css": "stylelint \"src/**/*.css\""
   },
   "peerDependencies": {
-    "@chanho/react": ">=0.8.0",
-    "@chanho/tokens": ">=0.4.0",
+    "@chanho/react": ">=0.13.0",
+    "@chanho/tokens": ">=0.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.0.0"

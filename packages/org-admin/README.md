@@ -194,9 +194,9 @@ alias로 import 이름을 유지한다.
 // 소비 프로젝트 package.json
 {
   "dependencies": {
-    "@chanho/tokens":    "npm:@chanho4702/tokens@0.4.0",
-    "@chanho/react":     "npm:@chanho4702/react@0.8.1",
-    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.0",
+    "@chanho/tokens":    "npm:@chanho4702/tokens@0.6.0",
+    "@chanho/react":     "npm:@chanho4702/react@0.13.0",
+    "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.1",
     "react-router": "^7.0.0"
   }
 }

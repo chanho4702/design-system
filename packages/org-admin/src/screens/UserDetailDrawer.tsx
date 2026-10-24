@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import type { ChangeEvent } from "react";
-import { Button, ConfirmDialog, Modal, Spinner, Tag, useToast } from "@chanho/react";
+import { Button, ConfirmDialog, Modal, Skeleton, SkeletonText, Tag, useToast } from "@chanho/react";
 import { useOrgAdmin } from "../context";
 import { useAsync } from "../useAsync";
 import {
@@ -134,7 +134,12 @@ export function UserDetailDrawer({ memberId, onClose, onChanged }: UserDetailDra
 
   return (
     <Modal open onOpenChange={(open) => (open ? undefined : onClose())} title="사용자 상세">
-      {detail.loading ? <Spinner size="large" label="불러오는 중" /> : null}
+      {detail.loading ? (
+        <div className={styles.stack} aria-busy="true">
+          <Skeleton width="40%" height={20} label="불러오는 중" />
+          <SkeletonText lines={4} />
+        </div>
+      ) : null}
       {detail.error ? (
         <p role="alert" className={styles.subtle}>
           {detail.error}
@@ -260,7 +265,7 @@ export function UserDetailDrawer({ memberId, onClose, onChanged }: UserDetailDra
           {isGlobalAdmin ? (
             <section className={styles.stack}>
               <h3 className={styles.sectionTitle}>이력</h3>
-              {events.loading ? <Spinner size="small" label="이력 불러오는 중" /> : null}
+              {events.loading ? <SkeletonText lines={2} label="이력 불러오는 중" /> : null}
               {events.error ? (
                 <p className={styles.subtle} role="alert">
                   {events.error}
