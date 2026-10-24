@@ -72,4 +72,16 @@ describe("Checkbox", () => {
     );
     expect(screen.getByRole("checkbox", { name: "알림 받기" })).toBeInTheDocument();
   });
+
+  it("indeterminate면 aria-checked=mixed이고 대시 아이콘을 그린다", () => {
+    render(<Checkbox label="모두 선택" indeterminate />);
+    const box = screen.getByRole("checkbox", { name: "모두 선택" });
+    expect(box).toHaveAttribute("aria-checked", "mixed");
+    expect(box.querySelector('[data-icon="minus"]')).toBeInTheDocument();
+  });
+
+  it("indeterminate는 checked보다 우선한다", () => {
+    render(<Checkbox label="모두 선택" checked indeterminate onCheckedChange={() => {}} />);
+    expect(screen.getByRole("checkbox", { name: "모두 선택" })).toHaveAttribute("aria-checked", "mixed");
+  });
 });

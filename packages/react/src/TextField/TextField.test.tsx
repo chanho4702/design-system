@@ -41,4 +41,16 @@ describe("TextField", () => {
     render(<TextField label="이메일" ref={ref} />);
     expect(ref.current).toBeInstanceOf(HTMLInputElement);
   });
+
+  it("size=compact면 compact 클래스가 붙고 네이티브 size 속성은 넘기지 않는다", () => {
+    render(<TextField label="필터" size="compact" />);
+    const input = screen.getByLabelText("필터");
+    expect(input.className).toMatch(/compact/);
+    expect(input).not.toHaveAttribute("size");
+  });
+
+  it("size에 숫자를 주면 예전처럼 네이티브 size 속성으로 넘어간다", () => {
+    render(<TextField label="코드" size={6} />);
+    expect(screen.getByLabelText("코드")).toHaveAttribute("size", "6");
+  });
 });

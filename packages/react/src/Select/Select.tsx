@@ -1,6 +1,8 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
-import { Popover as RadixPopover, Select as RadixSelect } from "radix-ui";
+import { Select as RadixSelect } from "radix-ui";
+import { Popover } from "../Popover/Popover";
+import { CheckIcon, ChevronIcon, OptionIcon, OptionList, groupOptions } from "./OptionList";
 import styles from "./Select.module.css";
 
 export interface SelectOption {
@@ -49,53 +51,11 @@ export interface SelectProps {
   searchPlaceholder?: string;
   /** 검색 결과가 없을 때 문구. @default '일치하는 항목이 없습니다' */
   noOptionsMessage?: string;
-}
-
-function ChevronIcon() {
-  return (
-    <svg viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true">
-      <path
-        d="M2.5 4.5L6 8l3.5-3.5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true">
-      <path
-        d="M3.5 8.5l3 3 6-7"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-/** 연달아 같은 group을 가진 옵션을 한 묶음으로. group이 없는 옵션은 제목 없는 묶음이 된다. */
-function groupOptions(options: SelectOption[]): { group?: string; items: SelectOption[] }[] {
-  const out: { group?: string; items: SelectOption[] }[] = [];
-  for (const option of options) {
-    const last = out[out.length - 1];
-    if (last && last.group === option.group) last.items.push(option);
-    else out.push({ group: option.group, items: [option] });
-  }
-  return out;
-}
-
-function OptionBody({ option }: { option: SelectOption }) {
-  return option.icon ? (
-    <span className={styles.itemIcon} aria-hidden="true">
-      {option.icon}
-    </span>
-  ) : null;
+  /**
+   * 높이. compact는 32px — 버튼(32px)·필터 줄과 맞출 때(Atlassian textfield/select isCompact). 기본은 40px.
+   * @default 'default'
+   */
+  size?: "default" | "compact";
 }
 
 export function Select({
@@ -111,7 +71,9 @@ export function Select({
   searchable = false,
   searchPlaceholder = "검색",
   noOptionsMessage = "일치하는 항목이 없습니다",
+  size = "default",
 }: SelectProps) {
+  const triggerClass = [styles.trigger, size === "compact" ? styles.compact : null].filter(Boolean).join(" ");
   const autoId = useId();
   const triggerId = id ?? autoId;
   // Radix의 Value는 선택된 항목의 ItemText만 복제하므로 아이콘은 따라오지 않는다.
@@ -141,6 +103,7 @@ export function Select({
           disabled={disabled}
           searchPlaceholder={searchPlaceholder}
           noOptionsMessage={noOptionsMessage}
+          triggerClass={triggerClass}
         />
       ) : (
         <RadixSelect.Root
@@ -149,7 +112,7 @@ export function Select({
           onValueChange={handleValueChange}
           disabled={disabled}
         >
-          <RadixSelect.Trigger id={triggerId} className={styles.trigger} title={selected?.label}>
+          <RadixSelect.Trigger id={triggerId} className={triggerClass} title={selected?.label}>
             <span className={styles.triggerValue}>
               {selected?.icon ? (
                 <span className={styles.itemIcon} aria-hidden="true">
@@ -203,7 +166,7 @@ function RadixItem({ option }: { option: SelectOption }) {
       title={option.label}
     >
       <span className={styles.itemContent}>
-        <OptionBody option={option} />
+        <OptionIcon option={option} />
         <RadixSelect.ItemText className={styles.itemText}>{option.label}</RadixSelect.ItemText>
       </span>
       <RadixSelect.ItemIndicator className={styles.check}>
@@ -223,12 +186,12 @@ interface SearchableSelectProps {
   disabled?: boolean;
   searchPlaceholder: string;
   noOptionsMessage: string;
+  triggerClass: string;
 }
 
 /**
- * 검색 입력이 붙는 선택 — Radix Select는 목록 안 입력을 지원하지 않아 Popover + listbox로 만든다.
- * 키보드: 트리거 ↓/↑/Enter/Space로 열기, 입력에서 ↑↓·Home·End 이동, Enter 선택, Esc 닫기(포커스는 트리거로).
- * 포커스는 입력에 머물고 강조 항목은 aria-activedescendant로 알린다(WAI-ARIA combobox 패턴).
+ * 검색 입력이 붙는 선택 — Radix Select는 목록 안 입력을 지원하지 않아 Popover + OptionList(MultiSelect와 공유)로 만든다.
+ * 키보드: 트리거 ↓/↑/Enter/Space로 열기, 입력에서 ↑↓·Home·End 이동, Enter 선택, Esc·Tab 닫기(포커스는 트리거로).
  */
 function SearchableSelect({
   label,
@@ -240,143 +203,33 @@ function SearchableSelect({
   disabled,
   searchPlaceholder,
   noOptionsMessage,
+  triggerClass,
 }: SearchableSelectProps) {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [active, setActive] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const baseId = useId();
-  const listId = `${baseId}-list`;
-  const optionId = (v: string) => `${baseId}-opt-${encodeURIComponent(v)}`;
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLocaleLowerCase();
-    return q ? options.filter((o) => o.label.toLocaleLowerCase().includes(q)) : options;
-  }, [options, query]);
-  const enabled = filtered.filter((o) => !o.disabled);
-
-  const openList = () => {
-    setQuery("");
-    setActive(selected && !selected.disabled ? selected.value : (options.find((o) => !o.disabled)?.value ?? null));
-    setOpen(true);
-  };
-
-  useEffect(() => {
-    if (!open || active === null) return;
-    // 목록은 포털로 body에 붙는다 — id로 찾아 강조 항목이 보이게 굴린다.
-    document.getElementById(`${baseId}-opt-${encodeURIComponent(active)}`)?.scrollIntoView({ block: "nearest" });
-  }, [open, active, baseId]);
-
-  const choose = (option: SelectOption | undefined) => {
-    if (!option || option.disabled) return;
-    onSelect(option.value);
-    setOpen(false);
-  };
-
-  const move = (to: "next" | "prev" | "first" | "last") => {
-    if (enabled.length === 0) return;
-    const last = enabled.length - 1;
-    const idx = enabled.findIndex((o) => o.value === active);
-    let next: number;
-    if (to === "first") next = 0;
-    else if (to === "last") next = last;
-    else if (idx === -1) next = to === "next" ? 0 : last;
-    else next = to === "next" ? Math.min(idx + 1, last) : Math.max(idx - 1, 0);
-    setActive(enabled[next].value);
-  };
-
-  const onInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.nativeEvent.isComposing) return; // 한글 조합을 끝내는 Enter·화살표는 IME 몫
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        move("next");
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        move("prev");
-        break;
-      case "Home":
-        e.preventDefault();
-        move("first");
-        break;
-      case "End":
-        e.preventDefault();
-        move("last");
-        break;
-      case "Enter":
-        e.preventDefault();
-        choose(enabled.find((o) => o.value === active));
-        break;
-      case "Tab":
-        // 목록 안에 다른 포커스 대상이 없다 — 닫고 트리거로 돌아간다.
-        e.preventDefault();
-        setOpen(false);
-        break;
-      default:
-        break;
-    }
-  };
+  const focusRef = useRef<HTMLElement | null>(null);
 
   const onTriggerKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !open) {
       e.preventDefault();
-      openList();
+      setOpen(true);
     }
   };
 
-  const groups = groupOptions(filtered);
-  const activeVisible = active !== null && enabled.some((o) => o.value === active);
-
-  const renderOption = (option: SelectOption) => {
-    const isSelected = option.value === selected?.value;
-    return (
-      <div
-        key={option.value}
-        id={optionId(option.value)}
-        role="option"
-        aria-selected={isSelected}
-        aria-disabled={option.disabled || undefined}
-        data-disabled={option.disabled ? "" : undefined}
-        data-highlighted={option.value === active ? "" : undefined}
-        data-state={isSelected ? "checked" : "unchecked"}
-        className={styles.item}
-        title={option.label}
-        // 클릭해도 포커스는 검색 입력에 남는다
-        onMouseDown={(e) => e.preventDefault()}
-        onMouseMove={() => {
-          if (!option.disabled && active !== option.value) setActive(option.value);
-        }}
-        onClick={() => choose(option)}
-      >
-        <span className={styles.itemContent}>
-          <OptionBody option={option} />
-          <span className={styles.itemText}>{option.label}</span>
-        </span>
-        {isSelected ? (
-          <span className={styles.check}>
-            <CheckIcon />
-          </span>
-        ) : null}
-      </div>
-    );
-  };
-
   return (
-    <RadixPopover.Root
+    <Popover
       open={open}
-      onOpenChange={(next) => {
-        if (next) openList();
-        else setOpen(false);
-      }}
-    >
-      <RadixPopover.Trigger asChild>
+      onOpenChange={setOpen}
+      label={label}
+      padding="none"
+      className={[styles.content, styles.searchContent].join(" ")}
+      initialFocusRef={focusRef}
+      trigger={
         <button
           type="button"
           id={triggerId}
           role="combobox"
           aria-expanded={open}
-          className={styles.trigger}
+          className={triggerClass}
           data-placeholder={selected ? undefined : ""}
           disabled={disabled}
           title={selected?.label}
@@ -394,63 +247,23 @@ function SearchableSelect({
             <ChevronIcon />
           </span>
         </button>
-      </RadixPopover.Trigger>
-      <RadixPopover.Portal>
-        <RadixPopover.Content
-          className={[styles.content, styles.searchContent].join(" ")}
-          align="start"
-          sideOffset={4}
-          collisionPadding={8}
-          aria-label={label}
-          onOpenAutoFocus={(e) => {
-            e.preventDefault();
-            inputRef.current?.focus();
-          }}
-        >
-          <div className={styles.search}>
-            <input
-              ref={inputRef}
-              className={styles.searchInput}
-              type="text"
-              role="combobox"
-              aria-label={`${label} 검색`}
-              aria-expanded="true"
-              aria-controls={listId}
-              aria-autocomplete="list"
-              aria-activedescendant={activeVisible ? optionId(active!) : undefined}
-              placeholder={searchPlaceholder}
-              value={query}
-              onChange={(e) => {
-                const q = e.target.value;
-                setQuery(q);
-                const lower = q.trim().toLocaleLowerCase();
-                const first = options.find((o) => !o.disabled && o.label.toLocaleLowerCase().includes(lower));
-                setActive(first?.value ?? null);
-              }}
-              onKeyDown={onInputKeyDown}
-            />
-          </div>
-          <div id={listId} role="listbox" aria-label={label} className={styles.viewport}>
-            {groups.map((g, gi) =>
-              g.group !== undefined ? (
-                <div key={`g-${gi}`} role="group" aria-label={g.group} className={styles.group}>
-                  <div className={styles.groupLabel} aria-hidden="true">
-                    {g.group}
-                  </div>
-                  {g.items.map(renderOption)}
-                </div>
-              ) : (
-                g.items.map(renderOption)
-              ),
-            )}
-          </div>
-          {filtered.length === 0 ? (
-            <p className={styles.empty} role="status">
-              {noOptionsMessage}
-            </p>
-          ) : null}
-        </RadixPopover.Content>
-      </RadixPopover.Portal>
-    </RadixPopover.Root>
+      }
+    >
+      <OptionList
+        label={label}
+        options={options}
+        selected={selected ? [selected.value] : []}
+        searchable
+        searchPlaceholder={searchPlaceholder}
+        noOptionsMessage={noOptionsMessage}
+        focusRef={focusRef}
+        onPick={(option) => {
+          onSelect(option.value);
+          setOpen(false);
+        }}
+        // 목록 안에 다른 포커스 대상이 없다 — Tab은 닫고 트리거로 돌아간다
+        onTab={() => setOpen(false)}
+      />
+    </Popover>
   );
 }

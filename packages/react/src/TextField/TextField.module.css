@@ -28,6 +28,11 @@
   transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
 }
 
+/* compact — 32px(Atlassian isCompact: 1+1+4+20+4+1+1) */
+.compact {
+  height: 32px;
+}
+
 .input::placeholder {
   color: var(--chanho-color-text-subtlest);
 }

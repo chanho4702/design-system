@@ -55,6 +55,7 @@
 }
 
 .sort {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--chanho-space-50);
@@ -66,6 +67,13 @@
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+/* 정렬 버튼 클릭 영역 24px 이상(WCAG 2.5.8) — 보이는 크기는 그대로 */
+.sort::before {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
 }
 
 .sort:hover {

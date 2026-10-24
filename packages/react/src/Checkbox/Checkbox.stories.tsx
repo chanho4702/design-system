@@ -55,3 +55,6 @@ export const NodeLabel: Story = {
     ),
   },
 };
+
+/** 중간 상태 — 표 머리 "모두 선택"에서 일부만 고른 경우(aria-checked="mixed"). */
+export const IndeterminateProp: Story = { args: { indeterminate: true } };

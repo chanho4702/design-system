@@ -15,6 +15,11 @@ export interface CheckboxProps extends ComponentPropsWithRef<typeof RadixCheckbo
    * 표 헤더의 "모두 선택"이나 행마다 붙는 선택 체크박스처럼 글자를 둘 자리가 없을 때 쓴다.
    */
   labelHidden?: boolean;
+  /**
+   * true면 중간 상태(대시 표시, `aria-checked="mixed"`) — 표 머리의 "일부 선택"처럼.
+   * `checked="indeterminate"`와 같다. 켜져 있는 동안 `checked`보다 우선한다.
+   */
+  indeterminate?: boolean;
 }
 
 /* lucide Check(M20 6 9 17l-5-5)를 12px 박스로 옮긴 것 — lucide-react는 이 패키지의 의존성이 아니라 인라인으로 그린다. */
@@ -63,7 +68,7 @@ function MinusIcon({ className }: { className?: string }) {
   );
 }
 
-export function Checkbox({ label, labelHidden = false, id, className, ...rest }: CheckboxProps) {
+export function Checkbox({ label, labelHidden = false, indeterminate, id, className, ...rest }: CheckboxProps) {
   const autoId = useId();
   const checkboxId = id ?? autoId;
   // Radix의 Root는 button이라 label[for]만으로는 이름이 붙지 않는 브라우저가 있다.
@@ -77,6 +82,7 @@ export function Checkbox({ label, labelHidden = false, id, className, ...rest }:
         className={styles.box}
         aria-labelledby={hasOwnName ? undefined : labelId}
         {...rest}
+        {...(indeterminate ? { checked: "indeterminate" as const } : {})}
       >
         <RadixCheckbox.Indicator className={styles.indicator}>
           <CheckIcon className={styles.iconChecked} />

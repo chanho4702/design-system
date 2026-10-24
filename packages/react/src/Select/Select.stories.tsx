@@ -66,3 +66,6 @@ export const Grouped: Story = { args: { label: "담당자", options: PEOPLE, pla
 export const Searchable: Story = {
   args: { label: "담당자", options: PEOPLE, placeholder: "선택", searchable: true, searchPlaceholder: "이름 검색" },
 };
+
+/** compact(32px) — 버튼·필터 줄과 같은 높이. */
+export const Compact: Story = { args: { size: "compact", defaultValue: "medium" } };

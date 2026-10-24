@@ -1,12 +1,23 @@
 # @chanho/react
 
-## 0.13.1
+## 0.14.0
 
-### Patch Changes
+### Minor Changes
 
+(0.13.1은 발행하지 않고 이 버전에 합쳤다.) 공개 API는 추가만 했다.
+
+- 새 컴포넌트
+  - `Popover` — 트리거에 붙는 비모달 오버레이(Atlassian popup). 포털·충돌 회피(가장자리 8px·뒤집기)·포커스 이동/복귀,
+    `label`(대화상자 이름)·`initialFocusRef`·`matchTriggerWidth`·`padding`. 기본 스타일은 특이도 0이라 `className`이 늘 이긴다.
+  - `MultiSelect` — 여러 개 고르는 선택(Atlassian CheckboxSelect, 지라 필터 체크 목록). 체크 목록·검색(기본 켬)·그룹·비활성,
+    트리거는 칩 요약(`maxChips`, 넘치면 +N, 전체는 접근 설명), 선택 수·전체 해제, 고를 때 닫히지 않음. 검색형 Select와 같은 목록 구현을 공유한다.
+- `Select`·`TextField`에 `size="compact"`(32px, Atlassian isCompact) — 버튼·필터 줄과 높이를 맞춘다. 기본 40px.
+  `TextField`의 `size`에 숫자를 주면 예전처럼 네이티브 `size` 속성으로 넘어간다(기존 사용 깨지지 않음).
+- `Checkbox`에 `indeterminate` 프롭(대시, `aria-checked="mixed"`) — `checked="indeterminate"`와 같고 켜져 있으면 `checked`보다 우선.
+- 클릭·터치 영역 24px 이상(WCAG 2.5.8): `Checkbox`·`Radio`(16px → 24×24), `Switch`(32×16 → 32×24), `Table` 정렬 버튼(위아래 +4px).
+  보이는 크기는 그대로이고 투명 의사요소로 넓혔다.
 - 입력류 높이를 외곽 40px 하나로 — `TextField`(content-box 36 + 테두리 = 38px)와 `Select` 트리거(36px)가 어긋났다.
   근거: `@atlaskit/textfield` 10.2.6(테두리 1 + 안쪽 1 + 패딩 8 + 행간 20 + 8 + 1 + 1 = 40px), react-select control 최소 40px.
-  `TextField` 입력은 `box-sizing: border-box`.
 - `Table` 셀 줄바꿈: `word-break: keep-all` + `overflow-wrap: break-word`. 0.13.0의 `anywhere`가 열 많은 좁은 화면에서 모든 열을
   한 글자 폭까지 짓눌러 이름·"사람"·날짜가 글자마다 끊겼다. 이제 열은 단어보다 좁아지지 않고 표가 래퍼 안에서 가로로 스크롤된다.
   이메일·URL처럼 아무 데서나 끊어도 되는 값은 셀 안에서 `overflow-wrap: anywhere`를 준다(org-admin 0.3.2가 그렇게 한다).

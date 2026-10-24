@@ -1,0 +1,86 @@
+/* 트리거 안 선택 칩 — Atlassian select multi-value: 회색 틴트·반경 4px·12px 글자 */
+.chips {
+  gap: var(--chanho-space-50);
+}
+
+.chip {
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: var(--chanho-space-50);
+  min-width: 0;
+  max-width: 140px;
+  height: 20px;
+  padding: 0 var(--chanho-space-50);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-neutral);
+  color: var(--chanho-color-text-default);
+  font-size: var(--chanho-font-size-75);
+  line-height: var(--chanho-font-lineHeight-50);
+}
+
+.chipText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.more {
+  flex: none;
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+}
+
+/* 목록 아래 — 선택 수 · 전체 해제 */
+.footer {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--chanho-space-100);
+  padding: var(--chanho-space-50) var(--chanho-space-100) var(--chanho-space-50) var(--chanho-space-150);
+  border-top: 1px solid var(--chanho-color-border-default);
+}
+
+.count {
+  color: var(--chanho-color-text-subtlest);
+  font-size: var(--chanho-font-size-75);
+}
+
+/* Atlassian subtle 버튼(compact) 모양 */
+.clear {
+  min-height: 24px;
+  padding: 0 var(--chanho-space-100);
+  border: none;
+  border-radius: var(--chanho-radius-small);
+  background: transparent;
+  color: var(--chanho-color-text-subtle);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-medium);
+  cursor: pointer;
+}
+
+.clear:hover:not(:disabled) {
+  background: var(--chanho-color-background-neutral);
+}
+
+.clear:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
+.clear:disabled {
+  color: var(--chanho-color-text-disabled);
+  cursor: not-allowed;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

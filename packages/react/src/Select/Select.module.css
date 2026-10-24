@@ -38,6 +38,11 @@
   transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
 }
 
+/* compact — 32px(Atlassian isCompact: 1+1+4+20+4+1+1). 버튼·필터 줄과 같은 높이 */
+.compact {
+  height: 32px;
+}
+
 .trigger:hover:not(:disabled) {
   background: var(--chanho-color-background-input-hovered);
 }
@@ -218,4 +223,48 @@
   color: var(--chanho-color-text-subtlest);
   font-size: var(--chanho-font-size-100);
   text-align: center;
+}
+
+/* 여러 개 고르는 목록(MultiSelect) — 항목 앞 체크 상자(Checkbox와 같은 16px·반경 4px) */
+.itemMulti {
+  justify-content: flex-start;
+}
+
+.box {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--chanho-color-border-input);
+  border-radius: var(--chanho-radius-small);
+  background: var(--chanho-color-background-input);
+  color: var(--chanho-color-text-inverse);
+}
+
+.box[data-state="checked"] {
+  border-color: var(--chanho-color-border-brand);
+  background: var(--chanho-color-background-brand);
+}
+
+.box svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* 여러 개 선택에서 선택 항목은 배경을 칠하지 않는다 — 체크 상자가 상태를 말한다(Atlassian CheckboxSelect) */
+.itemMulti[data-state="checked"] {
+  background: transparent;
+  color: var(--chanho-color-text-default);
+}
+
+.itemMulti[data-state="checked"][data-highlighted] {
+  background: var(--chanho-color-background-neutral);
+}
+
+.viewport:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--chanho-color-border-focused);
 }

@@ -1,0 +1,28 @@
+/* 팝오버 표면 — Dropdown과 같은 오버레이 체계. 기본값은 :where()로 특이도 0이라
+   소비자·내부 컴포넌트(className)가 폭·높이·패딩을 언제나 덮어쓸 수 있다. */
+:where(.content) {
+  box-sizing: border-box;
+  max-width: min(480px, var(--radix-popover-content-available-width, 480px));
+  max-height: var(--radix-popover-content-available-height, calc(100vh - 16px));
+  overflow: auto;
+  padding: var(--chanho-space-200);
+  border-radius: var(--chanho-radius-large);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-overlay);
+  color: var(--chanho-color-text-default);
+  font-family: var(--chanho-font-family-sans);
+  font-size: var(--chanho-font-size-100);
+  z-index: var(--chanho-z-popover);
+}
+
+:where(.content):focus {
+  outline: none;
+}
+
+:where(.paddingNone) {
+  padding: 0;
+}
+
+:where(.matchTrigger) {
+  min-width: var(--radix-popover-trigger-width);
+}

@@ -76,3 +76,10 @@
   font-size: var(--chanho-font-size-100);
   cursor: pointer;
 }
+
+/* 클릭·터치 영역 24px 이상(WCAG 2.5.8) — 보이는 크기는 그대로, 투명 의사요소로 넓힌다 */
+.track::before {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+}

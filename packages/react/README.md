@@ -21,10 +21,10 @@ import { Button, TextField, ToastProvider } from "@chanho/react";
 
 다크 모드: `document.documentElement.dataset.theme = "dark"`.
 
-## 컴포넌트 (31)
+## 컴포넌트 (33)
 
 Avatar · Badge · Banner · Button · Card · Checkbox · CommandPalette · Comment · ConfirmDialog · ContextMenu ·
-Dropdown · EmptyState · InlineEdit · Lozenge · Modal · PageHeader · ProgressBar · Radio/RadioGroup · Select ·
+Dropdown · EmptyState · InlineEdit · Lozenge · Modal · MultiSelect · PageHeader · Popover · ProgressBar · Radio/RadioGroup · Select ·
 SideNav · Skeleton(SkeletonText·SkeletonAvatar·SkeletonListItem) · Spinner · Switch · Table · Tabs · Tag ·
 TextArea · TextField · Toast(ToastProvider/useToast) · Tooltip · TopBar
 

@@ -22,3 +22,6 @@ export const WithError: Story = {
 };
 
 export const Disabled: Story = { args: { disabled: true } };
+
+/** compact(32px) — 필터 줄의 검색 칸처럼 버튼과 높이를 맞출 때. */
+export const Compact: Story = { args: { size: "compact" } };

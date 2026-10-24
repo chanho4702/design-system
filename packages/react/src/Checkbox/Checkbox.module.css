@@ -6,6 +6,7 @@
 }
 
 .box {
+  position: relative;
   /* 긴 라벨 옆에서도 컨트롤이 찌그러지지 않는다 */
   flex: none;
   display: inline-flex;
@@ -83,4 +84,11 @@
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* 클릭·터치 영역 24px 이상(WCAG 2.5.8) — 보이는 크기는 그대로, 투명 의사요소로 넓힌다 */
+.box::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
 }

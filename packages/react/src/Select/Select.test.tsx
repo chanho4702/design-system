@@ -211,4 +211,11 @@ describe("Select searchable", () => {
     await userEvent.click(screen.getByRole("option", { name: "검토 중" }));
     expect(onValueChange).not.toHaveBeenCalled();
   });
+
+  it("size=compact면 트리거에 compact 클래스가 붙는다(검색형도 같다)", () => {
+    const { rerender } = render(<Select label="상태" options={MANY} size="compact" />);
+    expect(screen.getByRole("combobox", { name: "상태" }).className).toMatch(/compact/);
+    rerender(<Select label="상태" options={MANY} size="compact" searchable />);
+    expect(screen.getByRole("combobox", { name: "상태" }).className).toMatch(/compact/);
+  });
 });

@@ -12,6 +12,7 @@
 }
 
 .circle {
+  position: relative;
   /* 긴 라벨 옆에서도 컨트롤이 찌그러지지 않는다 */
   flex: none;
   display: inline-flex;
@@ -79,4 +80,11 @@
   color: var(--chanho-color-text-default);
   font-size: var(--chanho-font-size-100);
   cursor: pointer;
+}
+
+/* 클릭·터치 영역 24px 이상(WCAG 2.5.8) — 보이는 크기는 그대로, 투명 의사요소로 넓힌다 */
+.circle::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
 }
