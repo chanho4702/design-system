@@ -214,6 +214,8 @@ export function CommandPalette({
         break;
       case "Enter":
         e.preventDefault();
+        // 로딩 중엔 목록이 스켈레톤으로 가려져 있다 — 보이지 않는 이전 결과를 실행하지 않는다
+        if (loading) break;
         run(enabled.find((i) => i.id === active));
         break;
       case "Backspace":

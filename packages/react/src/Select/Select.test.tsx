@@ -1,6 +1,6 @@
 // Select는 Radix 합성 컴포넌트를 감싼 복합 루트라 ref를 노출하지 않는다
 // (공통 테스트 3종 중 ref 테스트 예외 — Global Constraints 참조).
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Select } from "./Select";
@@ -151,6 +151,16 @@ describe("Select searchable", () => {
     expect(trigger).toHaveTextContent("진행 중");
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
+  });
+
+  it("한글 조합을 끝내는 Enter(isComposing)로는 옵션을 고르지 않는다", async () => {
+    const onValueChange = vi.fn();
+    render(<Select label="상태" options={MANY} searchable onValueChange={onValueChange} />);
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    const search = screen.getByRole("combobox", { name: "상태 검색" });
+    fireEvent.keyDown(search, { key: "Enter", isComposing: true });
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
   });
 
   it("비활성 옵션은 키보드 이동에서 건너뛰고 End는 마지막 활성 옵션으로 간다", async () => {

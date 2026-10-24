@@ -128,6 +128,14 @@ describe("CommandPalette", () => {
     expect(screen.getByRole("status")).toHaveTextContent("불러오는 중");
   });
 
+  it("loading 중 Enter는 가려진 이전 결과를 실행하지 않는다", async () => {
+    const create = vi.fn();
+    render(<Harness items={ITEMS({ create })} loading />);
+    await userEvent.keyboard("{Enter}");
+    expect(create).not.toHaveBeenCalled();
+    expect(screen.getByRole("dialog", { name: "명령 팔레트" })).toBeInTheDocument();
+  });
+
   it("onQueryChange로 검색어를 알린다", async () => {
     const onQueryChange = vi.fn();
     render(<Harness items={ITEMS()} onQueryChange={onQueryChange} />);

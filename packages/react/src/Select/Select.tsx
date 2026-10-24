@@ -286,6 +286,7 @@ function SearchableSelect({
   };
 
   const onInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return; // 한글 조합을 끝내는 Enter·화살표는 IME 몫
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
