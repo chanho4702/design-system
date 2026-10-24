@@ -1,0 +1,23 @@
+@chanho design-system
+Copyright (c) 2026 Chanho Kim (chanho4702) — MIT License (see LICENSE)
+
+This product includes design values derived from the Atlassian Design System:
+
+  @atlaskit/tokens 20.7.0 (themes `atlassian-light`, `atlassian-dark`, `palette-brand-refresh`)
+  and the compiled CSS of current @atlaskit/* component packages
+  (e.g. @atlaskit/button 25.6.0, @atlaskit/skeleton)
+  Copyright 2019 Atlassian Pty Ltd
+  Licensed under the Apache License, Version 2.0
+  https://www.apache.org/licenses/LICENSE-2.0
+  Source: https://bitbucket.org/atlassian/atlassian-frontend-mirror
+
+Modifications (Apache-2.0 §4(b)): color, radius, spacing and state values were
+re-expressed as `--chanho-*` CSS custom properties and TypeScript constants in
+packages/tokens/src (palette.ts, semantic.ts, static.ts, buildCss.ts) and
+packages/react/src/**/*.module.css. No Atlassian source code, icons, fonts or
+logos are redistributed; @atlaskit packages are not runtime dependencies.
+The upstream @atlaskit/tokens package ships no NOTICE file.
+
+Jira, Confluence and Atlassian are trademarks of Atlassian Pty Ltd.
+This product is not affiliated with or endorsed by Atlassian.
+(Jira, Confluence, Atlassian은 Atlassian Pty Ltd의 상표이며 본 제품은 Atlassian과 무관합니다.)
