@@ -1,5 +1,29 @@
 # @chanho/react
 
+## 0.12.0
+
+### Minor Changes
+
+- Atlassian 현행 컴포넌트 치수·상태색으로 정렬(근거: `@atlaskit/*` 현행 패키지의 컴파일 CSS, 실사이트 실측). API·CSS 클래스 이름은 그대로다.
+  - Button: 기본 36 → 32px, small 28 → 24px(반경 4px), 반경 4 → 6px, 굵기 600 → 500, 글자 14px 통일, 아이콘 전용 32/24px.
+    `secondary` = Atlassian default(투명 배경 + 알파 테두리 + text-subtle), `ghost` = subtle(text-subtle). default·subtle 모양은 비활성에서 채우지 않는다.
+  - TextField·TextArea·Select: 반경 6px, 좌우 6px, hover `background.input-hovered`, placeholder `text.subtlest`, 오류 상태는 늘 안쪽 1px danger 테두리.
+    라벨은 Atlassian 폼 라벨(12px · 653 · text-subtle), 설명은 `text.subtlest`.
+  - Select·Dropdown 팝업: 테두리 없이 반경 8px + `shadow.overlay`. 항목 hover는 neutral 틴트(글자색 유지), Select 현재 값은 selected 배경.
+    Dropdown 그룹 제목은 대문자 변환을 없애고 12px · 653.
+  - Lozenge: 20px · 12px 보통 굵기 · 대문자 변환 없음, subtler 배경 + bolder 글자.
+  - Badge: 반경 2px · 최소 폭 24px · 보통 굵기. neutral = 회색 틴트, brand = information subtler, danger = danger subtler(진한 빨강 채움 → 옅은 빨강).
+  - Tag: 투명 배경 + 1px `border.accent-gray-subtle`, 12px. 링크 태그는 글자색 유지·hover 밑줄. 제거 버튼 16px, hover neutral 틴트.
+  - Tabs: 패딩 6px 8px · 반경 6px · 간격 없음, 목록 아래 1px 알파 선, 선택 밑줄은 좌우 8px 들여 2px `border.selected`, hover 밑줄 2px.
+  - Switch: Atlassian 토글 — 트랙 32×16 neutral-bold, **켜짐 초록(success)**, 썸 12px.
+  - Radio: 선택 시 원 전체를 브랜드로 채우고 가운데 점은 반전색. Checkbox·Radio hover `background.input-hovered`.
+  - Modal: 반경 12px(`radius.xlarge`), `shadow.overlay`, 제목 653, 닫기 32px · 반경 6px.
+  - Tooltip: `background.neutral-bold`, 패딩 4px 6px, 12/16, 그림자 없음.
+  - ProgressBar: 트랙 neutral, 기본 막대 neutral-bold(브랜드 → 짙은 회색).
+  - Toast: 반경 8px, `shadow.overlay`, info 강조선 = info 색. InlineEdit: 반경 6px, 확인/취소 32px 오버레이 버튼.
+  - SideNav 항목 36 → 32px · 반경 6px · 좌우 4px. Table 클릭 행 hover = neutral 틴트. TopBar 검색 placeholder·hover 정렬.
+  - Avatar `teal`: info가 블루가 되어 `blue`와 겹치지 않도록 accent teal 토큰 사용. Card hover 테두리 `border.accent-gray-subtle`.
+
 ## 0.11.0
 
 ### Minor Changes

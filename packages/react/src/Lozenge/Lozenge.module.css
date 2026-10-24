@@ -1,37 +1,40 @@
+/* Atlassian 현행 로젠지(@atlaskit/lozenge 17.0.6 new/lozenge-base): 높이 20px·반경 4px·좌우 4px,
+   body-small(12/16)·대문자 변환 없음, subtler 배경 + bolder 텍스트. */
 .lozenge {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
+  height: 20px;
   padding: var(--chanho-space-25) var(--chanho-space-50);
   border-radius: var(--chanho-radius-small);
   font-family: var(--chanho-font-family-sans);
   font-size: var(--chanho-font-size-75);
-  font-weight: var(--chanho-font-weight-semibold);
-  line-height: 1;
-  text-transform: uppercase;
+  font-weight: var(--chanho-font-weight-regular);
+  line-height: var(--chanho-font-lineHeight-50);
   white-space: nowrap;
 }
 
 .neutral {
   background: var(--chanho-color-background-neutral);
-  color: var(--chanho-color-text-subtle);
+  color: var(--chanho-color-text-default);
 }
 
 .info {
-  background: var(--chanho-color-background-info-subtle);
-  color: var(--chanho-color-text-info);
+  background: var(--chanho-color-background-info-subtler);
+  color: var(--chanho-color-text-info-bolder);
 }
 
 .success {
-  background: var(--chanho-color-background-success-subtle);
-  color: var(--chanho-color-text-success);
+  background: var(--chanho-color-background-success-subtler);
+  color: var(--chanho-color-text-success-bolder);
 }
 
 .warning {
-  background: var(--chanho-color-background-warning-subtle);
-  color: var(--chanho-color-text-warning);
+  background: var(--chanho-color-background-warning-subtler);
+  color: var(--chanho-color-text-warning-bolder);
 }
 
 .danger {
-  background: var(--chanho-color-background-danger-subtle);
-  color: var(--chanho-color-text-danger);
+  background: var(--chanho-color-background-danger-subtler);
+  color: var(--chanho-color-text-danger-bolder);
 }

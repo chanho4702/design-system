@@ -4,12 +4,12 @@
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-5FA04E?logo=nodedotjs&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-11.10.0-F69220?logo=pnpm&logoColor=white)
-![Components](https://img.shields.io/badge/Components-28-1B66C9)
+![Components](https://img.shields.io/badge/Components-28-1868DB)
 
 Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프론트엔드가 공유하도록 만든 **자체 디자인 시스템 모노레포**.
 토큰·React 컴포넌트·공통 조직 관리 화면을 별도 npm 패키지로 분리해, 소비 앱은 필요한 패키지만 설치하면 동일한 룩앤필·다크모드·접근성 계약을 그대로 가져간다.
 
-**구조는 Atlassian을 참고하되 브랜드는 자체 정의** — 스틸 블루 `#1B66C9`(브랜드 탐색 1a), Pretendard 서체.
+**색·치수는 Atlassian 현행 값(`@atlaskit/tokens` 20.7.0)에 맞춘다** — 브랜드 블루 `#1868DB`, 서체는 한글 때문에 Pretendard.
 
 > 이 저장소는 [독립 git repo](https://github.com/chanho4702/design-system)이며, MSA 우산 repo에서는 별도로 관리한다. MSA 프론트 중 `wiki-front`·`alm-front`가 **GitHub Packages(`@chanho4702/*`) + pnpm alias**로 실제 소비 중이다 — 아래 [소비 프로젝트](#소비-프로젝트) 참고.
 
@@ -22,8 +22,8 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 | 패키지 | 버전 | 발행 이름(GitHub Packages) | 설명 |
 |---|---|---|---|
-| [`@chanho/tokens`](packages/tokens) | 0.4.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
-| [`@chanho/react`](packages/react) | 0.11.0 | `@chanho4702/react` | React 19 컴포넌트 28종 — Radix UI 기반 동작 + 토큰 스타일링 |
+| [`@chanho/tokens`](packages/tokens) | 0.5.0 | `@chanho4702/tokens` | 디자인 토큰 — 원시(palette) / 시맨틱 2층 구조, 라이트·다크 CSS 변수 + TypeScript 상수 |
+| [`@chanho/react`](packages/react) | 0.12.0 | `@chanho4702/react` | React 19 컴포넌트 28종 — Radix UI 기반 동작 + 토큰 스타일링 |
 | [`@chanho/org-admin`](packages/org-admin) | 0.3.0 | `@chanho4702/org-admin` | 플랫폼 공통 조직 관리 화면(사용자·초대·팀·전역 역할·권한 이력·승인 대기·메일 설정) — [README](packages/org-admin/README.md) |
 
 세 패키지 모두 MIT, 리포지토리 `github.com/chanho4702/design-system`.
@@ -50,8 +50,8 @@ Jira/Confluence가 하나의 Atlassian Design System을 공유하듯, 여러 프
 
 3층 소스로 구성되고, 빌드 시 CSS 변수(`--chanho-*`)와 TS 상수 양쪽으로 나온다.
 
-- **`palette.ts`** — 원시 컬러 램프. 브랜드 `blue`(500 = `#1B66C9`), 라이트용 `gray`, 다크 전용 `darkGray`(단순 반전이 아니라 명도 재조정), 상태색(red·green·orange·teal 등). 컴포넌트에서 직접 참조 금지.
-- **`semantic.ts`** — 시맨틱 토큰(라이트·다크 각 100키). 그룹: `color.background.*` · `color.text.*` · `color.border.*` · `color.blanket` · `shadow.*`(elevation). 라이트/다크는 동일 키 세트를 가져야 하며 `buildCss.test.ts`가 이를 강제한다.
+- **`palette.ts`** — 원시 컬러 램프. 브랜드 `blue`(500 = `#1868DB`), 라이트용 `gray`, 다크 전용 `darkGray`(단순 반전이 아니라 명도 재조정), 상태색(red·green·orange·teal 등). 컴포넌트에서 직접 참조 금지.
+- **`semantic.ts`** — 시맨틱 토큰(라이트·다크 동일 키 세트, 일부 알파 값). 그룹: `color.background.*` · `color.text.*` · `color.border.*` · `color.blanket` · `shadow.*`(elevation). 라이트/다크는 동일 키 세트를 가져야 하며 `buildCss.test.ts`가 이를 강제한다.
 - **`static.ts`** — 테마 무관 정적 토큰: `space`(4px 그리드) · `radius` · `font`(family·size·weight·lineHeight, Pretendard Variable / IBM Plex Mono) · `z`(z-index 층위) · `focus`(2중 포커스 링).
 
 `exports`: `.`(TS 상수) / `./css`(`dist/tokens.css`).
@@ -103,8 +103,8 @@ GitHub Packages npm은 스코프가 소유자와 같아야 해서 레지스트�
 ```jsonc
 // package.json — 버전은 위 패키지 표(또는 태그)에서 고른다
 "dependencies": {
-  "@chanho/tokens":    "npm:@chanho4702/tokens@0.4.0",
-  "@chanho/react":     "npm:@chanho4702/react@0.11.0",
+  "@chanho/tokens":    "npm:@chanho4702/tokens@0.5.0",
+  "@chanho/react":     "npm:@chanho4702/react@0.12.0",
   "@chanho/org-admin": "npm:@chanho4702/org-admin@0.3.0"   // 조직 관리 화면이 필요할 때만
 }
 ```

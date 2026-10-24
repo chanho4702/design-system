@@ -6,7 +6,7 @@
   padding: var(--chanho-space-25) var(--chanho-space-75);
   margin: calc(-1 * var(--chanho-space-25)) calc(-1 * var(--chanho-space-75));
   border: none;
-  border-radius: var(--chanho-radius-small);
+  border-radius: var(--chanho-radius-medium);
   background: transparent;
   font: inherit;
   color: inherit;
@@ -40,7 +40,7 @@
 }
 
 .placeholder {
-  color: var(--chanho-color-text-subtle);
+  color: var(--chanho-color-text-subtlest);
 }
 
 .editor {
@@ -54,7 +54,7 @@
   padding: var(--chanho-space-25) var(--chanho-space-75);
   margin: calc(-1 * var(--chanho-space-25)) calc(-1 * var(--chanho-space-75));
   border: 1px solid var(--chanho-color-border-focused);
-  border-radius: var(--chanho-radius-small);
+  border-radius: var(--chanho-radius-medium);
   background: var(--chanho-color-background-input);
   font: inherit;
   color: var(--chanho-color-text-default);
@@ -74,14 +74,16 @@
   z-index: var(--chanho-z-popover);
 }
 
+/* Atlassian inline-edit 확인/취소 버튼(@atlaskit/inline-edit 16.4.6 internal/buttons): 32px·반경 6px,
+   surface-overlay + shadow-overlay, 테두리 없음 */
 .control {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border: 1px solid var(--chanho-color-border-default);
-  border-radius: var(--chanho-radius-small);
-  background: var(--chanho-color-background-surface-raised);
-  box-shadow: var(--chanho-shadow-200);
+  border: none;
+  border-radius: var(--chanho-radius-medium);
+  background: var(--chanho-color-background-surface-overlay);
+  box-shadow: var(--chanho-shadow-overlay);
   color: var(--chanho-color-text-subtle);
   font-size: var(--chanho-font-size-100);
   line-height: 1;

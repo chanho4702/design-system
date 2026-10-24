@@ -1,19 +1,33 @@
+/* Atlassian 현행 탭(@atlaskit/tabs 21.3.0 tab-list): 탭 패딩 6px 8px·반경 6px·medium(500)·text-subtle,
+   목록 아래 1px 알파 선, 선택 탭은 좌우 8px 들여 2px border-selected 밑줄 + text-selected,
+   hover는 같은 자리에 2px border-default 밑줄. 탭 사이 간격은 없다. */
 .root {
   font-family: var(--chanho-font-family-sans);
 }
 
 .list {
+  position: relative;
   display: flex;
-  gap: var(--chanho-space-100);
-  border-bottom: 2px solid var(--chanho-color-border-default);
+}
+
+.list::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: var(--chanho-space-100);
+  height: 1px;
+  background: var(--chanho-color-border-default);
 }
 
 .trigger {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--chanho-space-75);
-  padding: var(--chanho-space-100) var(--chanho-space-150);
+  padding: var(--chanho-space-75) var(--chanho-space-100);
   border: none;
+  border-radius: var(--chanho-radius-medium);
   background: none;
   color: var(--chanho-color-text-subtle);
   font-family: var(--chanho-font-family-sans);
@@ -22,8 +36,18 @@
   cursor: pointer;
 }
 
-.trigger:hover {
-  color: var(--chanho-color-text-default);
+.trigger::after {
+  content: "";
+  position: absolute;
+  right: var(--chanho-space-100);
+  bottom: 0;
+  left: var(--chanho-space-100);
+  height: 0;
+  border-bottom: 2px solid transparent;
+}
+
+.trigger:hover::after {
+  border-bottom-color: var(--chanho-color-border-default);
 }
 
 .trigger:focus-visible {
@@ -32,8 +56,11 @@
 }
 
 .trigger[data-state="active"] {
-  color: var(--chanho-color-text-brand);
-  box-shadow: inset 0 -2px 0 0 var(--chanho-color-background-brand);
+  color: var(--chanho-color-text-selected);
+}
+
+.trigger[data-state="active"]::after {
+  border-bottom-color: var(--chanho-color-border-selected);
 }
 
 .content {

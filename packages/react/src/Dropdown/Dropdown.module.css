@@ -2,10 +2,9 @@
   overflow: hidden;
   min-width: 160px;
   padding: var(--chanho-space-50);
-  border: 1px solid var(--chanho-color-border-default);
-  border-radius: var(--chanho-radius-medium);
+  border-radius: var(--chanho-radius-large);
   background: var(--chanho-color-background-surface-overlay);
-  box-shadow: var(--chanho-shadow-300);
+  box-shadow: var(--chanho-shadow-overlay);
   font-family: var(--chanho-font-family-sans);
   z-index: var(--chanho-z-popover);
 }
@@ -22,9 +21,9 @@
   outline: none;
 }
 
+/* Atlassian 메뉴 항목(@atlaskit/menu 11.0.4): hover는 neutral 틴트이고 글자색은 그대로 */
 .item[data-highlighted] {
-  background: var(--chanho-color-background-brand-subtle);
-  color: var(--chanho-color-text-brand);
+  background: var(--chanho-color-background-neutral);
 }
 
 .item[data-disabled] {
@@ -52,14 +51,14 @@
   color: var(--chanho-color-text-danger);
 }
 
-/* 그룹 제목 — 선택 불가, 지라 설정 메뉴의 "개인 설정 / 관리자 설정" */
+/* 그룹 제목 — 선택 불가, 지라 설정 메뉴의 "개인 설정 / 관리자 설정".
+   Atlassian(@atlaskit/dropdown-menu group-title): heading-xxsmall 12/16 · 653 · text-subtle, 대문자 변환 없음 */
 .heading {
   padding: var(--chanho-space-100) var(--chanho-space-150) var(--chanho-space-50);
   color: var(--chanho-color-text-subtle);
   font-size: var(--chanho-font-size-75);
-  font-weight: var(--chanho-font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  font-weight: var(--chanho-font-weight-bold);
+  line-height: var(--chanho-font-lineHeight-50);
 }
 
 /* 설명이 있는 두 줄 항목 */
@@ -88,7 +87,7 @@
 }
 
 .itemDescription {
-  color: var(--chanho-color-text-subtle);
+  color: var(--chanho-color-text-subtlest);
   font-size: var(--chanho-font-size-75);
   white-space: normal;
 }

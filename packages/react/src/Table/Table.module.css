@@ -119,8 +119,9 @@
   cursor: pointer;
 }
 
+/* Atlassian dynamic-table 행 hover = neutral-subtle-hovered(알파 틴트) */
 .rowClickable:hover .td {
-  background: var(--chanho-color-background-subtle);
+  background: var(--chanho-color-background-neutral);
 }
 
 .rowSelected .td {

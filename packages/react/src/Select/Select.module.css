@@ -5,10 +5,12 @@
   font-family: var(--chanho-font-family-sans);
 }
 
+/* Atlassian 폼 라벨(@atlaskit/form 18.2.1 label): body-small 12/16 · bold(653) · text-subtle */
 .label {
-  color: var(--chanho-color-text-default);
-  font-size: var(--chanho-font-size-100);
-  font-weight: var(--chanho-font-weight-medium);
+  color: var(--chanho-color-text-subtle);
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-bold);
+  line-height: var(--chanho-font-lineHeight-50);
 }
 
 .trigger {
@@ -18,9 +20,9 @@
   gap: var(--chanho-space-100);
   min-width: 180px;
   height: 36px;
-  padding: 0 var(--chanho-space-100);
+  padding: 0 var(--chanho-space-75);
   border: 1px solid var(--chanho-color-border-input);
-  border-radius: var(--chanho-radius-small);
+  border-radius: var(--chanho-radius-medium);
   background: var(--chanho-color-background-input);
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
@@ -30,7 +32,7 @@
 }
 
 .trigger:hover:not(:disabled) {
-  background: var(--chanho-color-background-subtle);
+  background: var(--chanho-color-background-input-hovered);
 }
 
 .trigger:focus-visible {
@@ -47,16 +49,15 @@
 }
 
 .trigger[data-placeholder] {
-  color: var(--chanho-color-text-subtle);
+  color: var(--chanho-color-text-subtlest);
 }
 
 .content {
   overflow: hidden;
   min-width: 180px;
-  border: 1px solid var(--chanho-color-border-default);
-  border-radius: var(--chanho-radius-medium);
+  border-radius: var(--chanho-radius-large);
   background: var(--chanho-color-background-surface-overlay);
-  box-shadow: var(--chanho-shadow-300);
+  box-shadow: var(--chanho-shadow-overlay);
   font-family: var(--chanho-font-family-sans);
   z-index: var(--chanho-z-popover);
 }
@@ -74,9 +75,19 @@
   outline: none;
 }
 
+/* Atlassian 메뉴 항목(@atlaskit/menu 11.0.4): hover는 neutral 틴트이고 글자색은 그대로 */
 .item[data-highlighted] {
-  background: var(--chanho-color-background-brand-subtle);
-  color: var(--chanho-color-text-brand);
+  background: var(--chanho-color-background-neutral);
+}
+
+/* 현재 값 — Atlassian 선택 항목: selected 배경 + selected 글자 */
+.item[data-state="checked"] {
+  background: var(--chanho-color-background-selected);
+  color: var(--chanho-color-text-selected);
+}
+
+.item[data-state="checked"][data-highlighted] {
+  background: var(--chanho-color-background-selected-hovered);
 }
 
 .item[data-disabled] {

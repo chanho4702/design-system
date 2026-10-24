@@ -5,14 +5,16 @@
   font-family: var(--chanho-font-family-sans);
 }
 
+/* Atlassian 현행 토글(@atlaskit/toggle 17.3.5 regular): 트랙 32×16·neutral-bold, 켜짐 success-bold(초록),
+   썸 12px·2px 여백·icon-inverse. */
 .track {
   position: relative;
   width: 32px;
-  height: 18px;
+  height: 16px;
   padding: 0;
   border: none;
   border-radius: var(--chanho-radius-full);
-  background: var(--chanho-color-background-neutral-hovered);
+  background: var(--chanho-color-background-neutral-bold);
   cursor: pointer;
   transition: background-color 120ms ease;
 }
@@ -22,8 +24,20 @@
   box-shadow: var(--chanho-focus-ring);
 }
 
+.track:hover:not(:disabled) {
+  background: var(--chanho-color-background-neutral-bold-hovered);
+}
+
+.track:active:not(:disabled) {
+  background: var(--chanho-color-background-neutral-bold-pressed);
+}
+
 .track[data-state="checked"] {
-  background: var(--chanho-color-background-brand);
+  background: var(--chanho-color-background-success);
+}
+
+.track[data-state="checked"]:hover:not(:disabled) {
+  background: var(--chanho-color-background-success-hovered);
 }
 
 /* disabled는 색을 덮지 않고 흐리게만 — checked 상태(브랜드색)가 disabled에서도 읽혀야 한다.
@@ -35,17 +49,17 @@
 
 .thumb {
   display: block;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: var(--chanho-radius-full);
-  background: var(--chanho-color-background-surface);
+  background: var(--chanho-color-text-inverse);
   transform: translateX(2px);
   transition: transform 120ms ease;
   will-change: transform;
 }
 
 .thumb[data-state="checked"] {
-  transform: translateX(16px);
+  transform: translateX(18px);
 }
 
 /* 라벨이 노드(아이콘+텍스트)일 때 아이콘과 글자를 세로 가운데로 모으고 토큰 간격을 준다.

@@ -30,8 +30,20 @@
   box-shadow: var(--chanho-focus-ring);
 }
 
+.circle:hover:not(:disabled) {
+  background: var(--chanho-color-background-input-hovered);
+}
+
+/* Atlassian 현행 라디오(@atlaskit/radio 10.2.6): 선택 시 원 전체를 selected-bold(브랜드)로 채우고
+   가운데 점은 반전색(icon-inverse) */
 .circle[data-state="checked"] {
-  border-color: var(--chanho-color-border-brand);
+  border-color: var(--chanho-color-background-brand);
+  background: var(--chanho-color-background-brand);
+}
+
+.circle[data-state="checked"]:hover:not(:disabled) {
+  border-color: var(--chanho-color-background-brand-hovered);
+  background: var(--chanho-color-background-brand-hovered);
 }
 
 .circle:disabled {
@@ -44,10 +56,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: var(--chanho-radius-full);
-  background: var(--chanho-color-background-brand);
+  background: var(--chanho-color-text-inverse);
+}
+
+.circle:disabled .indicator {
+  background: var(--chanho-color-text-disabled);
 }
 
 /* 라벨이 노드(아이콘+텍스트)일 때 아이콘과 글자를 세로 가운데로 모으고 토큰 간격을 준다.

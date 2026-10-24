@@ -37,13 +37,14 @@
   gap: var(--chanho-space-25);
 }
 
+/* Atlassian 사이드바 항목 실측(Jira/Confluence 2026-10): 높이 32px·반경 6px·패딩 4px·굵기 400 */
 .item {
   display: flex;
   align-items: center;
   gap: var(--chanho-space-100);
-  height: 36px;
-  padding: 0 var(--chanho-space-100);
-  border-radius: var(--chanho-radius-small);
+  height: 32px;
+  padding: 0 var(--chanho-space-50);
+  border-radius: var(--chanho-radius-medium);
   color: var(--chanho-color-text-default);
   font-size: var(--chanho-font-size-100);
   text-decoration: none;

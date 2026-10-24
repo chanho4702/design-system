@@ -14,9 +14,9 @@
   max-height: calc(100vh - 64px);
   overflow-y: auto;
   padding: var(--chanho-space-300);
-  border-radius: var(--chanho-radius-large);
+  border-radius: var(--chanho-radius-xlarge);
   background: var(--chanho-color-background-surface-overlay);
-  box-shadow: var(--chanho-shadow-300);
+  box-shadow: var(--chanho-shadow-overlay);
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
   z-index: var(--chanho-z-modal);
@@ -30,21 +30,22 @@
   margin-bottom: var(--chanho-space-100);
 }
 
+/* Atlassian 모달 제목(@atlaskit/modal-dialog 17.1.1 modal-title): heading-medium 20px · 653 */
 .title {
   margin: 0;
   font-size: var(--chanho-font-size-300);
-  font-weight: var(--chanho-font-weight-semibold);
+  font-weight: var(--chanho-font-weight-bold);
 }
 
 .close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--chanho-radius-small);
+  border-radius: var(--chanho-radius-medium);
   background: none;
   color: var(--chanho-color-text-subtle);
   cursor: pointer;
@@ -52,6 +53,10 @@
 
 .close:hover {
   background: var(--chanho-color-background-neutral);
+}
+
+.close:active {
+  background: var(--chanho-color-background-neutral-hovered);
 }
 
 .close:focus-visible {

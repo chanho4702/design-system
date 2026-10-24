@@ -16,11 +16,19 @@ export const space = {
   1000: "80px",
 } as const;
 
+/**
+ * 반경 — Atlassian 현행 shape 스케일(`@atlaskit/tokens` 20.7.0 `atlassian-shape.js`).
+ * 버튼·입력·탭·사이드바 항목 = medium(6px), 작은(24px) 버튼·로젠지·태그 = small(4px),
+ * 팝업·플래그·섹션 메시지 = large(8px), 모달 = xlarge(12px).
+ * 0.4.0 대비 large 12→8, xlarge 16→12로 바뀌었다(이전 값은 xlarge·xxlarge로 옮겨 감).
+ */
 export const radius = {
+  xsmall: "2px",
   small: "4px",
   medium: "6px",
-  large: "12px",
-  xlarge: "16px",
+  large: "8px",
+  xlarge: "12px",
+  xxlarge: "16px",
   full: "9999px",
 } as const;
 
@@ -50,11 +58,16 @@ export const font = {
     500: "28px",
     600: "32px",
   },
+  /**
+   * Atlassian 현행 굵기(`--ds-font-weight-*`): bold는 653(헤딩·로젠지·폼 라벨).
+   * Pretendard Variable은 wght 축(45–920)이라 653을 그대로 그린다. 정적 Pretendard로 떨어지면
+   * 브라우저가 가장 가까운 700을 고른다.
+   */
   weight: {
     regular: "400",
     medium: "500",
     semibold: "600",
-    bold: "700",
+    bold: "653",
   },
   lineHeight: {
     50: "16px",

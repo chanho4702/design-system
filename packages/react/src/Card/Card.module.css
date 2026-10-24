@@ -35,7 +35,7 @@
 
 .interactive:hover {
   box-shadow: var(--chanho-shadow-200);
-  border-color: var(--chanho-color-border-input);
+  border-color: var(--chanho-color-border-accent-gray-subtle);
 }
 
 .interactive:active {

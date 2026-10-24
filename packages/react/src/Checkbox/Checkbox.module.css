@@ -25,6 +25,16 @@
   box-shadow: var(--chanho-focus-ring);
 }
 
+.box:hover:not(:disabled) {
+  background: var(--chanho-color-background-input-hovered);
+}
+
+.box[data-state="checked"]:hover:not(:disabled),
+.box[data-state="indeterminate"]:hover:not(:disabled) {
+  border-color: var(--chanho-color-background-brand-hovered);
+  background: var(--chanho-color-background-brand-hovered);
+}
+
 .box[data-state="checked"],
 .box[data-state="indeterminate"] {
   border-color: var(--chanho-color-border-brand);

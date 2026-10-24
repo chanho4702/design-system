@@ -56,7 +56,8 @@
   color: var(--chanho-color-text-danger);
 }
 
+/* 정보색(info)이 블루로 바뀌어 blue와 구분되도록 Atlassian accent teal을 쓴다 */
 .teal {
-  background: var(--chanho-color-background-info-subtle);
-  color: var(--chanho-color-text-info);
+  background: var(--chanho-color-background-accent-teal-subtlest);
+  color: var(--chanho-color-text-accent-teal);
 }

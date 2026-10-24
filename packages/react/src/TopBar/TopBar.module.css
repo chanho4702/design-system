@@ -62,11 +62,11 @@
 }
 
 .searchInput::placeholder {
-  color: var(--chanho-color-text-subtle);
+  color: var(--chanho-color-text-subtlest);
 }
 
 .searchInput:hover {
-  background: var(--chanho-color-background-subtle);
+  background: var(--chanho-color-background-input-hovered);
 }
 
 .searchInput:focus-visible {
