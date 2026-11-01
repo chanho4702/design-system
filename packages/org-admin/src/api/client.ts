@@ -146,6 +146,18 @@ export function createOrgClient(api: OrgApiFetch) {
       await send(`/api/org/members/${encodeURIComponent(id)}`, "PATCH", patch);
     },
 
+    /**
+     * 구성원 CSV 내보내기(전역 관리자). 필터는 `memberPage`와 같은 규칙이다(`"ALL"`이면 전부).
+     * 서버가 UTF-8 BOM·수식 주입 차단을 끝낸 CSV를 내려 주므로 그대로 Blob으로 받는다.
+     */
+    async exportMembersCsv(q: Omit<MemberQuery, "page" | "size"> = {}): Promise<Blob> {
+      const res = await api(
+        `/api/org/members/export${query({ status: q.status, kind: q.kind, q: q.q })}`,
+      );
+      if (!res.ok) throw await errorOf(res);
+      return res.blob();
+    },
+
     async memberEvents(id: string): Promise<MemberEvent[]> {
       const raw = await call(`/api/org/members/${encodeURIComponent(id)}/events`);
       return toPage(raw, toMemberEvent, 100).items;
@@ -199,6 +211,12 @@ export function createOrgClient(api: OrgApiFetch) {
     async resendInvitation(id: string): Promise<Invitation | null> {
       const raw = await send(`/api/org/invitations/${encodeURIComponent(id)}/resend`, "POST");
       return raw === null ? null : toInvitation(raw);
+    },
+
+    /** 초대 한 건의 이력(발송·재발송·수락·철회·만료, 최신순, 서버 상한 100건). 전역 관리자 전용. */
+    async invitationEvents(id: string): Promise<MemberEvent[]> {
+      const raw = await call(`/api/org/invitations/${encodeURIComponent(id)}/events`);
+      return toPage(raw, toMemberEvent, 100).items;
     },
 
     async revokeInvitation(id: string): Promise<void> {

@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { Button, Select, Table, TextField } from "@chanho/react";
+import { Button, Select, Table, TextField, useToast } from "@chanho/react";
 import type { TableColumn } from "@chanho/react";
-import { useOrgClient } from "../context";
+import { useOrgAdmin } from "../context";
+import { downloadBlob, todayStamp } from "../download";
 import { useAsync } from "../useAsync";
 import { DataSection } from "../components/DataSection";
 import { Pagination } from "../components/Pagination";
@@ -27,9 +28,11 @@ const KIND_OPTIONS = [
   ...(["HUMAN", "AGENT"] as const).map((k) => ({ value: k, label: MEMBER_KIND_LABEL[k] })),
 ];
 
-/** 사용자 목록 — 검색·상태/종류 필터·페이지네이션, 행을 열면 상세. */
+/** 사용자 목록 — 검색·상태/종류 필터·페이지네이션, 행을 열면 상세. 전역 관리자는 현재 필터로 CSV를 내려받는다. */
 export function UsersScreen() {
-  const client = useOrgClient();
+  const { client, isGlobalAdmin } = useOrgAdmin();
+  const toast = useToast();
+  const [exporting, setExporting] = useState(false);
   const [term, setTerm] = useState("");
   const [status, setStatus] = useState<MemberStatus | typeof ALL>("ACTIVE");
   const [kind, setKind] = useState<MemberKind | typeof ALL>("HUMAN");
@@ -40,8 +43,9 @@ export function UsersScreen() {
     () =>
       client.memberPage({
         q: term,
-        status: status === ALL ? "" : status,
-        kind: kind === ALL ? "" : kind,
+        // "전체"는 ALL로 명시한다 — 비워 보내면 서버 기본값(ACTIVE·HUMAN)으로 걸러져 "전체"가 활성만 보였다.
+        status,
+        kind,
         page,
         size: PAGE_SIZE,
       }),
@@ -80,6 +84,24 @@ export function UsersScreen() {
 
   const items = result.data?.items ?? [];
 
+  /** 지금 화면의 필터(검색어·상태·종류) 그대로 — 페이지와 무관하게 조건에 맞는 전원을 받는다. */
+  const exportCsv = () => {
+    setExporting(true);
+    client.exportMembersCsv({ q: term, status, kind }).then(
+      (blob) => {
+        setExporting(false);
+        downloadBlob(blob, `members-${todayStamp()}.csv`);
+      },
+      (cause: unknown) => {
+        setExporting(false);
+        toast({
+          title: cause instanceof Error ? cause.message : "CSV를 내려받지 못했습니다",
+          appearance: "danger",
+        });
+      },
+    );
+  };
+
   return (
     <div className={styles.screen}>
       <div className={styles.toolbar}>
@@ -111,6 +133,13 @@ export function UsersScreen() {
             setPage(0);
           }}
         />
+        {isGlobalAdmin ? (
+          <div className={styles.toolbarEnd}>
+            <Button variant="secondary" loading={exporting} onClick={exportCsv}>
+              CSV 내보내기
+            </Button>
+          </div>
+        ) : null}
       </div>
 
       <DataSection

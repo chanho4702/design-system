@@ -170,8 +170,13 @@ export interface Me {
 }
 
 export interface MemberQuery {
-  status?: MemberStatus | "";
-  kind?: MemberKind | "";
+  /**
+   * 상태 필터. `"ALL"`이면 거르지 않는다. 비우면(`""`·생략) 서버 기본값 ACTIVE다 —
+   * "전체"를 원하면 반드시 `"ALL"`을 보낸다.
+   */
+  status?: MemberStatus | "ALL" | "";
+  /** 종류 필터. `"ALL"`이면 거르지 않는다. 비우면 서버 기본값 HUMAN. */
+  kind?: MemberKind | "ALL" | "";
   q?: string;
   page?: number;
   size?: number;

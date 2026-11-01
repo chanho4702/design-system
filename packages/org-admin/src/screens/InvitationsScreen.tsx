@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Button, ConfirmDialog, Table, Tabs, TextField, useToast } from "@chanho/react";
 import type { TableColumn } from "@chanho/react";
 import { useSearchParams } from "react-router";
-import { useOrgClient } from "../context";
+import { useOrgAdmin } from "../context";
 import { useAsync } from "../useAsync";
 import { CopyButton } from "../components/CopyButton";
 import { DataSection } from "../components/DataSection";
 import { MailLogLink } from "../components/MailLogLink";
 import { Pagination } from "../components/Pagination";
 import { INVITATION_STATUS_LABEL, formatDate } from "../format";
+import { InvitationHistoryDialog } from "./InvitationHistoryDialog";
 import { InviteForm } from "./InviteForm";
 import { InvitationStatusLozenge } from "./StatusLozenge";
 import type { GrantPreset, GrantRole, GrantScope, Invitation, InvitationStatus } from "../api/types";
@@ -34,9 +35,10 @@ function readPresetFromQuery(params: URLSearchParams): GrantPreset | null {
   };
 }
 
-/** 초대 화면 — 새 초대 폼 + 상태 탭 목록(재발송·철회·링크 복사). */
+/** 초대 화면 — 새 초대 폼 + 상태 탭 목록(재발송·철회·링크 복사, 전역 관리자는 이력). */
 export function InvitationsScreen() {
-  const client = useOrgClient();
+  const { client, isGlobalAdmin } = useOrgAdmin();
+  const [historyOf, setHistoryOf] = useState<Invitation | null>(null);
   const toast = useToast();
   const [status, setStatus] = useState<InvitationStatus>("PENDING");
   const [term, setTerm] = useState("");
@@ -135,30 +137,44 @@ export function InvitationsScreen() {
         key: "actions",
         header: "",
         adjustable: false,
-        render: (row) =>
-          row.status === "PENDING" ? (
-            <span className={styles.rowActions}>
-              {row.inviteUrl ? (
-                <CopyButton value={row.inviteUrl} label={`${row.email} 초대 링크 복사`} />
-              ) : null}
+        render: (row) => (
+          <span className={styles.rowActions}>
+            {row.status === "PENDING" ? (
+              <>
+                {row.inviteUrl ? (
+                  <CopyButton value={row.inviteUrl} label={`${row.email} 초대 링크 복사`} />
+                ) : null}
+                <Button
+                  variant="secondary"
+                  size="small"
+                  loading={busyId === row.id}
+                  onClick={() => resend(row)}
+                >
+                  재발송
+                </Button>
+                <Button variant="danger" size="small" onClick={() => setRevoking(row)}>
+                  철회
+                </Button>
+              </>
+            ) : null}
+            {/* 이력 API는 전역 관리자 전용 — 리소스 ADMIN에게는 버튼을 두지 않는다(눌러도 403). */}
+            {isGlobalAdmin ? (
               <Button
-                variant="secondary"
+                variant="subtle"
                 size="small"
-                loading={busyId === row.id}
-                onClick={() => resend(row)}
+                aria-label={`${row.email} 초대 이력`}
+                onClick={() => setHistoryOf(row)}
               >
-                재발송
+                이력
               </Button>
-              <Button variant="danger" size="small" onClick={() => setRevoking(row)}>
-                철회
-              </Button>
-            </span>
-          ) : null,
+            ) : null}
+          </span>
+        ),
       },
     ],
-    // resend/setRevoking은 매 렌더 새로 만들어지지만 동작이 같다 — busyId만 실제 의존성이다.
+    // resend/setRevoking은 매 렌더 새로 만들어지지만 동작이 같다 — busyId·isGlobalAdmin만 실제 의존성이다.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [busyId],
+    [busyId, isGlobalAdmin],
   );
 
   const items = result.data?.items ?? [];
@@ -235,6 +251,10 @@ export function InvitationsScreen() {
           content: value === status ? list : null,
         }))}
       />
+
+      {historyOf ? (
+        <InvitationHistoryDialog invitation={historyOf} onClose={() => setHistoryOf(null)} />
+      ) : null}
 
       <ConfirmDialog
         open={revoking !== null}

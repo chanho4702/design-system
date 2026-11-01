@@ -1,5 +1,17 @@
 # @chanho/org-admin
 
+## 0.4.0
+
+### Minor Changes
+
+- 초대 이력(F-25): 초대 목록 행마다 "이력" 버튼(전역 관리자) → 그 초대의 발송·재발송·철회·만료·수락을 최신순으로 보여 주는 대화상자.
+  클라이언트에 `invitationEvents(id)` 추가(`GET /api/org/invitations/{id}/events`).
+- 구성원 CSV 내보내기(F-25): 사용자 화면 툴바에 "CSV 내보내기"(전역 관리자) — 지금 필터(검색어·상태·종류) 그대로,
+  `members-YYYY-MM-DD.csv`로 내려받는다. 클라이언트에 `exportMembersCsv(q)` 추가(`GET /api/org/members/export`, Blob 응답).
+  **org-service에 이 경로가 있어야 한다**(platform-backend F-25 커밋 이후 이미지).
+- 수정: 사용자 화면에서 상태·종류를 "전체"로 고르면 실제로는 활성·사람만 보이던 문제 — 빈 값을 보내 서버 기본값(ACTIVE·HUMAN)으로
+  걸러졌다. 이제 `ALL`을 명시해 보낸다. `MemberQuery.status`·`kind`가 `"ALL"`을 받는다(빈 값의 뜻은 그대로 "서버 기본값").
+
 ## 0.3.2
 
 ### Patch Changes

@@ -341,4 +341,36 @@ describe("InvitationsScreen", () => {
       expect(screen.queryByText(/보냈습니다/)).not.toBeInTheDocument();
     });
   });
+
+  describe("초대 이력(F-25)", () => {
+    it("한 건의 이력 버튼을 누르면 그 초대의 이벤트가 최신순으로 나온다", async () => {
+      const { api, calls } = createFakeApi(
+        invitationRoutes({
+          "GET /api/org/invitations/:id/events": () => [
+            { id: 3, invitationId: 10, type: "INVITE_RESENT", createdAt: "2026-09-03T01:00:00Z", detail: "초대 재발송" },
+            { id: 1, invitationId: 10, type: "INVITED", createdAt: "2026-09-01T01:00:00Z", detail: "초대 발송: new@example.com" },
+          ],
+        }),
+      );
+      renderScreen(<InvitationsScreen />, { api });
+      await screen.findByRole("cell", { name: "new@example.com" });
+
+      await userEvent.click(screen.getByRole("button", { name: "new@example.com 초대 이력" }));
+
+      const dialog = await screen.findByRole("dialog", { name: "초대 이력 — new@example.com" });
+      const list = await within(dialog).findByRole("list", { name: "초대 이력" });
+      const rows = within(list).getAllByRole("listitem");
+      expect(rows).toHaveLength(2);
+      expect(rows[0]).toHaveTextContent("초대 재발송");
+      expect(rows[1]).toHaveTextContent("초대됨");
+      expect(calls.some((c) => c.path === "/api/org/invitations/10/events")).toBe(true);
+    });
+
+    it("전역 관리자가 아니면 이력 버튼이 없다(서버가 403을 낸다)", async () => {
+      const { api } = createFakeApi(invitationRoutes());
+      renderScreen(<InvitationsScreen />, { api, currentUser: PLAIN_USER });
+      await screen.findByRole("cell", { name: "new@example.com" });
+      expect(screen.queryByRole("button", { name: "new@example.com 초대 이력" })).not.toBeInTheDocument();
+    });
+  });
 });

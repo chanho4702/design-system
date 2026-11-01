@@ -1,9 +1,9 @@
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { UsersScreen } from "./UsersScreen";
-import { createFakeApi } from "../testing/fakeApi";
-import { ADMIN_USER, renderScreen } from "../testing/renderScreen";
+import { FakeError, createFakeApi } from "../testing/fakeApi";
+import { ADMIN_USER, PLAIN_USER, renderScreen } from "../testing/renderScreen";
 
 const MEMBERS = [
   {
@@ -135,5 +135,73 @@ describe("UsersScreen", () => {
     });
     const patch = calls.find((c) => c.method === "PATCH");
     expect(patch?.body).toEqual({ status: "DEACTIVATED" });
+  });
+
+  describe("CSV 내보내기(F-25)", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    /** 가짜 API는 등록 순서로 고르므로 `/members/:id`가 export를 먼저 삼킨다 — export만 따로 받는다. */
+    function exportFake(handler: () => unknown) {
+      const base = fake();
+      const exportApi = createFakeApi({ "GET /api/org/members/export": handler });
+      return {
+        calls: exportApi.calls,
+        api: (path: string, init?: RequestInit) =>
+          path.startsWith("/api/org/members/export") ? exportApi.api(path, init) : base.api(path, init),
+      };
+    }
+
+    it("현재 필터를 그대로 실어 내려받고, 전체는 ALL로 보낸다", async () => {
+      const createObjectURL = vi.fn(() => "blob:members");
+      const revokeObjectURL = vi.fn();
+      Object.assign(URL, { createObjectURL, revokeObjectURL });
+      const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+      const { api, calls } = exportFake(() => "이름,이메일,상태,팀");
+      renderScreen(<UsersScreen />, { api });
+      await screen.findByRole("cell", { name: "김채호" });
+
+      await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+      await userEvent.click(await screen.findByRole("option", { name: "전체 상태" }));
+      await userEvent.click(screen.getByRole("button", { name: "CSV 내보내기" }));
+
+      await waitFor(() => expect(click).toHaveBeenCalledTimes(1));
+      expect(calls[0].path).toContain("status=ALL");
+      expect(calls[0].path).toContain("kind=HUMAN");
+      expect(createObjectURL).toHaveBeenCalledTimes(1);
+      const anchor = click.mock.contexts[0] as HTMLAnchorElement;
+      expect(anchor.download).toMatch(/^members-\d{4}-\d{2}-\d{2}\.csv$/);
+    });
+
+    it("실패하면 서버 문구를 토스트로 보인다", async () => {
+      const { api } = exportFake(() => new FakeError(403, "GLOBAL ADMIN 권한이 필요합니다"));
+      renderScreen(<UsersScreen />, { api });
+      await screen.findByRole("cell", { name: "김채호" });
+
+      await userEvent.click(screen.getByRole("button", { name: "CSV 내보내기" }));
+
+      expect((await screen.findAllByText("GLOBAL ADMIN 권한이 필요합니다")).length).toBeGreaterThan(0);
+    });
+
+    it("전역 관리자가 아니면 버튼이 없다", async () => {
+      const { api } = fake();
+      renderScreen(<UsersScreen />, { api, currentUser: PLAIN_USER });
+      await screen.findByRole("cell", { name: "김채호" });
+      expect(screen.queryByRole("button", { name: "CSV 내보내기" })).not.toBeInTheDocument();
+    });
+  });
+
+  it("상태를 '전체'로 고르면 목록도 status=ALL로 조회한다(비우면 서버가 활성만 준다)", async () => {
+    const { api, calls } = fake();
+    renderScreen(<UsersScreen />, { api });
+    await screen.findByRole("cell", { name: "김채호" });
+
+    await userEvent.click(screen.getByRole("combobox", { name: "상태" }));
+    await userEvent.click(await screen.findByRole("option", { name: "전체 상태" }));
+
+    await waitFor(() =>
+      expect(calls.some((c) => c.path.includes("/members/page?") && c.path.includes("status=ALL"))).toBe(true),
+    );
   });
 });
