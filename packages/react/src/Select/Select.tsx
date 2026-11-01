@@ -134,6 +134,8 @@ export function Select({
               position="popper"
               sideOffset={4}
               collisionPadding={8}
+              // Radix의 listbox에는 접근 이름이 없다 — 검색형·MultiSelect(OptionList)와 같게 라벨을 이름으로 준다.
+              aria-label={label}
             >
               <RadixSelect.Viewport className={styles.viewport}>
                 {groupOptions(options).map((g, gi) =>

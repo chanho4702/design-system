@@ -18,7 +18,7 @@
   border-radius: var(--chanho-radius-full);
   background: var(--chanho-color-background-neutral-bold);
   cursor: pointer;
-  transition: background-color 120ms ease;
+  transition: background-color var(--chanho-transition-fast);
 }
 
 .track:focus-visible {

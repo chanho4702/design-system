@@ -24,6 +24,12 @@ describe("Select", () => {
     expect(screen.getAllByRole("option")).toHaveLength(3);
   });
 
+  it("열린 목록(listbox)도 라벨을 접근 이름으로 가진다(MultiSelect·검색형과 같다)", async () => {
+    render(<Select label="우선순위" options={OPTIONS} placeholder="선택" />);
+    await userEvent.click(screen.getByRole("combobox", { name: "우선순위" }));
+    expect(screen.getByRole("listbox", { name: "우선순위" })).toBeInTheDocument();
+  });
+
   it("옵션을 선택하면 onValueChange가 호출되고 트리거에 라벨이 표시된다", async () => {
     const onValueChange = vi.fn();
     render(

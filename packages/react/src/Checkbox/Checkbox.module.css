@@ -20,7 +20,7 @@
   background: var(--chanho-color-background-input);
   color: var(--chanho-color-text-inverse);
   cursor: pointer;
-  transition: background-color 120ms ease, border-color 120ms ease;
+  transition: background-color var(--chanho-transition-fast), border-color var(--chanho-transition-fast);
 }
 
 .box:focus-visible {

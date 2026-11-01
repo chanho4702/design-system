@@ -30,8 +30,8 @@
 .interactive {
   cursor: pointer;
   transition:
-    box-shadow 120ms ease,
-    border-color 120ms ease;
+    box-shadow var(--chanho-transition-fast),
+    border-color var(--chanho-transition-fast);
 }
 
 .interactive:hover {

@@ -58,6 +58,38 @@
   font-size: var(--chanho-font-size-75);
 }
 
+/* 동작 버튼 — 링크 모양(Atlassian Flag actions). 높이 24px로 터치 타깃 최소(WCAG 2.5.8)를 채운다. */
+.actions {
+  display: flex;
+  gap: var(--chanho-space-100);
+  margin-top: var(--chanho-space-100);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--chanho-radius-small);
+  background: none;
+  color: var(--chanho-color-text-link);
+  font: inherit;
+  font-size: var(--chanho-font-size-75);
+  font-weight: var(--chanho-font-weight-medium);
+  cursor: pointer;
+}
+
+.action:hover {
+  color: var(--chanho-color-text-link-hovered);
+  text-decoration: underline;
+}
+
+.action:focus-visible {
+  outline: none;
+  box-shadow: var(--chanho-focus-ring);
+}
+
 /* 터치 타깃 최소 24px(WCAG 2.5.8) */
 .close {
   flex: none;

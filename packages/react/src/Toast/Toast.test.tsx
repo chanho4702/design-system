@@ -1,7 +1,7 @@
 // ToastProvider/useToast는 Context 기반 합성이라 ref를 노출하지 않는다 (공통 테스트 ref 예외).
 // className은 개별 토스트가 아닌 Provider 관할이라 className 병합 테스트도 해당 없음 — 대신
 // appearance가 data-appearance 속성으로 노출되는지를 계약으로 검증한다.
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { ToastProvider, useToast } from "./Toast";
@@ -67,5 +67,40 @@ describe("Toast", () => {
     await userEvent.click(screen.getByRole("button", { name: "알림 발생" }));
     await userEvent.click(screen.getByRole("button", { name: "알림 발생" }));
     expect(screen.getAllByText("저장됨")).toHaveLength(2);
+  });
+
+  it("action을 주면 동작 버튼이 나오고, 누르면 onClick을 부르고 토스트가 닫힌다", async () => {
+    const undo = vi.fn();
+    function WithAction() {
+      const toast = useToast();
+      return (
+        <button
+          type="button"
+          onClick={() => toast({ title: "삭제됨", action: { label: "되돌리기", onClick: undo } })}
+        >
+          삭제
+        </button>
+      );
+    }
+    render(
+      <ToastProvider>
+        <WithAction />
+      </ToastProvider>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "삭제" }));
+    await userEvent.click(screen.getByRole("button", { name: "되돌리기" }));
+    expect(undo).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(screen.queryByText("삭제됨")).not.toBeInTheDocument());
+  });
+
+  it("action이 없으면 동작 버튼을 그리지 않는다(기존 사용처 그대로)", async () => {
+    render(
+      <ToastProvider>
+        <Demo />
+      </ToastProvider>,
+    );
+    await userEvent.click(screen.getByRole("button", { name: "알림 발생" }));
+    const toast = screen.getByText("저장됨").closest("li")!;
+    expect(within(toast).getAllByRole("button").map((b) => b.getAttribute("aria-label"))).toEqual(["닫기"]);
   });
 });

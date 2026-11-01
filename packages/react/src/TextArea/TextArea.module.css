@@ -24,7 +24,7 @@
   font-size: var(--chanho-font-size-100);
   line-height: 1.5;
   resize: vertical;
-  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  transition: border-color var(--chanho-transition-fast), box-shadow var(--chanho-transition-fast), background-color var(--chanho-transition-fast);
 }
 
 .textarea::placeholder {

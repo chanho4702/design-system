@@ -64,7 +64,7 @@ export type { TextAreaProps } from "./TextArea/TextArea";
 export { TextField } from "./TextField/TextField";
 export type { TextFieldProps } from "./TextField/TextField";
 export { ToastProvider, useToast } from "./Toast/Toast";
-export type { ToastOptions, ToastProviderProps } from "./Toast/Toast";
+export type { ToastAction, ToastOptions, ToastProviderProps } from "./Toast/Toast";
 export { TopBar } from "./TopBar/TopBar";
 export type { TopBarProps } from "./TopBar/TopBar";
 export { Tooltip } from "./Tooltip/Tooltip";

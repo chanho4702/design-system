@@ -35,7 +35,7 @@
   font-family: var(--chanho-font-family-sans);
   font-size: var(--chanho-font-size-100);
   cursor: pointer;
-  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  transition: border-color var(--chanho-transition-fast), box-shadow var(--chanho-transition-fast), background-color var(--chanho-transition-fast);
 }
 
 /* compact — 32px(Atlassian isCompact: 1+1+4+20+4+1+1). 버튼·필터 줄과 같은 높이 */

@@ -21,6 +21,17 @@ function Demo() {
       <Button variant="subtle" onClick={() => toast({ title: "새 댓글이 달렸습니다" })}>
         기본 토스트
       </Button>
+      <Button
+        variant="subtle"
+        onClick={() =>
+          toast({
+            title: "문서를 휴지통으로 옮겼습니다",
+            action: { label: "되돌리기", onClick: () => undefined, altText: "휴지통에서 복원할 수 있습니다" },
+          })
+        }
+      >
+        동작 버튼 토스트
+      </Button>
     </div>
   );
 }

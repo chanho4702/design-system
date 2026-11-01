@@ -1,5 +1,18 @@
 # @chanho/react
 
+## 0.16.0
+
+### Minor Changes
+
+공개 API는 추가만 했다(기존 프롭 이름·타입·기본값 그대로). tokens 요구는 0.15.0과 같다.
+
+- `Toast` — 선택적 `action: { label, onClick, altText? }` 동작 버튼 하나. 설명 아래 링크 모양(Atlassian Flag actions)이고,
+  누르면 `onClick`을 부르고 토스트를 닫는다. `altText`는 스크린리더용 대안 안내(Radix `Toast.Action`), 비우면 `label`.
+  타입 `ToastAction` export. `action`이 없는 기존 호출은 그대로다.
+- 접근성: 단일 `Select`(비검색형)의 열린 목록(listbox)에 접근 이름이 없던 문제 — 라벨을 이름으로 준다(검색형·`MultiSelect`와 같다).
+- 입력류 상태 색 전환의 하드코딩 `120ms ease`를 기존 토큰 `--chanho-transition-fast`(100ms ease)로 —
+  `TextField`·`TextArea`·`Select`·`Checkbox`·`Radio`·`Switch`, 같은 값을 쓰던 `Card`도 함께.
+
 ## 0.15.0
 
 ### Minor Changes
