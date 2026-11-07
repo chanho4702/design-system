@@ -15,7 +15,7 @@ export interface MultiSelectProps {
   value?: string[];
   /** 비제어 초기 값. */
   defaultValue?: string[];
-  /** 선택이 바뀔 때 — 옵션 순서대로 정렬된 배열. */
+  /** 선택이 바뀔 때 — 옵션 순서대로 정렬된 배열(목록 밖 값은 뒤에). 비동기 모드(onSearchChange)는 고른 순서. */
   onValueChange?: (values: string[]) => void;
   /** 아무것도 고르지 않았을 때 문구. */
   placeholder?: string;
@@ -41,6 +41,19 @@ export interface MultiSelectProps {
   maxChips?: number;
   /** 목록 아래 "전체 해제" 버튼 문구. @default '전체 해제' */
   clearLabel?: string;
+  /**
+   * 검색어가 바뀔 때 — 주면 비동기 모드다. options는 서버가 거른 현재 후보로 보고 다시 거르지 않으며,
+   * 후보 목록에서 사라진 선택도 칩으로 남는다(한 번 본 라벨을 기억). 값 순서는 고른 순서다.
+   */
+  onSearchChange?: (query: string) => void;
+  /** 후보를 받는 중. */
+  loading?: boolean;
+  /** @default '불러오는 중…' */
+  loadingMessage?: string;
+  /** true면 후보에 없는 검색어를 그대로 값으로 추가할 수 있다(목록 끝 "추가" 항목). */
+  creatable?: boolean;
+  /** 추가 항목 문구. @default (q) => `"${q}" 추가` */
+  createLabel?: (query: string) => string;
 }
 
 /**
@@ -65,6 +78,11 @@ export function MultiSelect({
   size = "default",
   maxChips = 2,
   clearLabel = "전체 해제",
+  onSearchChange,
+  loading,
+  loadingMessage,
+  creatable = false,
+  createLabel = (q) => `"${q}" 추가`,
 }: MultiSelectProps) {
   const autoId = useId();
   const triggerId = id ?? autoId;
@@ -73,12 +91,35 @@ export function MultiSelect({
   const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue);
   const current = value ?? uncontrolled;
   const focusRef = useRef<HTMLElement | null>(null);
+  const async = onSearchChange !== undefined;
+  // 비동기 후보는 검색어마다 바뀐다 — 한 번 본 옵션(라벨·아이콘)을 기억해 칩이 값 문자열로 퇴화하지 않게 한다
+  const seen = useRef(new Map<string, SelectOption>());
+  for (const o of options) seen.current.set(o.value, o);
 
-  // 옵션 순서대로 — 고른 순서와 무관하게 늘 같은 순서로 보인다
-  const selectedOptions = options.filter((o) => current.includes(o.value));
+  const known = (v: string) => options.some((o) => o.value === v);
+  const asOption = (v: string) => seen.current.get(v) ?? { value: v, label: v };
+  // 정적 목록은 옵션 순서대로(고른 순서와 무관하게 늘 같은 순서) + 목록 밖 값(직접 추가)은 뒤에 고른 순서로,
+  // 비동기 목록은 후보가 검색어마다 바뀌므로 전부 고른 순서대로
+  // 목록 밖 값을 남기는 건 creatable일 때만 — 일반 정적 목록은 예전처럼 options에 있는 값만 선택으로 본다
+  const extras = (vs: string[]) => (creatable ? vs.filter((v) => !known(v)) : []);
+  const selectedOptions = async
+    ? current.map(asOption)
+    : [...options.filter((o) => current.includes(o.value)), ...extras(current).map(asOption)];
+
+  // 이미 고른 값(현재 후보에 없어도 기억한 라벨 포함)과 이름이 같으면 "추가" 대신 그 선택을 보인다 — 같은 라벨 칩 중복 방지
+  const createFor = (q: string): SelectOption => {
+    const lower = q.toLocaleLowerCase();
+    const picked = selectedOptions.find(
+      (o) => o.value.toLocaleLowerCase() === lower || o.label.toLocaleLowerCase() === lower,
+    );
+    return picked ?? { value: q, label: createLabel(q) };
+  };
 
   const commit = (next: string[]) => {
-    const ordered = options.filter((o) => next.includes(o.value)).map((o) => o.value);
+    const unique = [...new Set(next)];
+    const ordered = async
+      ? unique
+      : [...options.filter((o) => unique.includes(o.value)).map((o) => o.value), ...extras(unique)];
     if (value === undefined) setUncontrolled(ordered);
     onValueChange?.(ordered);
   };
@@ -87,10 +128,16 @@ export function MultiSelect({
     commit(current.includes(option.value) ? current.filter((v) => v !== option.value) : [...current, option.value]);
   };
 
+  const changeOpen = (next: boolean) => {
+    // 다시 열면 검색 입력은 빈칸으로 새로 뜬다 — 부모 후보도 지난 검색어로 걸러진 채 남지 않게 빈 검색을 알린다
+    if (next && !open) onSearchChange?.("");
+    setOpen(next);
+  };
+
   const onTriggerKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !open) {
       e.preventDefault();
-      setOpen(true);
+      changeOpen(true);
     }
   };
 
@@ -105,7 +152,7 @@ export function MultiSelect({
       </label>
       <Popover
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={changeOpen}
         label={label}
         padding="none"
         className={[selectStyles.content, selectStyles.searchContent].join(" ")}
@@ -162,6 +209,11 @@ export function MultiSelect({
           noOptionsMessage={noOptionsMessage}
           focusRef={focusRef}
           onPick={toggle}
+          onQueryChange={onSearchChange}
+          filterLocally={!async}
+          loading={loading}
+          loadingMessage={loadingMessage}
+          createOption={creatable ? createFor : undefined}
           footer={
             <div className={styles.footer}>
               <span className={styles.count} aria-live="polite">

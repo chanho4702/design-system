@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent, ReactNode, RefObject } from "react";
 import type { SelectOption } from "./Select";
 import styles from "./Select.module.css";
@@ -75,6 +75,18 @@ export interface OptionListProps {
   focusRef: RefObject<HTMLElement | null>;
   /** 목록 아래에 붙는 요소(전체 해제 등). */
   footer?: ReactNode;
+  /** 검색어가 바뀔 때 — 서버에서 후보를 다시 받는 비동기 목록용. */
+  onQueryChange?: (query: string) => void;
+  /** false면 검색어로 options를 거르지 않는다(이미 서버가 거른 후보). @default true */
+  filterLocally?: boolean;
+  /** 후보를 받는 중 — 빈 목록 문구 대신 loadingMessage를 보인다. */
+  loading?: boolean;
+  loadingMessage?: string;
+  /**
+   * 검색어로 만드는 목록 끝 항목(새 값 추가 등). options에 같은 값·라벨이 있으면 부르지 않고, null이면 붙이지 않는다.
+   * 이미 고른 값을 돌려주면 선택된 항목으로 보인다.
+   */
+  createOption?: (query: string) => SelectOption | null;
 }
 
 export function OptionList({
@@ -89,6 +101,11 @@ export function OptionList({
   onTab,
   focusRef,
   footer,
+  onQueryChange,
+  filterLocally = true,
+  loading = false,
+  loadingMessage = "불러오는 중…",
+  createOption,
 }: OptionListProps) {
   const baseId = useId();
   const listId = `${baseId}-list`;
@@ -103,22 +120,44 @@ export function OptionList({
   );
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLocaleLowerCase();
-    return q ? options.filter((o) => o.label.toLocaleLowerCase().includes(q)) : options;
-  }, [options, query]);
+    // 받는 중에는 지난 검색어의 후보가 남아 있을 수 있다 — 고를 수 없게 아예 보이지 않는다
+    if (loading) return [];
+    const raw = query.trim();
+    const q = raw.toLocaleLowerCase();
+    const base = q && filterLocally ? options.filter((o) => o.label.toLocaleLowerCase().includes(q)) : options;
+    if (!createOption || !raw) return base;
+    const exists = options.some((o) => o.value.toLocaleLowerCase() === q || o.label.toLocaleLowerCase() === q);
+    if (exists) return base;
+    const extra = createOption(raw);
+    return extra && !base.some((o) => o.value === extra.value) ? [...base, extra] : base;
+  }, [options, query, filterLocally, createOption, loading]);
   const enabled = filtered.filter((o) => !o.disabled);
+  // 비동기 후보는 검색어보다 늦게 도착한다 — 강조 항목이 목록에서 사라졌으면 첫 활성 항목을 강조로 본다
   const activeVisible = active !== null && enabled.some((o) => o.value === active);
+  const highlighted = activeVisible ? active : (enabled[0]?.value ?? null);
+
+  // 서버가 거른 후보는 검색어마다 순서까지 바뀐다 — 후보 구성이 바뀌면 강조를 첫 항목으로 되돌린다
+  // (배열 정체성이 아니라 값 목록으로 비교해야 부모가 다시 그릴 때마다 강조가 튀지 않는다)
+  const candidateKey = filterLocally ? "" : JSON.stringify(options.map((o) => o.value));
+  const firstRun = useRef(true);
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    if (!filterLocally) setActive(null);
+  }, [candidateKey, filterLocally]);
 
   useEffect(() => {
-    if (active === null) return;
+    if (highlighted === null) return;
     // 목록은 포털로 body에 붙는다 — id로 찾아 강조 항목이 보이게 굴린다.
-    document.getElementById(`${baseId}-opt-${encodeURIComponent(active)}`)?.scrollIntoView({ block: "nearest" });
-  }, [active, baseId]);
+    document.getElementById(`${baseId}-opt-${encodeURIComponent(highlighted)}`)?.scrollIntoView({ block: "nearest" });
+  }, [highlighted, baseId]);
 
   const move = (to: "next" | "prev" | "first" | "last") => {
     if (enabled.length === 0) return;
     const last = enabled.length - 1;
-    const idx = enabled.findIndex((o) => o.value === active);
+    const idx = enabled.findIndex((o) => o.value === highlighted);
     let next: number;
     if (to === "first") next = 0;
     else if (to === "last") next = last;
@@ -153,13 +192,13 @@ export function OptionList({
         break;
       case "Enter":
         e.preventDefault();
-        pick(enabled.find((o) => o.value === active));
+        pick(enabled.find((o) => o.value === highlighted));
         break;
       case " ":
         // 검색 입력이 없을 때만 Space로 고른다(입력에서는 공백 글자)
         if (!searchable) {
           e.preventDefault();
-          pick(enabled.find((o) => o.value === active));
+          pick(enabled.find((o) => o.value === highlighted));
         }
         break;
       case "Tab":
@@ -175,7 +214,7 @@ export function OptionList({
 
   const comboProps = {
     "aria-controls": listId,
-    "aria-activedescendant": activeVisible ? optionId(active!) : undefined,
+    "aria-activedescendant": highlighted !== null ? optionId(highlighted) : undefined,
     onKeyDown,
   };
 
@@ -189,7 +228,7 @@ export function OptionList({
         aria-selected={isSelected}
         aria-disabled={option.disabled || undefined}
         data-disabled={option.disabled ? "" : undefined}
-        data-highlighted={option.value === active ? "" : undefined}
+        data-highlighted={option.value === highlighted ? "" : undefined}
         data-state={isSelected ? "checked" : "unchecked"}
         className={[styles.item, multiple ? styles.itemMulti : null].filter(Boolean).join(" ")}
         title={option.label}
@@ -235,6 +274,12 @@ export function OptionList({
             onChange={(e) => {
               const q = e.target.value;
               setQuery(q);
+              onQueryChange?.(q);
+              // 서버가 거르는 목록은 지금 손에 든 후보가 지난 검색어의 것이다 — 그걸로 강조를 고르지 않고 첫 후보에 맡긴다
+              if (!filterLocally) {
+                setActive(null);
+                return;
+              }
               const lower = q.trim().toLocaleLowerCase();
               const first = options.find((o) => !o.disabled && o.label.toLocaleLowerCase().includes(lower));
               setActive(first?.value ?? null);
@@ -267,7 +312,11 @@ export function OptionList({
           ),
         )}
       </div>
-      {filtered.length === 0 ? (
+      {loading ? (
+        <p className={styles.empty} role="status">
+          {loadingMessage}
+        </p>
+      ) : filtered.length === 0 ? (
         <p className={styles.empty} role="status">
           {noOptionsMessage}
         </p>

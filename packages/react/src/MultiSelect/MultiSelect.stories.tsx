@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MultiSelect } from "./MultiSelect";
 
@@ -38,3 +39,32 @@ export const CompactFilterBar: Story = {
 };
 
 export const WithoutSearch: Story = { args: { searchable: false } };
+
+const LABELS = ["frontend", "backend", "infra", "front-office", "design", "docs"];
+
+/** 검색어마다 서버가 후보를 거르는 흉내(250ms 지연) — 위키 검색의 라벨 필터 같은 자리 */
+function AsyncLabels() {
+  const [options, setOptions] = useState(LABELS.map((l) => ({ value: l, label: l })));
+  const [loading, setLoading] = useState(false);
+  return (
+    <MultiSelect
+      label="라벨"
+      placeholder="라벨 선택"
+      options={options}
+      loading={loading}
+      creatable
+      onSearchChange={(q) => {
+        setLoading(true);
+        setTimeout(() => {
+          setOptions(LABELS.filter((l) => l.includes(q)).map((l) => ({ value: l, label: l })));
+          setLoading(false);
+        }, 250);
+      }}
+    />
+  );
+}
+
+export const AsyncCreatable: Story = {
+  name: "비동기 후보 + 직접 추가",
+  render: () => <AsyncLabels />,
+};
