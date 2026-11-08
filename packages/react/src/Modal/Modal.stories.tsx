@@ -32,3 +32,13 @@ export const WithoutDescription: Story = {
     children: <p>설정 내용이 들어갑니다.</p>,
   },
 };
+
+export const LargeSettings: Story = {
+  args: {
+    trigger: <Button>보드 설정</Button>,
+    title: "보드 설정",
+    description: "필터와 열 구성을 한 화면에서 관리합니다.",
+    size: "large",
+    children: <div style={{ minHeight: 320 }}>설정 폼</div>,
+  },
+};

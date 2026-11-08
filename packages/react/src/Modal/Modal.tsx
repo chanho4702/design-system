@@ -3,6 +3,8 @@ import { Dialog as RadixDialog } from "radix-ui";
 import styles from "./Modal.module.css";
 import motion from "../motion/motion.module.css";
 
+export type ModalSize = "small" | "medium" | "large" | "xlarge";
+
 export interface ModalProps {
   /** 클릭 시 모달을 여는 트리거 요소. 제어형(open/onOpenChange)으로 열 때는 생략 가능. */
   trigger?: ReactElement;
@@ -14,6 +16,8 @@ export interface ModalProps {
   /** 제어 모드 열림 상태. */
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** 콘텐츠 폭. 기본값 medium은 기존 480px 폭을 유지한다. */
+  size?: ModalSize;
   /** 콘텐츠 패널에 병합되는 클래스. */
   className?: string;
 }
@@ -38,6 +42,7 @@ export function Modal({
   children,
   open,
   onOpenChange,
+  size = "medium",
   className,
 }: ModalProps) {
   return (
@@ -46,7 +51,7 @@ export function Modal({
       <RadixDialog.Portal>
         <RadixDialog.Overlay className={[styles.overlay, motion.blanket].join(" ")} />
         <RadixDialog.Content
-          className={[styles.content, motion.dialog, className].filter(Boolean).join(" ")}
+          className={[styles.content, styles[size], motion.dialog, className].filter(Boolean).join(" ")}
           {...(description ? {} : { "aria-describedby": undefined })}
         >
           <div className={styles.header}>

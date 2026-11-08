@@ -12,7 +12,7 @@
   transform: translate(-50%, -50%);
   /* 패딩·테두리를 폭에 포함 — content-box면 좁은 화면에서 패딩(48px)만큼 뷰포트 밖으로 밀려난다 */
   box-sizing: border-box;
-  width: min(480px, calc(100vw - 32px));
+  width: min(var(--modal-width), calc(100vw - 32px));
   max-height: calc(100vh - 64px);
   max-height: calc(100dvh - 64px);
   overflow-y: auto;
@@ -23,6 +23,22 @@
   color: var(--chanho-color-text-default);
   font-family: var(--chanho-font-family-sans);
   z-index: var(--chanho-z-modal);
+}
+
+.small {
+  --modal-width: 400px;
+}
+
+.medium {
+  --modal-width: 480px;
+}
+
+.large {
+  --modal-width: 720px;
+}
+
+.xlarge {
+  --modal-width: 960px;
 }
 
 .header {

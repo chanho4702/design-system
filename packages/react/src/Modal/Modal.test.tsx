@@ -4,12 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { Modal } from "./Modal";
 
-function Subject(props: { className?: string; description?: string }) {
+function Subject(props: { className?: string; description?: string; size?: "small" | "medium" | "large" | "xlarge" }) {
   return (
     <Modal
       trigger={<button type="button">열기</button>}
       title="이슈 삭제"
       description={props.description}
+      size={props.size}
       className={props.className}
     >
       <p>본문 내용</p>
@@ -51,6 +52,12 @@ describe("Modal", () => {
     render(<Subject className="custom" />);
     await userEvent.click(screen.getByRole("button", { name: "열기" }));
     expect(screen.getByRole("dialog")).toHaveClass("custom");
+  });
+
+  it("용도에 맞는 크기 변형을 콘텐츠 패널에 적용한다", async () => {
+    render(<Subject size="large" />);
+    await userEvent.click(screen.getByRole("button", { name: "열기" }));
+    expect(screen.getByRole("dialog").className).toContain("large");
   });
 
   it("열리면 포커스가 dialog 안에 갇히고, 닫으면 트리거로 돌아온다", async () => {

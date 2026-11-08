@@ -27,7 +27,7 @@ export type { InlineEditProps } from "./InlineEdit/InlineEdit";
 export { Lozenge } from "./Lozenge/Lozenge";
 export type { LozengeProps } from "./Lozenge/Lozenge";
 export { Modal } from "./Modal/Modal";
-export type { ModalProps } from "./Modal/Modal";
+export type { ModalProps, ModalSize } from "./Modal/Modal";
 export { MultiSelect } from "./MultiSelect/MultiSelect";
 export type { MultiSelectProps } from "./MultiSelect/MultiSelect";
 export { PageHeader } from "./PageHeader/PageHeader";

@@ -1,5 +1,14 @@
 # @chanho/react
 
+## 0.18.0
+
+### Minor Changes
+
+공개 API는 추가만 했다. 기존 `Modal`의 기본 폭은 그대로다.
+
+- `Modal`에 `size="small | medium | large | xlarge"`를 추가했다. 각각 400px·480px·720px·960px이며,
+  모든 크기는 화면 가장자리 16px 이상과 모바일 패딩 축소 규칙을 공유한다. 기본값 `medium`은 기존 480px 동작을 유지한다.
+
 ## 0.17.0
 
 ### Minor Changes
